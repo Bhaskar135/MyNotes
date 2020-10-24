@@ -1,0 +1,15 @@
+const msg={
+    firstname:"Bhaskar Jyoti",
+    lastname:"Gogoi",
+    social:{
+        instagram:"Bhaskar",
+        facebook:"instagram"
+    }
+};
+
+// const firstname=msg.firstname;
+// const lastname=msg.lastname;
+
+const {firstname:fname= "Javascript",lastname,course= "BSc",social}=msg;   // Javascript, BSc default value.
+console.log(fname,lastname,course,social.facebook);
+

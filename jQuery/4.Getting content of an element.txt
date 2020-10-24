@@ -1,0 +1,96 @@
+
+1) .html() and .text() both methods are used to retrieve and update the content of elements.
+
+2) .html() : This method is used to retrieve information from a jQuery selection, it retrieves only the HTML inside the first element in the matched set, along with any of its descendants.
+    
+    eg $('ul').html(); will return this:
+
+       <li id="one"><em>fresh</em> figs</li>
+       <li id="two">pine nuts</li>
+       <li id="three">honey</li>
+
+    Whereas $('li').html(); will return this:
+
+       <em>fresh</em> figs
+
+3) .text() : This method is used to retrieve the text from a jQuery selection, it returns the content from every element in the jQuery selection, along with the text from any descendants.
+
+    eg $('ul').text(); will return this:
+        fresh figs
+        pine nuts
+        honey
+
+    Whereas $('li').text(); will return this:
+        fresh figspine nutshoney
+
+4) To get the content from <input> or <textarea> elements, use the .val() method
+
+5) .append() method lets you add content to the page.
+
+   eg, var $listHTML = $('ul').html();
+       $('div').append($listHTML);        // here appended the content of ul elements to the end of div .
+
+   eg, var $listHTML = $('li').html();
+       $('div').append($listHTML);
+
+   eg, var $listHTML = $('ul').text();
+       $('div').append($listHTML);
+
+   eg, var $listHTML = $('li').text();
+       $('div').append($listHTML);
+
+6) To update the content we can also use .replaceWith() and .remove() .
+
+   a) .replaceWith() : This method replaces every element in a matched set with new content. It also returns the replaced elements.
+
+   b) .remove() : This method removes all of the elements in the matched set.
+
+        eg, $items= $('li').replaceWith("Hello jQuery");
+            
+            $items= $('li').remove();
+
+7) Using function to update content
+
+   $('li.hot').html(function(){
+        return '<b>'+$(this).text()+'</b>';
+   });
+
+     eg,
+        <ul>
+            <li>Hello Python</li>
+            <li>Hello Django</li>
+            <li class="hot">Hello jQuery</li>
+            <li id="one">Hello React</li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('li:contains("Django")').text('Flask');
+                $('li.hot').html(function(){
+                    return '<u>'+ $(this).text() +'</u>';
+                });
+                $('li#one').remove();
+            });
+        </script>
+   
+8) Getting URL of current page 
+        
+        window.location.pathname;       // mostly used.
+        window.location.href;
+        window.location.origin;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+7) Creating an Authentication Blueprint    
+ # app/auth/__init__.py
+ from flask import Blueprint
+ auth=Blueprint('auth',__name__)
+ from .import views
+
+ 8) # app/auth/views.py
+ from flask import render_template
+ from . import auth
+ from .forms import LoginForm
+
+ @auth.route('/login',methods=['GET','POST'])
+ def login():
+    form = LoginForm()
+    return render_template('auth/login.html',form=form)
+
+ 9) Now attached the auth blueprint to application create_app() function.
+ # app/__init__.py
+ def create_app(config_name):
+    #........
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint,url_prefix='/auth')    # here url_prefix is optional argument.we can check url -->
+                                                                         #http://127.0.0.1:5000/auth/login
+    return app
+

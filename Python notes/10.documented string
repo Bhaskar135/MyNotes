@@ -1,0 +1,11 @@
+ Documented String :
+ def my_function():
+    """Do nothing, but document it.       # 2nd line in documented string should be blank. 
+
+    No, really, it doesn't do anything.
+    """
+    pass
+ print(my_function.__doc__)
+ o/p : Do nothing, but document it. 
+	   No, really, it doesn't do anything.
+ 

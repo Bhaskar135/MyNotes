@@ -1,0 +1,92 @@
+
+1) 
+import numpy as np
+x=[1,2,3]
+
+print("x :",x)                   # o/p : x : [1, 2, 3]
+
+print("e^x :",np.exp(x))         # o/p : e^x : [ 2.71828183  7.3890561  20.08553692]
+
+print("2^x :",np.exp2(x))        # o/p : 2^x : [2. 4. 8.]
+
+print("3^x :",np.power(3,x))     # o/p : 3^x : [ 3  9 27]
+
+2) The inverse of the exponentials, the logarithms, are also available. The basic np.log gives the natural logarithm; if you prefer to compute the base-2 logarithm or the base-10 logarithm, these are available as well:
+
+import numpy as np
+x = [1, 2, 4, 10]
+
+print("x :",x)                    # o/p  x : [1, 2, 4, 10]
+
+print("ln(x) :",np.log(x))        # o/p  ln(x) : [0.     0.69314718     1.38629436     2.30258509]
+
+print("log2(x) :",np.log2(x))     # o/p  log2(x) : [0.         1.         2.         3.32192809]
+
+print("log10(x) :",np.log10(x))   # o/p  log10(x) : [0.        0.30103    0.60205999       1.        ]
+
+
+3) There are also some specialized versions that are useful for maintaining precision with very small input:
+
+import numpy as np
+x = [0, 0.001, 0.01, 0.1]
+
+print("exp^x - 1 =", np.expm1(x))     # o/p   exp^x - 1 = [0.    0.0010005    0.01005017    0.10517092]
+
+print("log(1 + x) =", np.log1p(x))    # o/p   log(1 + x) = [0.    0.0009995    0.00995033    0.09531018]
+
+When x is very small, these functions give more precise values than if the raw np.log
+or np.exp were used.
+
+4) pip install scipy
+
+from scipy import special
+x = [1, 5, 10]
+
+print("gamma(x)=", special.gamma(x))            # o/p : gamma(x)= [1.0000e+00 2.4000e+01 3.6288e+05]
+
+print("ln|gamma(x)| =", special.gammaln(x))     # o/p : ln|gamma(x)| = [ 0.    3.17805383     12.80182748]
+
+print("beta(x, 2)=", special.beta(x, 2))        # o/p : beta(x, 2)= [0.5     0.03333333     0.00909091]
+
+
+5) 
+
+# Error function (integral of Gaussian)
+# its complement, and its inverse
+import numpy as np
+x = np.array([0, 0.3, 0.7, 1.0])
+
+print("erf(x) =", special.erf(x))          # o/p erf(x) = [0.    0.32862676    0.67780119    0.84270079]
+
+print("erfc(x) =", special.erfc(x))        # o/p erfc(x) = [1.    0.67137324    0.32219881    0.15729921]
+
+print("erfinv(x) =", special.erfinv(x))    # o/p erfinv(x) = [0.    0.27246271      0.73286908     inf]
+
+
+6) 
+import numpy as np
+x = np.array([0, 0.3, 0.7, 1.0])
+
+y = np.zeros(10)
+
+np.power(2, x, out=y[::2])
+print(y)      # o/p [ 1.  0.  2.  0.  4.  0.  8.  0.  16.  0. ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

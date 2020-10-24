@@ -1,0 +1,228 @@
+
+1) 2 Types of flow of event :
+
+ Event Bubbling : The event starts at the most specific node and flows outwards to the least specific one(flow upward direction in DOM tree).Default flow.
+
+ Event Capturing : The event starts at the least specific node and flows inwards to the most specific one(flow downward direction in DOM tree).
+
+   *) The flow of events only matters when your code has event handlers on an element and one of its ancestor and descendant elements.
+
+   addEventListener('event',function,false/true), here true and false decide the flow of event.
+      false : bubbling event
+      true  : capturing event
+
+     eg,
+        <div id="4" style="width:500px;height:500px; background-color: red;padding:50px;">4
+            <div id="3" style="width:400px;height:400px; background-color: rgb(214, 76, 76);padding:50px;">3
+                <div id="2" style="width:300px;height:300px; background-color: rgb(163, 116, 116);padding:50px;">2
+                    <div id="1" style="width:200px;height:200px; background-color: rgb(144, 125, 125);padding:50px;">1
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            var id1=document.getElementById("1");
+            var id2=document.getElementById("2");
+            var id3=document.getElementById("3");
+            var id4=document.getElementById("4");
+            id1.addEventListener('click',function(){checkValue(a=1);},true);
+            id2.addEventListener('click',function(){checkValue(a=2);},true);
+            id3.addEventListener('click',function(){checkValue(a=3);},true);
+            id4.addEventListener('click',function(){checkValue(a=4);},true);
+            function checkValue(a){
+                alert("clicked div number "+a);
+            }
+        </script>
+     
+2) event object : When an event occurs, the event object tells you information about the event, and the element it happened upon.
+
+ event object contains helpful data about the event, such as:
+   • Which element t he event happened on
+   • Which key was pressed for a keypress event
+   • What part of the viewport the user clicked for a click event.
+
+    Property                   Purpose 
+     target                The target of the event (most specific element interacted with)
+      type                 Type of event that was occured.
+   cancelable              Whether you can cancel the default behavior of an element
+
+     Method                    Purpose
+   preventDefault()        Cancel default behavior of the event (if it can be canceled)
+   stopPropagation()       Stops the event from bubbling or capturing any further
+
+ Event Listener with no parameter for event object :
+ 1) function checkUsername(e){
+        var target=e.target;
+    }
+    var el=document.getElementById('username');
+    el.addEventListener('blur',checkUsername,false);
+
+ Event Listener with parameter for event object :
+ 1) function checkUsername(e,minLength){
+        var target=e.target;
+    }
+    var el=document.getElementById('username');
+    el.addEventListener('blur',function(e){checkUsername(e,5);},false);
+
+ A better approach to use event object:
+        <form method="POST">
+            <label for="username">Username</label>
+            <input type="text" id="username"
+            /><div id="feedback"></div>
+            <label for="password">Password</label>
+            <input type="password" id="password"/>
+            <button type="submit">Submit</button>
+        </form>
+
+        <script>
+            function checkUsername(e,minLength) {
+                var el,elMsg ;
+                if(!e) {
+                    e = window.event;
+                }
+                el = e.target;
+                console.log(el)||e.srcElement;
+                elMsg =el.nextSibling;
+                if (el.value.length< minLength ){
+                    elMsg.innerHTML="Username must be "+minLength+" characters or more.";
+                }else{
+                    elMsg.innerHTML="";
+                }
+            }
+            var elUsername = document.getElementById('username');
+            if(elUsername.addEventListener) {
+                elUsername.addEventListener('blur',function(e) {
+                    checkUsername(e,5);
+                },false);
+            }else{
+                elUsername.attachEvent('onblur',function(e){
+                    checkUsername(e,5);
+                });
+            }
+        </script>
+
+    *) You can place event handlers on a containing element and use the event object's target property to find which of its children the event happened on. This is called event delegation.
+
+    *) The event object has methods that change the default behavior of an element and how the element's ancestors respond to the event.
+     
+     a) preventDefault() : It is used to prevent the default behavior of elements. IE 5-8 have an equivalent property called return Value which can be set to false.
+         if(event.preventDefault){
+              event.preventDefault() ;
+         } else {
+              event.returnValue=false ;
+         }
+
+     b) stopPropagation() : To stop the event bubbling up, you can use the event object's stopPropogation() method. The equivalent in IE8 and earlier
+is the cancelBubble property which can be set to true.
+         if(event.stopPropogation){
+             event.stopPropogation();
+         }else {
+             event.cancelBubble = true;
+         }
+  
+     c) use both method : return false. It prevents the default behavior of the element, and prevents the event from bubbling up or capturing further.Since this stops any further code within the function, it is often better to use the preventDefault() method.
+
+     eg: event delegation
+        <ul id="shoppinglist">
+            <li class="complete"><a href="#" target="_blank">fresh figs</a></li>
+            <li class="complete"><a href="#" target="_blank">pine nuts</a></li>
+            <li class ="complete"><a href="#" target="_blank">honey</a></li>
+            <li class="complete"><a href="#" target="_blank">balsamic vinegar</a></li>
+        </ul>
+    
+        <script>
+            function getTarget(e){
+                if(!e){
+                    e=window.event;
+                }
+                return e.target||e.srcElement;
+            }
+            function itemDone(e){
+                var target, elParent, elGrandparent;
+                target=getTarget(e);
+                elParent=target.parentNode;
+                elGrandparent=target.parentNode.parentNode;
+                elGrandparent.removeChild(elParent);
+                if(e.preventDefaut){
+                    e.preventDefault();
+                }else{
+                    e.returnValue=false;
+                }
+            }
+            var el = document.getElementById('shoppinglist');
+            if(el.addEventListener) {
+                el.addEventListener('click',function(e) {
+                    itemDone(e);
+                },false);
+            }else{
+                el.attachEvent('onclick',function(e){
+                    itemDone(e);
+                });
+            }
+        </script>
+
+This keyword : The this keyword refers to the owner of a function. this keyword refers to the element that the event is on. this keyword works when no parameters are being passed to the function.
+     
+     function checkUsername() {
+         var elMsg = document.getElementById('feedback');
+         if(this.value.length< 5) {
+             elMsg.innerHTML = 'Not long enough';
+         } else {
+             elMsg.innerHTML = '';
+         }
+     }
+     var el = document.getElementByld('username');
+     el.addEventListener('blur', checkUsername, false);
+
+  If you pass parameters to the function, the this keyword no longer works :
+
+     function checkUsername(el , minLength) {
+          var elMsg = document.getElementById('feedback');
+          if(el.value.length< minLength) {
+               elMsg.innerHTML = 'Not long enough ' ;
+          }else {
+               elMsg.innerHTML = '';
+          }
+     }
+     var el = document.getElementById('username');
+     el.addEventListener('blur', function() {
+          checkUsername(el, 5);
+     }, false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

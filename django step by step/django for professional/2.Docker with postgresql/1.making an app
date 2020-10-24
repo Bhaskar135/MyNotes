@@ -1,0 +1,96 @@
+
+1) mkdir postgresql && cd postgresql
+
+2) pipenv install django
+
+3) pipenv shell
+
+4) django-admin startproject postgresql_project .
+
+5) python manage.py migrate
+
+6) python manage.py runserver
+
+7) 
+(postgresql) $ ls
+
+Pipfile    Pipfile.lock   db.sqlite3   manage.py   postgresql_project
+
+8) deactivate
+
+9) mkdir Dockerfile
+
+10) mkdir docker-compose.yml
+
+11) Write the previous example code in Dockerfile and docker-compose.yml
+
+12) docker build .
+
+13) docker-compose up -d
+
+ Start up container in detached mode(runs container in the background).
+
+14) http://127.0.0.1:8000/
+
+15) docker-compose exec web python manage.py createsuperuser
+
+16) docker-compose down
+
+17) Now add a new service db.
+
+# docker-compose.yml
+
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    
+    depends_on:
+      - db
+  
+  db:
+    image: postgres
+
+18) docker-compose up -d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

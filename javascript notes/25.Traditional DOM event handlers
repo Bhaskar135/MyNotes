@@ -1,0 +1,67 @@
+
+1) syntax : element.onevent= functionName;
+    eg,var el = document.getElementById('username');
+       el.onblur = checkUsername;
+
+2) Example 
+       <form method="post" action="http://www.example.org/register">
+            <label for="username">Create a username: </label>
+            <input type="text" id="username"/>
+            <div id="feedback"></div>
+            <label for="password">Create a password:</label>
+            <input type="password" id="password"/>
+            <input type="submit" value="Sign up!"/>
+        </form>
+        <script>
+            function checkUsername() {
+                var elMsg = document.getElementById('feedback') ;
+                var elUsername = document.getElementById('username'); // Get username input
+                if(elUsername.value.length<5) {
+                    elMsg.textContent='Username must be 5 characters or more'; // Set msg
+                }else {
+                    elMsg.textContent = '';
+                }
+            }
+            var el=document.getElementById("username");
+            el.onblur=checkUsername;
+        </script>
+
+      Or script can also be write like this :
+         <script>
+            function checkUsername() {
+                var elMsg = document.getElementById('feedback') ;
+                if(this.value.length<5) {        // this refers to the element the event happened on.
+                    elMsg.textContent='Username must be 5 characters or more'; // Set msg
+                }else {
+                    elMsg.textContent = '';
+                }
+            }
+            var el=document.getElementById("username");
+            el.onblur=checkUsername;
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

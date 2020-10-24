@@ -1,0 +1,33 @@
+
+1) <form>
+        Name <input type="text" name="name" id="name"><br>
+        <button id="button">Submit</button>
+   </form>
+   <h2 id="result"></h2>
+
+2)  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            $('#button').on('click',function(){
+                value=$('#name').val();
+                $.get('/name_func',value,function(data){
+                    $('#result').text(data.result);
+                });
+                return false;
+            });
+        });
+     </script>
+
+3) 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/name_func')
+def name_func():
+    try:
+        name=request.args.get('name')
+        return jsonify(result="success")
+    except Exception.e:
+        return(str(e))
+

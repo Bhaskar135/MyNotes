@@ -1,0 +1,17 @@
+
+1) Here the eventListener is attached to the window object (not the document object)
+ 
+        <label for="name">Name</label>
+        <input type="text" id="name">
+        <script>
+            function setup() {
+                var textInput;
+                textInput = document.getElementById('name');
+                textInput.focus();
+            }
+            window.addEventListener('load' , setup , false);
+        </script>
+
+*) In this example, a function called setup() gives focus to the text input when the page has loaded.
+
+*) The event is automatically raised by the window object when a page has finished loading the HTML and all of its resources: images, CSS, scripts (even third party content e.g, banner ads).

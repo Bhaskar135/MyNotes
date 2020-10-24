@@ -1,0 +1,69 @@
+
+1) The .find() and .closest() methods both require a CSS-style selector as an argument.
+
+2) For the other methods, the CSS-style selector is optional.
+
+3) If the original selection cont.ains multiple elements, these methods will work on all of the elements in the selection.
+
+Selector required :
+  Method                   Description
+ .find()            All elements within current selection that match selector
+
+ .closest()         Nearest ancestor (not just parent) that matches selector
+
+
+Selector optional :
+  Method                   Description
+ .parent()          Direct parent of current selection
+
+ .parents()         All parents of current selection
+
+ .children()        All children of current selection
+
+ .siblings()        All siblings of current selection
+ 
+ .next()            Next sibling of current element
+
+ .nextAll()         All subsequent siblings of current element
+
+ .prev()            Previous sibling of current element
+
+ .prevAll()         All previous siblings of current element
+
+
+     eg,
+        <h2></h2>
+        <ul>
+            <li>Hello jQuery</li>
+            <li>Hello python</li>
+            <li class="hot">Hello javascript</li>
+            <li>Hello java</li>
+        </ul>
+        
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                var $h2=$('h2');
+                $('ul').hide();
+                $h2.append('<a>show</a>');
+                $h2.on('click', function(){
+                    $h2.next().fadeIn(500).children('.hot').addClass('complete');
+                    $h2.find('a').fadeOut();
+                });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

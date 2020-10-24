@@ -1,0 +1,67 @@
+Selectors :
+i) universal selector : *{}
+ii) type selector : h1,h2{}
+iii) class selector : .classname{}
+iv) id selector : #idname{}
+v) child selector : li>a{}
+vi) decendent selector : p a{}
+vii) adjacent sibling selector : p+a{}
+viii) general sibling selector : p~a{}
+
+CSS Rule :
+i) Last Rule : If the two selectors are identical, the latter of the two will take precedence
+ii) Specificity : If one selector is more specific than the others, the more specific rule will take precedence .
+    eg, p{} vs p a{} : 2nd is more specific.
+iii) Important: You can add !important after any property value to indicate that it should be considered more important than other rules.
+    eg, p a {
+           color: blue !important;
+        }
+
+Inheritance : The properties of parent element is inherited by child element.
+ eg, <div class="page">
+       <h1>Potatoes</h1>
+       <p>There are dozens of different potato varieties.</p>
+       <p>They are usually described as early, second early and maincrop potatoes.</p>
+     </div>
+CSS :
+body {
+   font-family: Arial, Verdana, sans-serif;
+   color: #665544;
+   padding: 10px;
+}
+.page {       // font-family, color inherit from parrent element
+   border: 1px solid #665544;
+   background-color: #efefef;
+   padding: inherit;    // inherit use to take value of padding from parrent's padding property
+}
+
+
+To test in multiple browser some sites are : 
+
+BrowserCam.com
+BrowserLab.Adobe.com
+BrowserShots.org
+CrossBrowserTesting.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

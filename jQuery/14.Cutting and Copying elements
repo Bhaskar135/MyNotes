@@ -1,0 +1,35 @@
+
+  Cut
+ Method             Description
+.remove()       Removes matched elements from DOM tree (including any descendants and text nodes)
+
+.detach()       Same as .remove() but keeps a copy of them in memory
+
+.empty()        Removes child nodes and descendants from any elements in matched set
+
+.unwrap()       Removes parents of matched set, leaving matched elements
+
+
+  Copy
+ Method             Description
+.clone()        Creates a copy of the matched set (including any descendants and text nodes)
+
+     eg,
+        <h2>Web design</h2>
+        <ul>
+            <li id="one">Hello C</li>
+            <li>Hello python</li>
+            <li>Hello java</li>
+        </ul>
+        <p>Hello jQuery</p>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                var $p = $('p');
+                var $clonedQuote = $p.clone();
+                $p.remove();
+                $clonedQuote.insertAfter('h2');
+                var $moveItem = $('#one').detach();
+                $moveItem.appendTo('ul');
+            });
+        </script>

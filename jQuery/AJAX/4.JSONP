@@ -1,0 +1,83 @@
+
+1) Ajax works smoothly with data fro m your own server but - for security reasons - browsers do not load Ajax responses from other domains (known as cross-domain requests).
+
+2) This example looks the same as the JSON example, but the event details come from a remote server. Therefore, the HTML uses two <script> elements.
+
+3) The first <script> element loads a JavaScript file that contain s the the showEvents () function.
+
+4) The second <script> element loads the information from a remote server. The name of the function that processes the data is given in the query string.
+
+example: 
+
+<body>
+    <h1>Index </h1>
+    <div id="content"></div>
+
+    <script>
+        function showEvents(data){
+            var newContent='';
+            for(i=0;i<data.length;i++){
+                newContent+='<div class="event">';
+                newContent+='<p>'+data[i].userId+'</p>';
+                newContent+=data[i].id+'</p>';
+                newContent+=data[i].title+'</p>';
+                newContent+=data[i].body+'</p>';
+                newContent+='</div>';
+                newContent+='<hr>';
+            }
+            document.getElementById("content").innerHTML=newContent;
+        }
+    </script>
+    <script src="https://jsonplaceholder.typicode.com/posts?callback=showEvents"></script>
+    
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

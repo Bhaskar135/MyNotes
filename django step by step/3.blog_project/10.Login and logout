@@ -1,0 +1,106 @@
+
+   a) Login : For Login we use LoginView
+	i) Update project level urls.py file
+		# blog_project/urls.py
+	        from django.contrib import admin
+                from django.urls import path,include
+		urlpatterns = [
+    			path('admin/', admin.site.urls),
+    			path('accounts/',include('django.contrib.auth.urls')),
+    			path('', include('blog.urls')),
+		]
+	ii) Make a folder 'registration' inside 'templates'.Inside 'registration' make a file 'login.html'
+               # templates/registration/login.html
+		{% extends 'base.html' %}
+		{% block content %}
+		<h2>Log In</h2>
+		<form action="" method="post">
+    			{% csrf_token %}
+    			{{form.as_p}}
+    			<button type="submit">Log In</button>
+		</form>
+		{% endblock content %}
+	iii) The final step is to specify where to redirect the user upon a successful log in. At the bottom
+	of the 'settings.py' file add the following: 
+		# blog_project/settings.py
+		LOGIN_REDIRECT_URL='home' 
+	iv) Let's update our base.html template so we display a message to users whether they are logged
+	in or not. 
+
+{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+        </header>
+        {% if user.is_authenticated %}                <!--New-->
+            <p>Hi {{user.username}} </p>		<!--New-->
+        {% else %}					<!--New-->
+            <p>You are not logged in.</p>		<!--New-->
+            <a href="{% url 'login' %}">Log In</a>	<!--New-->
+        {% endif %}					<!--New-->
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+b) Logout : 
+   i) In 'base.html' file add a line 
+	{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+        </header>
+        {% if user.is_authenticated %}
+            <p>Hi {{user.username}} </p>
+            <p><a href="{% url 'logout' %}">Log out</a></p>
+        {% else %}
+            <p>You are not logged in.</p>
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+ii) Update 'settings.py' file by adding at the bottom :
+	LOGOUT_REDIRECT_URL='home'
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+1) To edit post 
+# templates/post_detail.html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="post-entry">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
+    </div>
+    <a href="{% url 'post_edit' post.pk %}">+ Edit blog Post</a>
+{% endblock content %}
+
+2) # templates/post_edit.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Edit post</h1>
+    <form action="" method="post"> {%csrf_token%}
+        {{ form.as_p }}
+        <input type="submit" value="Update" />
+    </form>
+{%endblock content%}
+
+3) To our view import UpdateView  
+from django.views.generic.edit import UpdateView 
+class BlogUpdateView(UpdateView):
+    model=Post
+    template_name='post_edit.html'
+    fields=['title','body']
+
+4) # blog/urls.py
+from .views import BlogUpdateView
+urlpatterns = [
+    path('post/<int:pk>/edit/',BlogUpdateView.as_view(),name='post_edit'),
+    path('post/new/',BlogCreateView.as_view(),name='post_new'),
+    path('post/<int:pk>/',BlogDetailView.as_view(),name='post_detail'),    
+    path('',BlogListView.as_view(),name='home'),
+]

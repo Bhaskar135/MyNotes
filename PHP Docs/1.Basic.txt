@@ -1,0 +1,89 @@
+1) php -S localhost:4000
+
+2) site.php
+
+<body>
+    <?php
+        echo "<h1>Hello world</h1>";
+    ?>
+</body>
+
+3) Search the url : http://localhost:4000/site.php
+
+
+4) Variable :
+ <?php
+     $name="John";
+     $age=35;
+     $percentage = 10.5;
+     echo "Name is $name, age is $age, percentage is $percentage";
+ ?>
+
+5) Data type :
+
+  $phrase="To be or not to be";
+
+  $age=30;
+ 
+  $cgpa=30.4;
+
+  $isMale=false;
+
+  $val=null;
+
+6) Working with string : Strings are array
+
+   i) strtolower() :
+         $phrase="Code Academy" ;
+         echo strtolower($phrase);
+
+  ii) strtoupper() :
+         $phrase="Code Academy" ;
+         echo strtoupper($phrase);
+
+ iii) strlen() :
+         $phrase="Code Academy" ;
+         echo strlen($phrase);
+
+  iv) str_replace() :
+         $phrase="Code Academy" ;
+         echo str_replace("Code","Programming",$phrase);
+
+   v) substr():   2nd argument is starting index, 3rd argument is total number of characters printed.
+         $name="Bhaskar JYOTI Gogoi";
+         echo substr($name,3,8);       // o/p : skar JYO
+
+7) Working with numbers :
+
+   Operators : +, -, *, /, %(modulus), ++, --, +=, -=, *=, pow(2,4), sqrt(144), max(2,10), round(3.24)
+
+
+8) Comments : // and /* .........  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,82 @@
+1) pip install faker
+
+2) The faker package is needed only during development.
+ Some eg: fake.name(),fake.date(),fake.random_int(6),fake.random_number(6),fake.city(),fake.address(),fake.state(),fake.word()
+
+2) To separate the production dependencies from the development dependencies, the requirements.txt file can be replaced with a requirements subdirectory that stores different sets of dependencies.
+
+3) Inside this new subdirectory, a dev.txt file can list the dependencies that are necessary for development and a prod.txt file can list the dependencies that are needed in production.
+
+4) As there are a large number of dependencies that will be in both lists, a common.txt file is added for those.
+
+5) Then the dev.txt and prod.txt lists use the -r prefix to include it.
+
+6) requirements/dev.txt :
+     -r common.txt
+     Faker==4.0.3
+
+7) Create fake data for two models 'User' and 'Post'
+
+# app/fake.py
+from random import randint
+from sqlalchemy.exc import IntegrityError
+from faker import Faker
+from . import db
+from .models import User, Post
+
+def users(count=100):
+    fake = Faker()
+    i = 0
+    while i < count:
+        u = User(email=fake.email(), username=fake.user_name(), password='password', confirmed=True, name=fake.name(), location=fake.city(), about_me=fake.text(), member_since=fake.past_date())
+        db.session.add(u)
+        try:
+            db.session.commit()
+            i += 1
+        except IntegrityError:
+            db.session.rollback()
+
+def posts(count=100):
+    fake = Faker()
+    user_count = User.query.count()
+    for i in range(count):
+        u = User.query.offset(randint(0, user_count - 1)).first()
+        p = Post(body=fake.text(), timestamp=fake.past_date(), author=u)
+        db.session.add(p)
+    db.session.commit()
+
+    The email addresses and usernames of users must be unique. But since Faker generates these in a completely random fashion, there is a risk of having duplicates for that situation database session commit will throw an IntegrityError exception. The exception is handled by rolling back the session to cancel that duplicate user. The random post generation must assign a random user to each post. For this, the offset() query filter is used.
+
+8) pip install -r requirements/dev.txt 
+
+9) (venv) $ flask shell
+   >>> from app import fake
+   >>> fake.users(100)
+   >>> fake.posts(100)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

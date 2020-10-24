@@ -1,0 +1,118 @@
+
+1) Objects : Objects group together a set of variables and functions to create a model of a something you would recognize from the real world.
+
+2) var hotel={
+                 name : 'javascript' ,
+                rooms : 40,
+               booked : 25,
+            roomTypes : ['twin','double'],
+    checkAvailability : function(){
+        return this.rooms - this.booked;
+    }
+ };
+ hotel.gym = true;
+
+3) left side variables are called key and right sides are values.
+
+4) Acess property of the object like -> hotel.name or hotel['name'], hotel.rooms, hotel.checkAvailability()
+
+5) The new keyword and the object constructor create a blank object.
+
+     var hotel=new Object();
+     
+     hotel.name='Taj hotel';
+     hotel.rooms=40;
+     hotel.booked=25;
+
+     hotel.checkAvailability=function(){
+         return this.rooms - this.booked;
+     };
+
+6) To create an empty object -> var hotel ={}
+
+7) To delete a property, use the delete keyword. eg, delete hotel.name;
+
+8) If you just want to clear the value of a property -> hotel.name='';
+
+9) Creating many objects that use same property and methods using constructor :
+     
+    function Hotel(name, rooms, booked){         // the function name begins with a capital letter
+        this.name=name;
+        this.rooms=rooms;
+        this.booked=booked;                      // important is semicolon (;) and this keyword.
+
+        this.checkAvailability = function(){
+            return this.rooms - this.booked;
+        };
+    }
+
+    var obj1=new Hotel('Vivanta',30,14);         // obj1 is object
+    var obj2=new Hotel('Hotel Rhino',40,21);     // obj2 is object
+
+    *) Use this technique if your script contains object that needs to be available but might not be used.
+    eg,
+    function Hotel(name, rooms, booked) {
+        this.name = name;
+        this.rooms = rooms;
+        this.booked = booked;
+        this.checkAvailability=function(){
+           return this.rooms - this.booked;
+        };
+    }
+    var taj=new Hotel('Taj', 40, 25);
+    var rhino=new Hotel('Rhino', 120, 77);
+
+    var details1 = taj.name + ' rooms : ';
+    details1 += taj.checkAvailability();       // value will be Taj rooms : 15
+    var elHotel1 = docurnent.getElementByid('hotel1');
+    elHotel1.textContent =details1;
+
+   *) If an object is created using a constructor function, only one instance of the object can add or remove properties of the object (not all objects created with that function can add or remove).
+
+10) Arrays are special type of object. They hold a related set of key/value pairs(like objects). But the key for each value is its index number.
+
+11) Array of objects :
+      var arr=[ {name:'Bhaskar',roll:25}, {lan:'Python',name:'Bipul'} ]
+      document.write(arr[1].name);    //Output : Bipul
+
+12) Array in objects :
+      var ob1={
+          room1:[5,40,10],
+          room2:[10,30,20],
+          room3:[50,30,70],
+          room4:[60,15,36]
+      }
+      document.write(ob1.room1[1]);
+
+*) functions are also object. But they are callable.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

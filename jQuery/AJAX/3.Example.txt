@@ -1,0 +1,90 @@
+
+1) data.json
+
+{
+    "events": [
+        {"location" : "Sivasagar" , "date" : "May 1", "state" : "Assam" } ,
+        {"location": "Mumbai", "date": "May 15", "state" : "Maharastra" } ,
+        {"location" : "Bangalore", "date" : "May 30", "state" : "Karnataka"}
+    ]
+}
+
+2) 
+<body>
+    <h1>Index </h1>
+    <div id="content"></div>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                responseObject=JSON.parse(xhr.responseText);
+                var newContent='';
+                for(var i=0;i<responseObject.events.length;i++){
+                    
+                    newContent+='<div class="event">';
+                    newContent+='<p>'+responseObject.events[i].state+' ';
+                    newContent+=responseObject.events[i].location+' ';
+                    newContent+=responseObject.events[i].date+'</p>';
+                    newContent+='</div>';
+                }
+                document.getElementById("content").innerHTML=newContent
+            }
+            else {
+                document.getElementById("content").innerHTML = "Page not found.."
+            }
+        };
+        xhr.open('GET','data.json', true);
+        xhr.send(null);
+    </script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

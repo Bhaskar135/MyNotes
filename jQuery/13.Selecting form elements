@@ -1,0 +1,120 @@
+
+
+ Method           Description
+:button       <button> and <input> elements whose type attribute has a value of button
+
+:checkbox     <input> elements whose type attribute has a value of checkbox. Note that you get better performance with $('(type="checkbox"]')
+
+:checked      Checked elements from checkboxes and radio buttons (see : selected for select boxes)
+
+:disabled     All elements that have been disabled
+
+:enabled      All elements that are enabled
+
+:focus        Element that currently has focus. Note that you get better performance with$ (document. acti veEl ement)
+
+:file         All elements that are file inputs
+
+:image        All image inputs. Note that you get better performance using [type="image"]
+
+:radio        All radio inputs.To select a group of radio buttons, you can use $('input(name="gender"]:radio')
+
+:reset        All inputs that are reset buttons
+
+:selected     All elements that are selected. Note that you get better performance using a CSS selector inside the .filter()method, e.g filter(":selected")
+
+:submit       <button> and <input> elements whose type attribute has a value of submit. Note that you will get better performance using (type=" submit"]
+
+:text        Selects <input> elements with a type attribute whose value is text, or whose type attribute is not present. You will likely get better performance from ('input:text')
+
+
+Retrieve value from elements :
+
+ Method                Description
+ .val()          Primarily used with <input>, <select>, and <textarea> elements. It can be used to get the value of the first element in a matched set, or update the value of all of them.
+
+ .filter()       Used to filter a jQuery selection using a second selector (especially form-specific filters).
+ 
+ .is()           Often used with filters to check whether a form input is selected/checked.
+
+ $.isNumeric()   It is a global method. It is not used on a jQuery selection; rather, the value you want to test is passed as an argument.It returns a Boolean
+
+                 $.isNumeric(1)   $.isNumeric(-3)   $.isNumeric("2")   $.isNumeric(4.4)   $.isNumeric(+2)
+
+
+Events
+Method             Description
+.on()           Used to handle all events
+
+
+Event              Description
+blur            When an element loses focus
+
+change          When the value of an input changes
+
+focus           When an element gains focus
+
+select          When the option for a <select> element is changed
+
+submit          When a form is submitted
+
+     eg,
+        <div id="newItemButton">
+            <button href="#" id="showForm">new item</button>
+        </div>
+        <form id ="newItemForm">
+            <input type="text" id="itemDescription" placeholder="Add description . . . " />
+            <input type="submit" id="addButton" value="add"/>
+        </form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                var $newItemButton = $('#newItemButton');
+                var $newItemForm=$('#newItemForm') ;
+                var $textInput = $('input:text') ;
+                $newItemButton.show();
+                $newItemForm.hide();
+                $('#showForm').on('click',function() {
+                    $newItemButton.hide();
+                    $newItemForm.show();
+                });
+                $newItemForm.on('submit',function(e){
+                    e.preventDefault();
+                    var newText = $('input:text').val();
+                    $('li:last').after('<li>' + newText + '</li>') ;
+                    $newItemForm.hide() ;
+                    $newItemButton.show();
+                    $textInput.val('');
+                });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

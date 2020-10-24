@@ -1,0 +1,40 @@
+1) Delete a post by using DeleteView
+
+2) # template/post_detail.html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="post-entry">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
+    </div>
+    <a href="{% url 'post_edit' post.pk %}">+ Edit blog Post</a>
+    <a href="{% url 'post_delete' post.pk %}">+ Delete blog Post</a>
+{% endblock content %}
+
+3) # template/post_delete.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Delete post</h1>
+    <form action="" method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object.title }}"?</p>         # here instead of 'object.title' we can also use 'post.title'.Both are provided by DetailView
+        <input type="submit" value="Confirm" />
+    </form>
+{% endblock content %}
+
+4) Import DeleteView and reverse_lazy. reverse_lazy as opposed to just reverse so that it won't execute the URL redirect until our view has finished deleting the blog post.
+from django.views.generic.edit import DeleteView 
+from django.urls import reverse_lazy
+class BlogDeleteView(DeleteView):
+    model=Post
+    template_name='post_delete.html'
+    success_url=reverse_lazy('home')
+
+5) # blog/urls.py
+from .views import BlogDeleteView
+urlpatterns = [
+    path('post/<int:pk>/delete/',BlogDeleteView.as_view(),name='post_delete'),
+]
+
+6) python manage.py runserver
+
+

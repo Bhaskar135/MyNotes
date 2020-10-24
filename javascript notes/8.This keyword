@@ -1,0 +1,74 @@
+
+1) this keyword is used inside functions and objects.
+
+2) A function in global scope:
+   
+    a) When a function is created at the top level of a script (that is, not inside another object or function), then it is in the global scope or global context. 
+    b) The default object in this context is the window object. So when this keyword is used inside a function in the global context it refers to the window object.
+
+    eg, function windowSize() {
+           var width=this.innerWidth;
+           var height=this.innerHeight;
+           return [height, width];       // return properties of the window object.
+        }
+
+3) Global variables :
+    a) All global variables also become properties of the window object.
+    b) So when a function is in the global context, you can access global variables using the window object.
+
+    eg, var width = 600;
+        var shape = {width: 300};  // this is object
+        var showWidth=function(){
+            document.write(this.width);   // here this.width refer width=600 not width property of shape object.
+        };
+        showWidth();
+        
+4) Method of an object :
+    var shape={
+ 	width:600,
+        height:400,
+        getArea: function(){
+           return this.width * this.height;     // here this.width = shape.width=600
+        }
+    };
+
+5) Function as method :
+    var width=600;
+    var shape={
+        width:300
+    };
+    var showWidth=function(){
+        document.write(this.width);
+    };
+    
+    shape.getWidth=showWidth;
+    shape.getWidth();    // output is 300
+    showWidth();         // output is 600
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,155 @@
+
+1) Basic selector 
+
+        a)*                            All elements
+
+        b)element                      All elements with that element name
+        
+        c)#id                          Elements whose id attribute has the value specified
+        
+        d).class                       Elements whose cl ass attribute has the value specified
+ 
+        e) selector1, selector2        Elements that match more than one selector (see also the .add() method, which is more efficient when combining selections)
+
+
+2) Hierarchy selector
+
+   a) ancestor descendant              An element that is a descendant of another element (e.g., li a)
+   b) parent > child                   An element that is a direct child of another element (you can use * in the place of the child to select all child elements of the specified parent)
+
+   c) previous + next                  Adjacent sibling selector only selects elements that are immediately followed by the previous element
+
+   d) previous ~ siblings              Sibling selector will select any elements that are a sibling of the previous element
+
+
+3) Basic filters
+
+   a) :not (selector)                  All elements except the one in the selector (e.g., div: not ('#summary'))
+  
+   b) :first         (new)             The first element from the selection
+
+   c) :last          (new)             The last element from the selection
+
+   d) :even          (new)             Elements with an even index number in the selection
+
+   e) :odd           (new)             Elements with an odd index number in the selection
+
+   f) :eq(index)     (new)             Elements with an index number equal to the one in the parameter
+
+   g) :gt(index)     (new)             Elements with an index number greater than the parameter
+
+   h) :lt(index)     (new)             Elements with an index number less than the parameter
+
+   i) :header        (new)             All <hl> - <h6> elements
+
+   j) :animated      (new)             Elements that are currently being animated
+
+   k) :focus                           The element that currently has focus
+
+
+3) Content filters
+
+   a) :contains('text')                Elements that contain the specified text as a parameter
+
+   b) :empty                           All elements that have no children
+
+   c) :parent            (new)         All elements that have a child node(can be text or element)
+
+   d) :has(selector)     (new)         Elements that contain at least one element that matches the selector (e.g., div:has(p) matches all div elements that contain a <p> element)
+
+  
+4) Visibility filters
+
+   a) :hidden        (new)             All elements that are hidden
+
+   b) :visible       (new)             All elements that consume space in the layout of the page. Not selected if, display: none; height/width: O; ancestor is hidden. Selected if, visibility : hidden; opacity : 0 because they would take up space in layout.
+
+
+5) Child filters
+
+   a) :nth-child(expr)                 The value here is not zero-based e.g. ul li:nth-child(2)
+ 
+   b) :first-child                     First child from the current selection
+
+   c) :last-child                      Last child from the current selection
+
+   d) :only-child                      When there is only one child of the element (div p:only-child)
+
+
+6) Attribute filters
+
+   a) [attribute]                            Elements that carry the specified attribute (with any value)
+
+   b) [attribute ='value']                   Elements that carry the specified attribute with the specified value
+
+   c) [attribute !='value']      (new)       Elements that carry the specified attribute but not the specified value
+
+   d) [attribute ^= 'value']                 The value of the attribute begins with this value
+
+   e) [attribute $= 'value']                 The value of the attribute ends with this value
+
+   f) [attribute *= 'value']                 The value should appear somewhere in the attribute value
+
+   g) [attribute |= 'value']                 Equal to given string, or starting with string and followed by a hyphen
+
+   h) [attribute ~= 'value']                 The value should be one of the values in a space separated list
+
+   i) [attribute][attribute2]                Elements that match all of the selectors
+
+
+7) Forms
+
+   a) :input       (new)     All input elements
+
+   b) :text        (new)     All text inputs
+
+   c) :password    (new)     All password inputs
+
+   d) :radio       (new)     All radio buttons
+
+   e) :checkbox    (new)     All checkboxes
+
+   f) :submit      (new)     All submit buttons
+
+   g) :image       (new)     All <img> elements
+
+   h) :reset       (new)     All reset buttons
+
+   i) :button      (new)     All <button> elements
+
+   j) :file        (new)     All file inputs
+
+   k) :selected    (new)     All selected items from drop-down lists
+
+   l) :enabled               All enabled form elements (the default for all form elements)
+
+   m) :disabled              All disabled form elements (using the CSS disabled property)
+
+   n) :checked               All checked radio buttons or checkboxes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+
+1) While loop
+<body>
+    <?php
+        $index=1;
+        while($index<=5){
+            echo "$index<br>";
+            $index++;
+        }
+    ?>
+</body>
+
+2) Do while :
+
+<body>
+    <?php
+        $index=6;
+        do{
+            echo "$index<br>";
+            $index++;
+        }while($index<=5);
+    ?>
+</body>
+
+
+
+
+
+
+

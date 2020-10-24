@@ -1,0 +1,75 @@
+
+1) Use np.concatenate , np.vstack (vertical stack), and np.hstack (horizontal stack).
+
+2) np.concatenate takes a tuple or list of arrays as its first argument :
+
+import numpy as np
+x = np.array([1, 2, 3])
+y = np.array([3, 2, 1])
+z = [99, 99, 99]
+print(np.concatenate([x, y, z]))
+
+o/p :[ 1 2 3 3 2 1 99 99 99]
+
+
+3) np.concatenate can also be used for two-dimensional arrays:
+
+grid = np.array([[1, 2, 3], [4, 5, 6]])
+
+a) concatenate along the first axis
+np.concatenate([grid, grid])
+array([[1, 2, 3],
+       [4, 5, 6],
+       [1, 2, 3],
+       [4, 5, 6]])
+
+b) concatenate along the second axis (zero-indexed)
+np.concatenate([grid, grid], axis=1)
+array([[1, 2, 3, 1, 2, 3],
+       [4, 5, 6, 4, 5, 6]])
+
+
+4) For working with arrays of mixed dimensions, it can be clearer to use the np.vstack (vertical stack) and np.hstack (horizontal stack) functions:
+
+a) x = np.array([1, 2, 3])
+grid = np.array([[9, 8, 7],
+                 [6, 5, 4]])
+np.vstack([x, grid])
+
+o/p : array([[1, 2, 3],
+       	     [9, 8, 7],
+             [6, 5, 4]])
+
+b) grid = np.array([[9, 8, 7],
+                    [6, 5, 4]])
+
+y = np.array([[99],
+              [99]])
+np.hstack([grid, y])
+
+o/p : array([[ 9,  8,  7, 99],
+             [ 6,  5,  4, 99]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

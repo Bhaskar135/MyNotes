@@ -1,0 +1,255 @@
+Database Management with Flask-SQLAlchemy :
+ 1) pip install flask-sqlalchemy
+ 2) URL :
+    MySQL : mysql://username:password@hostname/database
+    Postgres : postgresql://username:password@hostname/database
+    SQLite (Linux, macOS) : sqlite:////absolute/path/to/database
+    SQLite (Windows) :  sqlite:///c:/absolute/path/to/database
+ 3) from flask_sqlalchemy import SQLAlchemy
+    app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:@localhost/prac1'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+    db=SQLAlchemy(app)
+ 4) Model Definition :
+    class Role(db.Model):
+        __tablename__= 'roles'      # name of the table in database
+        id = db.Column(db.Integer,primary_key=True)
+        name=db.Column(db.String(64),unique=True)
+        def __repr__(self):
+           return '<Role %r>' % self.name
+    
+    class User(db.Model):
+        __tablename__='users'
+        id=db.Column(db.Integer,primary_key=True)
+        username=db.Column(db.String(64), unique=True, index=True)
+        def __repr__(self):
+            return '<User %r>' % self.username
+    
+
+ 5) Some SQLAlchemy column types :
+    a) Integer : 32 bits integer
+    b) SmallInteger : 16 bits integer
+    c) BigInteger : Unlimited precision integer
+    d) Float : Floating-point number
+    e) Numeric : Fixed-point number 
+    f) String : Variable-length string
+    g) Text : Variable-length string, for large or unbounded length
+    h) Boolean : Boolean value
+    i) Date : Date value
+    j) Time : Time value
+    k) DateTime : Date and time value
+    l) Interval : Time interval
+    m) Enum : List of string values
+    
+   Some most common SQLAlchemy column options :
+    a) primary_key : Either True or False
+    b) unique : If True then do not allow duplicate values for this column.
+    c) index : If True, create an index for this column so that queries are more efficient.
+    d) nullable : If True then allow empty values for this column.
+    e) default : Define a default value for this column.
+
+ 6) Relationships :
+    a) For One-to-Many relationship from Role to User :
+       class Role(db.Model):
+           #.....
+           users=db.relationship('User',backref='role')
+
+       class User(db.Model):
+           #.....
+           role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))   # role_id is a foreign key. Here 'role' come from backref='role'
+       
+   'roles.id' argument specifies that the column should be interpreted as having id values from rows in the roles table. Here 'roles' is the database table name.
+    In Role class, users attribute will return the list of users associated with that role. The 'backref' argument defines the reverse direction of the relationship by adding a role to the User model. This attribute can be used on any instance of User model instead of the role_id foreign key to access the Role model as an object.
+
+ 
+ Common SQLAlchemy relationship options :
+ a) backref : add a back reference in the other model in the relationship.
+ b) primaryjoin : Specify the join condition between the two models explicitly (necessary for ambiguous relationships.)
+ c) lazy : Specify how the loaded items are to be loaded.
+           Some values :
+           i) select : items are loaded on demand the first time they are accessed.
+           ii) immediate : items are loaded when the source object is loaded.
+           iii) joined : items are loaded immediately, but as a join.
+           iv) subquery : items are loaded immediately, but as a subquery.
+           v) noload : items are never loaded.
+           vi) dynamic : instead of loading the items, the query that can load them is given.
+ d) uselist : if False, use a scalar instead of a list.
+ e) order_by : Specify the ordering used for the items in the relationship.
+ f) secondary : Specify the name of the association table to use in many-to-many relationships.
+ g) secondaryjoin : Specify the secondary join condition for many-to-many relationships when SQLAlchemy cannot determine it on its own.
+
+  The one-to-one relationship can be expressed the same way as one-to-many with the uselist option set to False within the db.relationship().
+  The many-to-one relationship can be expressed the same way as one-to-many but foreign key and db.relationship() definition both on the "many" side.
+  The many-to-many relationship require addition table called association table.
+
+ Database Operations
+ 1) Creating the tables :
+      (venv)flask shell
+            from main import db
+            db.create_all()
+ 
+ 2) To remove tables :
+      db.drop_all()
+ 
+ 3) Inserting rows by command line :
+      from main import Role,User
+      admin_role=Role(name='Admin')
+      mod_role=Role(name='Moderator')
+      user_role=Role(name='User')
+      
+      user_john=User(username='john',role=admin_role)
+      user_susan=User(username='susan',role=user_role)
+      user_david=User(username='david',role=user_role)
+	The objects exist only on the python side, they have not been written to the database yet.
+
+ 4) To write on the database use database session
+      db.session.add(admin_role).......... or db.session.add_all([admin_role,mod_role,user_role,user_john,user_susan,user_david])
+      After that db.session.commit()
+ 
+ 5) Modifying rows :
+      admin_role.name='Administrator'
+      db.session.add(admin_role)
+      db.session.commit()
+
+ 6) Deleting rows :
+      db.session.delete(mod_role)
+      db.session.commit()
+
+ 7) Querying rows :
+      a) Role.query.all()
+      b) User.query.filter_by(role=user_role).all()
+      c) If we exit the shell session, and start a brand new shell session, we have to re-create the python objects from their database rows.
+           user_role=Role.query.filter_by(name='User').first()
+      
+  Common SQLAlchemy query filters
+  a) filter() : Returns a new query that adds an additional filter to the original query.
+  b) filter_by() : Returns a new query that adds an additional equlity filter to the original query.
+  c) limit() : Returns a new query that limits the number of results of the original query to the given number.
+  d) offset() : Returns a new query that applies an offset into the list of results of the original query.
+  e) order_by() : Returns a new query that sorts the results of the original query according to the given criteria.
+  f) group_by() : Returns a new query that groups the results of the original query according to the given criteria.
+
+  Most common SQLAlchemy query executors :
+  a) all() : Returns all the results of a query as a list.
+  b) first() : Returns the first result of a query,or None if there are no results.
+  c) first_or_404() : Returns the first result of a query, or aborts the request and sends a 404 error as the response if there are no results.
+  d) get() : Returns the row that matches the given primary key, or None if no matching row is found.
+  e) get_or_404() : Returns the row that matches the given primary key, or if the key is not found, aborts the request and sends a 404 error as the response
+  f) count() : Returns the result count of the query
+  g) paginate() : Returns a pagination object that contains the specified range of results.
+
+  Relationships work similarly to queries :
+  1) from Role table to User table :
+        us=user_role.users
+        us
+  2) from User table to Role table :
+	us=user_role.users
+        us[0].role
+     
+        The user_role.users query internally calls all() to return the list of users. Because the query object is hidden, it is not possible to refine it with additional query filters.
+       The configuration of the relationship is modified with a lazy='dynamic' argument to request that the query is not automatically executed.
+
+ class Role(db.Model):
+    ........
+    users=db.relationship('User',backref='role',lazy='dynamic')
+    ........
+    
+  With this relationship configured in this way, user_role.users returns a query that hasn't executed yet, so filters can be added to it.
+     a) user_role.users.order_by(User.username).all()
+     b) user_role.users.count()
+
+  Database access in view functions :
+  # main.py :
+  @app.route('/',methods=['GET','POST'])
+  def index():
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():
+        user=User.query.filter_by(username=form.name.data).first()
+        if user is None :
+            user=User(username=form.name.data)
+            db.session.add(user)
+            db.session.commit()
+            session['known']=False
+        else:
+            session['known']=True
+        session['name']=form.name.data
+        form.name.data=''
+        return redirect(url_for('index'))
+    return render_template('index.html',form=form,name=session.get('name'),known=session.get('known',False))
+
+  # templates/index.html :
+  {% extends "base.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+  {% block title %}Flasky{% endblock %}
+
+  {% block page_content %}
+    <div class="page-header">
+        <h1>Hello {% if name %}{{name}} {% else %} Stranger {% endif %}!</h1>
+        {% if not known %}
+          <p>Pleased to meet you</p>
+        {% else %}
+          <p>Happy to see you again!</p>
+        {% endif %}
+    </div>
+    {{ wtf.quick_form(form) }}
+  {% endblock %}
+
+ Integration with the Python Shell :
+    Having to import the database instance and the models each time a shell session is started is tedious work. To avoid having to constantly repeat these steps, flask shell command can be configured to automatically import these objects.
+
+  # main.py
+  @app.shell_context_processor
+  def make_shell_context():
+      user_role=Role.query.filter_by(name='User').first()
+      return dict(db=db,User=User,Role=Role,user_role=user_role)
+    
+      Now you can check this in shell :
+        >>> flask shell
+        >>> app
+        >>> db
+
+  Database Migrations with Flask-Migrate
+  1) To update database tables use Flask-Migrate
+  2) pip install flask-migrate
+  3) # main.py
+     from flask_migrate import Migrate 
+     ......
+     migrate=Migrate(app,db)
+  4) flask db init
+         This command creates a migrations directory, where all the migration scripts will be stored.
+  
+     In alembic, a database migration is represented by a migration script.This script has two functions - upgrade() and downgrade() .
+     a) upgrade() : This function applies the database changes that are part of the migration.
+     b) downgrade() : This function removes them.
+       Procedure needs to be followed for Flask-Migrate :
+         i) Make the necessary changes to the model classes.
+        ii) Create an automatic migration script with the "flask db migrate" command. 
+       iii) Review the generated script and adjust it so that it accurately represents the changes that were made to the models.
+        iv) Add the migration script to source control.
+         v) Apply the migration to the database with the "flask db upgrade" command.
+  5) flask db migrate -m "initial migration" 
+  6) flask db upgrade 
+     For this first migration, this is equivalent to db.create_all() 
+
+  Adding more migrations :
+  1) Make necessary changes in the database models.
+  2) flask db migrate
+  3) Review the generated migration script and correct it if it has any inaccuracies.
+  4) flask db upgrade 
+
+  Procedure to expand the last migration script is as follows :
+     1) Remove the last migration from the database with "flask db downgrade"   (This may cause some data to be lost)
+     2) Delete the last migration script
+     3) Generate new database migration : flask db migrate
+     4) Review and apply the migration script as described previously.
+
+
+
+
+
+
+
+
+
+
+
+

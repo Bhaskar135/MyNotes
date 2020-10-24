@@ -1,0 +1,40 @@
+
+1) Public and Private :
+
+<body>
+    <?php 
+        class Movie{
+            public $title;     // can be access throughout the programme.
+            private $rating;     // can be access only within the class.
+            function __construct($title,$rating){
+                $this->title=$title;
+                $this->setRating($rating);
+            }
+            function getRating(){      // get function
+                return $this->rating;
+            }
+            function setRating($rating){     // set function
+                if($rating=="Good"||$rating=="Bad"||$rating=="Awsome"){
+                    $this->rating=$rating;   
+                }
+            }
+        }
+        $movie1=new Movie("Avenger","Good");
+        echo $movie1->getRating();
+
+    ?>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

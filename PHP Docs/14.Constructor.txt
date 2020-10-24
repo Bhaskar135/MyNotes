@@ -1,0 +1,47 @@
+
+1) 
+<body>
+    <?php 
+        class Book{
+            var $title;
+            var $author;
+            var $totalpage;
+
+            function __construct($c_title,$c_author,$c_totalpage){      // Constructor
+                $this->title= $c_title;
+                $this->author= $c_author;
+                $this->totalpage= $c_totalpage;
+            }
+        }
+        $book1=new Book("Harry potter", "Bhaskar", 500);
+        $book2=new Book("Avenger", "Dipankar", 400);
+        
+        echo $book1->title;
+        echo $book1->author;
+        echo $book1->totalpage;
+
+    ?>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

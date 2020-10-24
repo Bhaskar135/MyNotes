@@ -1,0 +1,249 @@
+
+1) DOM : As a browser loads a web page, it creates a model of t hat page.The model is called a DOM tree, and it is stored in t he browsers' memory. It consists of four main types of nodes -> 
+ 
+  a) document node : At the top of the tree a document node is added; it represents the entire page. When you access any element, attribute, or text
+node, you navigate to it via the document node.
+
+  b) element node : h1,h2,h3,p,a.....
+
+  c) attribute node : Attribute nodes are not children of the element that carries them; they are part of that element. Once you access an element, there are specific JavaScript methods and properties to read or change that element's attributes.
+
+  d) text node : Text nodes cannot have children. If an element contains text and another child element, the child element is not a child of the text node but rather a child of the containing element.
+
+2) Each node of DOM tree is an object with methods and properties.
+
+3) 
+  <html>
+     <body>
+       <div id="page">
+          <h1 id="header">List</h1>
+          <h2>Buy groceries</h2>
+          <ul>
+                <li id="one" class="hot"><em>fresh</em> figs</li>
+                <li id="two" class="hot">pine nuts</li>
+                <li id="three" class="hot">honey</li>
+                <li id="four">balsamic vinegar</l i>
+          </ul>
+          <script src="js/list.js"></script>
+       </div>
+     </body>
+  </html>
+
+4) Accessing the elements :
+
+    a) Select an individual node :
+       i) getElementById('id') : It is faster than querySelector().
+
+      ii) querySelector('css selector') : This method returns only the first of the matching elements.
+            eg, querySelector('li.hot')
+            
+            eg,var el = document.querySelector('li.hot');
+               el.className ='cool' ;
+
+   b) Select multiple elements(nodelists(collection of element nodes)) :
+
+       i) getElementsByClassName() : This method is faster than querySelectorAll(). eg, getElementsByClassName('hot')
+
+      ii) getElementsByTagName() : This method is faster than querySelectorAll(). eg, getElementsByTagName('li')
+
+     iii) querySelectorAll() : Uses CSS selector syntax to select one or more elements and returns all of those that match.eg, querySelectorAll('li.hot')
+            eg, var els = document.querySelectorAll('li.hot') ;
+                els[1].className = 'cool' ;
+
+            eg, <ul>
+                   <li class="hot">C++</li>
+                   <li class="hot">Java</li>
+                   <li class="hot">Javascript</li>
+                </ul>
+                <script>
+                   var hotItems = document.querySelectorAll('li.hot'); 
+                   if(hotItems.length>0){
+                       for(var i=0;i<hotItems.length;i++){
+                            hotItems[i].className="cool";
+                       }
+                   }
+                   var coolItems = document.querySelectorAll('li.cool'); 
+                   if(coolItems.length>0){
+                       for(var i=0;i<coolItems.length;i++){
+                            coolItems[i].textContent="Django";
+                       }
+                   }
+               </script>
+
+     *) item(index number) method or arrayName[index] returns a specific node from the Nodelist. But arrayName[index] faster than item().
+
+     *) The methods beginning getElementsBy__ return live Node lists(when your script updates the page, the Nodelist is updated at the same time.). They are also typically faster to generate than static Nodelists. The new methods that begin querySelector__ return static Nodelists( In a static Nodelist when your script updates the page, the NodeList is not updated to reflect the changes made by the script.). 
+
+ eg, by class name
+   <p class="oop">C++</p>
+   <p class="oop">Java</p>
+   <p class="oop" id="py">Python</p>
+   <script>
+        var el=document.getElementsByClassName('oop');
+        el[2].className='functional';
+        var el1=document.getElementsByClassName('functional');
+        el1[0].textContent="Python with django";
+   </script>
+
+ eg, by tag name
+   <ul>
+       <li>C++</li>
+       <li>Java</li>
+       <li>Javascript</li>
+   </ul>
+   <script>
+       var elements = document.getElementsByTagName('li');
+       if(elements.length>O) {
+           var el = elements[O];
+           el.className = 'cool';
+       }
+   </script>
+
+   c) Traversing between element nodes : 
+       i) parentNode : Selects the parent of the current element node (which will return just one element).
+   
+      ii) previousSibling/nextSibling : Selects the previous or next sibling from the DOM tree.
+
+     iii) firstChild / lastChild : Select the first or last child of the current element.
+
+       *) If there is a Whitespace between elements then it creates a text node between them.
+           
+           <li>Javascript</li>
+           <li>Node.JS</li> It has white space. But <li>Javascript</li><li>Node.JS</li> have not white space.
+
+       eg,<ul>
+            <li id="one" class="hot"><em>fresh</em> figs</li>
+            <li id="two" class="hot">pine nuts</li>
+            <li id="three" class ="hot">honey</li>
+            <li id="four">balsamic vinegar</li>
+         </ul>
+        <script>
+            var startItem = document.getElementById('two');
+            var prevItem = startItem.previousSibling;
+            var nextItem = startItem.nextSibling;
+            prevItem.textContent = 'complete' ;
+            nextItem.textContent = 'cool';
+        </script>
+        The output is like fresh figs
+                           complete
+                           pine nuts
+                           cool
+                           honey
+                           balsamic vinegar
+
+       *) To avoid this problem we can use either jquery or <ul><li id="one" class="hot"><em>fresh</em> figs</li><li id="two" class="hot">pine nuts</li><li id="three" class ="hot">honey</li><liid="four">balsamic vinegar</li></ul>
+
+       *) One more solution is : 
+       <ul
+            ><li id="one" class="hot"><em>fresh</em> figs</li
+            ><li id="two" class="hot">pine nuts</li
+            ><li id="three" class ="hot">honey</li
+            ><li id="four">balsamic vinegar</li
+        ></ul>
+        <script>
+            var startItem = document.getElementsByTagName('ul')[0];
+            var firstChild = startItem.firstChild;
+            var lastChild = startItem.lastChild;
+            firstChild.textContent = 'complete' ;
+            lastChild.textContent = 'cool';
+        </script>
+
+
+5) Working with the selected elements : Properties you can use to work with attributes: className/id
+
+   a) access/update text nodes : To access the text node above:
+           1. Select the <li> element
+           2. Use the firstChild property to get the text node
+           3. Use the text node's only property 'nodeValue' to get the text from the element
+
+   b) work with HTML content : Properties allow access to text content are 'innerHTML'and 'textContent'
+         Several methods let you create new nodes, add nodes to a tree, and remove nodes from a tree: createElement(), createTextNode(), appendChild()/removeChild()
+
+   c) update or access attribute values :
+       i) hasAttribute() : checks if an attribute exists.
+      ii) getAttribute() : gets attribute value.  
+     iii) setAttribute() : updates the value.
+      iv) removeAttribute() : removes an attribute.
+
+ eg, <ul>
+            <li id="one" class="hot"><em>fresh <em>figs <li>
+            <li id="two" class="hot">pine nuts<li>
+            <li id="three" class="hot">honey<li>
+            <li id="four">balsamic vinegar<li>
+     </ul>
+     <script>
+            var el = document.getElementById('one');
+            el.className ='cool';     // changing the class name of id="one" element.
+     </script>
+
+ eg,
+ var elements = document.getElementsByClassName('hot')
+ if (elements.length>= 1) {
+     var firstItem = elements.item(O);
+ }
+
+ Or 
+ var elements = document.getElementsByClassName('hot')
+ if (elements.length>= 1) {
+     var firstItem = elements[O];
+ }
+ 
+6) Access and Update text node with nodeValue : 
+   a) nodeValue is applied to ony text node where as textContent is applied to element also.
+   b) To work with text in an element, first the element node is accessed and then its text node.
+   c) The text node has a property called nodeValue which returns the text in that text node.
+   d) You can also use the node Value property to update the content of a text node.
+
+   <li id="one"><em>fresh</em> figs</li>
+   document.getElementById("one").firstChild.nextSibling.nodeValue;
+
+   eg,
+   <li id="one">fresh figs</li>
+   <script>
+        var itemOne= document.getElementById('one');     //Get the element
+        var elText=  itemOne.firstChild.nodeValue;       //Get its text content
+        elText = elText.replace('fresh figs','kale');    //Change fresh figs to kale
+        itemOne.firstChild.nodeValue = elText;           //Update the text content
+   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

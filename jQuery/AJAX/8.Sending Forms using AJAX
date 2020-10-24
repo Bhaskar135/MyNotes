@@ -1,0 +1,74 @@
+
+1) To send data to the server, you are likely to use the .post() method.
+
+2) jQuery also provides the .serialize() method to collect form data. It selects all of the information from the form. And then puts it into a string ready to send to the server.
+
+3) It will only send successful form controls. It will nol send:: 
+     
+     a) Controls that have been disabled.
+
+     b) Controls where no option has been selected.
+
+     c) The submit button.
+
+4) When a server-side page handles a form, you might want the same page to work whether:
+
+     • It was a normal request for a web page (in which case you would send the whole page); or
+          
+     • It was an Ajax request (where you might respond with just a fragment of the page)
+
+5) On the server, you can check whet her a page is being requested by an Ajax call using the X-Requested-With header.
+
+6) If it is set and has a value of XMLHttpRequest, you know that the request was an Ajax request.
+
+7) example :
+ 
+   a) When users submit the form, an anonymous function runs.
+
+   b) e.PreventDefault() stops the form from submitting.
+
+   c) The form data is collected by the .serialize() method and stored in the details variable.
+
+   d) The $.post() method is called using all three parameters :
+
+       i) The url of the page that the data is being sent to
+
+      ii) The data that was just collected from the form
+
+     iii) A callback function that will display the results to the user
+
+<form id="register" action="register.php" method="post">
+     <h2>Register</h2>
+     <label for="name"> Username</label>
+     <input type="text" id="name" name="name" />
+     <label for="pwd"> Password</label>
+     <input type="password" id="pwd" name="pwd" />
+     <label for="email"> Emai1 </label>
+     <input type="email" id="email" name="email" />
+     <input type="submit" value="Join" />
+</form>
+
+   $('#register').on('submit', function(e) {
+        e.preventDefault();
+        var details = $('#register').serialize();
+        $.post('register.php', details,function(data) { 
+            $('#register').html(data);
+        });
+   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

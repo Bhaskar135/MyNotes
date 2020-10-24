@@ -1,0 +1,53 @@
+
+1) The most flexible way of doing this is with the reshape() method.
+
+grid = np.arange(1, 10).reshape((3, 3))
+print(grid)
+      
+   [[1 2 3]
+    [4 5 6]
+    [7 8 9]]
+
+   Note that for this to work, the size of the initial array must match the size of the reshaped array.
+
+2) Reshaping a one-dimensional array into a two-dimensional row or column matrix. You can do this with the reshape method, or more easily by making use of the newaxis keyword within a slice operation:
+
+     a)  x = np.array([1, 2, 3])
+         x.reshape((1, 3))
+     o/p array([[1, 2, 3]])
+
+     
+     b)  x[np.newaxis, :]
+     o/p array([[1, 2, 3]])
+ 
+     c)  x.reshape((3, 1))
+     o/p array([[1],
+                [2],
+                [3]])
+
+     d)  x[:, np.newaxis]
+     o/p array([[1],
+                [2],
+                [3]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+
+<body>
+    <?php 
+        class Movie{
+            public $title;
+            public $rating;
+        }
+        class SuperHero extends Movie{
+            function checkRating($rating){
+                if($rating=="Good"){
+                    return "Good";
+                }else{
+                    return "Bad";
+                }
+            }
+        }
+        $a1=new SuperHero();
+        $a1->title="Avenger";
+        echo $a1->checkRating("Bad");
+    ?>
+</body>

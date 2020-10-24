@@ -1,0 +1,53 @@
+
+1) use tick `....`(left of 1 key in keyboard).
+
+2) Print value as ${variable_name}.
+
+let a=25;
+msg=`Her roll no is ${a}`;
+console.log(msg);
+
+3) 
+
+function bio(arr,arg1,arg2){
+    console.log(arr);
+    console.log(arg1);
+    console.log(arg2);
+    return [arg1,arg2];
+}
+
+const ob1={
+    name:"Bhaskar",
+    address:"Sivasagar",
+    qualification:"MCA"
+}
+
+const getVal=bio`Your name ${ob1.name}      
+Your address ${ob1.address}
+Your qualification ${ob1.qualification}`;
+console.log(`hello ${getVal}`);
+
+
+ *) bio is the function name. ${ob1.name} is store in arg1 and ${ob1.address} is store in arg2. And other string is stored in arr.
+
+Rest operator(...) :
+function bio(arr, ...arg){
+    console.log(arg);  // It behaves like an array
+    return arg;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

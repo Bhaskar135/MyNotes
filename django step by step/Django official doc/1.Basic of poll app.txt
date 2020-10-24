@@ -1,0 +1,71 @@
+1) mkdir mysite
+
+2) cd mysite
+
+3) pip3 install pipenv
+
+4) pipenv install django
+
+5) pipenv shell
+
+6) django-admin startproject mysite
+
+7) cd mysite
+
+8) python manage.py runserver
+
+9) python manage.py startapp polls
+
+10) # mysite/settings.py
+INSTALLED_APPS = [
+    #.......
+    'polls.apps.PollsConfig',
+]
+
+
+11) # polls/views.py
+
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+
+12) # polls/urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+13) # mysite/urls.py
+
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

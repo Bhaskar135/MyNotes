@@ -1,0 +1,117 @@
+
+We’ll cover a few categories of basic array manipulations here :
+
+a) Attributes of arrays : Determining the size, shape, memory consumption, and data types of arrays
+
+b) Indexing of arrays : Getting and setting the value of individual array elements
+
+c) Slicing of arrays : Getting and setting smaller subarrays within a larger array
+
+d) Reshaping of arrays : Changing the shape of a given array
+
+e) Joining and splitting of arrays : Combining multiple arrays into one, and splitting one array into many
+
+
+a) NumPy Array Attributes :  
+
+  1) We’ll use NumPy’s random number generator, which we will seed with a set value in order to ensure that the same random arrays are generated each time this code is run:
+
+import numpy as np
+np.random.seed(0)      # seed for reproducibility
+x1 = np.random.randint(10, size=6)      # One-dimensional array
+x2 = np.random.randint(10, size=(3, 4))       # Two-dimensional array
+x3 = np.random.randint(10, size=(3, 4, 5))       # Three-dimensional array
+
+ Each array has attributes i) ndim (the number of dimensions)
+                          ii) shape (the size of each dimension)
+                         iii) size (the total size of the array)
+                          iv) dtype (the data type of the array)
+                           v) itemsize (which lists the size (in bytes) of each array element)
+                          vi) nbytes (which lists the total size (in bytes) of the array)
+
+print("x3 ndim: ", x3.ndim)      o/p : x3 ndim: 3
+
+print("x3 shape:", x3.shape)     o/p : x3 shape: (3, 4, 5)
+
+print("x3 size: ", x3.size)      o/p : x3 size: 60
+
+print("dtype:", x3.dtype)        o/p : dtype: int64
+
+print("itemsize:", x3.itemsize, "bytes")         o/p : itemsize: 8 bytes
+
+print("nbytes:", x3.nbytes, "bytes")             o/p : nbytes: 480 bytes
+
+
+
+b) Array Indexing :
+
+1) For 1D array 
+ 
+    import numpy as np
+    np.random.seed(0) # seed for reproducibility
+    x1 = np.random.randint(10, size=6)
+    x1[0]  o/p : 5
+    x1[4]  o/p : 7
+    x1[-1]  o/p : 9
+
+2) For 2D array : x2[2, 0]
+
+3) If you attempt to insert a floating-point value to an integer array, the value will be silently truncated. example if we insert 3.13 in an integer array then it will be inserted as 3.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

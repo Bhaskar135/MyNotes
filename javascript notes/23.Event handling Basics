@@ -1,0 +1,14 @@
+
+1) When the user interacts with the HTML on a web page, there are three steps involved in getting it to trigger some JavaScript code. Together these steps are known as event handling :
+    a) Select the element node(s) you want the script to respond to.
+    b) Indicate which event on the selected node(s) will trigger the response.
+    c) State the code you want to run when the event occurs.
+
+2) Three ways to bind an event to an element : Event handlers let you indicate which event you are waiting for on any particular element. There are three types of event handlers.
+
+    a) HTML event handlers(bad practice)
+
+    b) Traditional DOM event handlers : The main drawback is that you can only attach a single function to any event.
+        eg, the submit event of a form cannot trigger one function that checks the contents of a form, and a second to submit the form data if it passes the checks.
+
+    c) DOM level 2 event listener : These newer event listeners allow one event to trigger multiple functions.

@@ -1,0 +1,30 @@
+
+1) Following four methods can be used to get, set, update addtribute values:
+
+  a) .attr()        : This method can get or set a specified attribute and its value.
+
+                         eg, $('li#one').attr('id');
+                         or  $('li#one').attr('id','hot');
+
+  b) .removeAttr()  : This method removes a specified attribute (and its value).
+                         eg, $('li#one').removeAttr('id');
+
+  c) .addClass()    : This method adds a new value to the existing value of the class attribute. It does not overwrite existing values.
+
+  d) .removeClass() : This method removes a value from the class attribute.
+
+    eg,
+        <ul>
+            <li class="hot">Hello Python</li>
+            <li>Hello Django</li>
+            <li>Hello jQuery</li>
+            <li id="three" class="hot">Hello React</li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('li#three').removeClass('hot');
+                $('li.hot').addClass('favorite');
+                $('ul').attr('id','group');
+            });
+        </script>

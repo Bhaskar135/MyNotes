@@ -1,0 +1,35 @@
+
+1) switch (level) {
+       case 'One':
+           title= 'Level 1 ' ;
+           break;
+       case 'Two':
+           title = 'Level 2 ' ;
+           break;
+       case 'Three':
+           title = 'Level 3' ;
+           break ;
+       default :
+           title= 'Test';
+           break;
+   }
+
+2) eg, 
+   var msg;
+   var level = 2; 
+   switch (level) {
+      case 1:
+         msg = 'Good luck on the first test ' ;
+         break;
+      case 2:
+         msg = 'Second of three - keep going!';
+         break;
+      case 3:
+         msg = ' Final round, almost there!';
+         break;
+      default :
+         msg = 'Good luck!';
+         break;
+   }
+   var el = document.getEl ementByld('answer');
+   el.textContent = msg;

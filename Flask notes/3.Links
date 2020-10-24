@@ -1,0 +1,21 @@
+8) Links : url_for():
+   For : @app.route('/')
+         def index():
+             return render_template('index.html') 
+   use url_for('index') # index is function name
+   
+   For : def index():
+             return render_template('index.html') 
+         app.add_url_route('/','index1','index')
+   use url_for('index1') # index1 is the endpoint
+
+9) url_for('index',_external=True)  #absolute url: This type of link used for outside of the web browser, such as sending email.
+   url_for('user',name='john',page=2,version=1)    # dynamic url
+   return /user/john?page=2&version=1
+
+Static Files :
+ 1) Make a subdirectory 'static'
+ 2) to link static file : "{{ url_for('static',filename='something') }}"
+  
+
+

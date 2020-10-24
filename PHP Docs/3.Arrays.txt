@@ -1,0 +1,13 @@
+
+1)
+<body>
+    
+    <?php
+        $friends=array("Cake PHP","Laraval","Django");
+        echo $friends[2];
+    ?>
+</body>
+
+2) Getting total elements in an array : count($friends)
+
+

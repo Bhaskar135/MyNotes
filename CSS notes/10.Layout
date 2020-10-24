@@ -1,0 +1,203 @@
+
+Controlling the position of elements :
+
+1) Normal flow : you do not need a CSS property to indicate that elements should appear in normal flow, but the syntax would be:
+     position: static;
+
+2) Relative positioning : position: relative;
+   a) This moves an element from the position it would be in normal flow, shifting it to the top, right, bottom, or left of where it would have been
+placed.
+   b) This does not affect the position of surrounding elements.
+   c) To move the box up or down, you can use either the top or bottom properties. To move the box horizontally, you can use either the left or right properties.
+
+3) Absolute positioning :
+   a) This positions the element in relation to its parent element.
+   b) It does not affect the position of any surrounding elements.
+   c) The box offset properties ( top or bottom and left or right ) specify where the element should appear in relation to its parent element.
+   d) Absolutely positioned elements move as users scroll up and down the page.
+
+4) Fixed positioning : 
+   a) This is a form of absolute positioning that positions the element in relation to the browser window, as opposed to the parent element.
+   b) They do not move when the user scrolls up or down the page.
+
+5) Floating element : 
+   a) Floating an element allows you to take that element out of normal flow and position it to the far left or right of a containing box. 
+   b) The floated element becomes a block-level element around which other content can flow.
+
+6) z-index : 
+   a) When you move any element from normal flow, boxes can overlap. The z-index property allows you to control which box appears on top.
+   b) Its value is a number, and the higher the number the closer that element is to the front.
+
+7) To indicate where a box should be positioned, you may also need to use box offset properties to tell the browser how far from the top or bottom and left or right it should be placed.
+
+ 
+1) eg of normal flow :
+HTML
+   <body>
+       <h1>The Evolution of the Bicycle</h1>
+       <p>In 1817 Baron von Drais invented a walking machine that would help him get around the royal gardens faster...</p>
+   </body>
+
+CSS
+   body {
+      width: 750px;
+      font-family: Arial, Verdana, sans-serif;
+      color: #665544;
+   }
+   h1 {
+      background-color: #efefef;
+      padding: 10px;
+   }
+   p {
+      width: 450px;
+   }
+
+2) eg of relative flow :
+CSS
+   p.example {
+      position: relative;
+      top: 10px;
+      left: 100px;
+   }
+
+3) eg of absolute flow :
+CSS
+   h1 {
+      position: absolute;
+      top: 0px;
+      left: 500px;
+      width: 250px;
+   }
+   p {
+      width: 450px;
+   }
+
+4) eg of fixed positioning :
+CSS 
+   h1 {
+       position: fixed;
+       top: 0px;
+       left: 50px;
+       padding: 10px;
+       margin: 0px;
+       width: 100%;
+       background-color: #efefef;
+   }
+   p.example {
+       margin-top: 100px;
+   }
+
+5) eg of z-index :
+CSS
+   h1 {
+       position: fixed;
+       top: 0px;
+       left: 0px;
+       margin: 0px;
+       padding: 10px;
+       width: 100%;
+       z-index: 10;
+   }
+   p {
+       position: relative;
+       top: 70px;
+       left: 70px;
+   }
+
+float property : 
+   a) The float property allows you to take an element in normal flow and place it as far to the left or right of the containing element(parent) as possible.
+   b) You should also use the width property to indicate how wide the floated element should be.
+   c) When elements are floated, the height of the boxes can affect where the following elements sit.
+
+      eg, width: 230px;
+          float: left;
+
+      Suppose we have 6 boxes with same height except 3rd one. Which has less height than others. Then fourth box take position under 3rd one. This problem can be solve by clear property.
+
+clear property :
+   a) The clear property allows you to say that no element (within the same containing element) should touch the left or right hand sides of a box.
+   b) The values are : 
+       i) left : The left-hand side of the box should not touch any other elements appearing in the same containing element.
+      ii) right : The right-hand side of the box will not touch elements appearing in the same containing element.
+     iii) both : Neither the left nor right-hand sides of the box will touch elements appearing in the same containing element.
+      iv) none : Elements can touch either side.
+
+    In the above example, the fourth paragraph has a class called clear. The CSS rule for this class uses the clear property to indicate that nothing should touch the left-hand side of it. clear:left;
+
+*) If a containing element(parent) only contains floated elements, some browsers will treat it as if it is zero pixels tall.
+     
+    eg, if we give (border:1px solid black) to parent element then border assigned to the containing element has collapsed, and it looks like 2px.
+    To solve this problem we do (overflow: auto; and width:100%;) to parent element.
+
+Multicolumn layouts with float :
+
+ 1) Three CSS properties are used to position the columns next to each other: width, float, margin
+ eg, 
+ HTML
+ <div class="col1">
+   HTML is a ...........
+ </div>
+ <div class="col2">
+   CSS is a ............
+ </div>
+            
+ CSS 
+ .col1{
+     float: left;
+     width: 620px;
+     margin: 10px;
+ }
+ .col2{
+     float: left;
+     width: 300px;
+     margin: 10px;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

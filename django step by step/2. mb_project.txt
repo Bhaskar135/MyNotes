@@ -1,0 +1,119 @@
+1) django-admin startproject mb_project
+2) python manage.py startapp posts
+3) # mb_project/settings.py
+	INSTALLED_APPS = [
+		'posts.apps.PostsConfig',
+	]
+4) execute migrate command to create an initial database based on Django's default settings.
+	python manage.py migrate
+5) python manage.py runserver
+6) # posts/models.py
+  	from django.db import models
+	class Post(models.Model):
+    	    text=models.TextField()
+    	    def __str__(self):
+                return self.text[:50]
+7) python manage.py makemigrations posts
+8) python manage.py migrate posts
+9) python manage.py createsuperuser
+10) #posts/admin.py
+	from django.contrib import admin
+	from .models import Post
+	admin.site.register(Post)
+11) #posts/views.py
+	from django.views.generic import ListView
+	from .models import Post
+	class HomePageView(ListView):
+		model = Post
+		template_name='home.html'
+
+    Internally ListView returns an object called 'object_list' that we want to display in our template.
+12) make a project level 'templates'
+13) # settings.py
+	TEMPLATES=[
+		{
+		    'DIRS' : [os.path.join(BASE_DIR,'templates')],
+		},
+	]
+14) <!-- templates/home.html -->
+	<h1>Message Board Homepage</h1>
+	<ul>
+    		{% for post in object_list %}
+        		<li>{{ post }}</li>
+    		{% endfor %}
+	</ul>
+
+15) instead of 'object_list' we can provide an explicit name by 'context_object_name'
+	from django.views.generic import ListView
+	from .models import Post
+	class HomePageView(ListView):
+	    model = Post
+	    template_name='home.html'`
+	    context_object_name='all_posts_list'
+
+16) <!-- templates/home.html -->
+	<h1>Message Board Homepage</h1>
+	<ul>
+    		{% for post in all_posts_list %}
+        		<li>{{ post }}</li>
+    		{% endfor %}
+	</ul>
+
+17) # mb_project/urls.py
+	from django.contrib import admin
+	from django.urls import path,include
+	urlpatterns = [
+    		path('admin/', admin.site.urls),
+    		path('',include('posts.urls')),
+	]
+
+18) # posts/urls.py
+	from django.urls import path
+	from .views import HomePageView
+	urlpatterns=[
+    		path('',HomePageView.as_view(),name='home'),
+	]
+19) python manage.py runserver
+20) Now we test our model and homepage. 
+# posts/tests.py
+
+from django.test import TestCase	#TestCase module help us to create a sample database
+from .models import Post
+
+class PostModelTest(TestCase):		# without using actual database we do separate test database
+    def setUp(self):			# a method to create a new database.Not a test method
+        Post.objects.create(text='just a test')
+    def test_text_content(self):	# testing the content
+        post=Post.objects.get(id=1)
+        expected_object_name=f'{post.text}'
+        self.assertEqual(expected_object_name,'just a test')
+21) python manage.py test
+22) Second test #posts/tests.py
+
+from django.test import TestCase	
+from django.urls import reverse		# To test homepage.
+from .models import Post
+class PostModelTest(TestCase):		# without using actual database we do separate test database
+    def setUp(self):			
+        Post.objects.create(text='just a test')
+    def test_text_content(self):     
+        post=Post.objects.get(id=1)
+        expected_object_name=f'{post.text}'
+        self.assertEqual(expected_object_name,'just a test')
+
+class HomePageViewTest(TestCase):	# one more import 'reverse'. Now we test template
+    def setUp(self):		
+        Post.objects.create(text='this is another test') 
+    def test_view_url_exists_at_proper_location(self):     # test
+        resp=self.client.get('/')
+        self.assertEqual(resp.status_code, 200)
+    def test_view_url_by_name(self):			# test
+        resp=self.client.get(reverse('home'))
+        self.assertEqual(resp.status_code, 200)
+    def test_view_uses_correct_template(self):		# test
+        resp=self.client.get(reverse('home'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp,'home.html')
+
+23) python manage.py test
+

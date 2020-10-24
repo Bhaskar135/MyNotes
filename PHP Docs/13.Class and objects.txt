@@ -1,0 +1,84 @@
+
+1) 
+
+<body>
+    <?php 
+        class Book{
+            var $title;
+            var $author;
+            var $totalpage;
+        }
+        $book1=new Book();      // creating objects
+        $book1->title="Harry potter";
+        $book1->author="Bhaskar";
+        $book1->totalpage=23;
+
+        echo $book1->title;
+        echo $book1->author;
+        echo $book1->totalpage;
+    ?>
+</body>
+
+2) 
+
+<body>
+    <?php 
+        class Book{
+            var $title;
+            var $author;
+            var $totalpage;
+            var $available;
+            function __construct($c_title,$c_author,$c_totalpage,$c_available){      // Constructor
+                $this->title= $c_title;
+                $this->author= $c_author;
+                $this->totalpage= $c_totalpage;
+                $this->available=$c_available;
+            }
+            function checkAvailability(){
+                if($this->available){
+                    return "Available";
+                }else{
+                    return "Not available";
+                }
+            }
+        }
+        $book1=new Book("Harry potter", "Bhaskar", 500,true);
+        $book2=new Book("Avenger", "Dipankar", 400,false);
+        echo $book2->checkAvailability();
+    ?>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

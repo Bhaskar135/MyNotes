@@ -1,0 +1,24 @@
+
+1) When we click the link a new list item is added and show the total list in the div element.
+        <a href="#" id="a">click here</a>  
+        <ul id="list"></ul>
+        <div id="counter"></div>
+        <script>
+            var elList, addLink, newEl, newText, counter, listitems;
+            elList=document.getElementById('list');
+            addLink=document.querySelector('a');
+            counter=document.getElementById('counter');
+            function addItem(e) {
+                e.preventDefault();
+                newEl = document.createElement('li');
+                newText = document.createTextNode('New list item');
+                newEl.appendChild(newText);
+                elList.appendChild(newEl);
+            }
+            function updateCount() {
+                listitems = document.getElementsByTagName('li').length;
+                counter.innerHTML = "Total items "+listitems;
+            }
+            addLink.addEventListener('click',addItem,false);
+            elList.addEventListener('DOMNodeInserted',updateCount,false);
+        </script>

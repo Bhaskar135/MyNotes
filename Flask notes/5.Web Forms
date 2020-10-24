@@ -1,0 +1,130 @@
+Web forms :
+ *) in flask, get the HTML element values by request.form.get('name of the element')
+
+ 1) pip install flask-wtf
+ 2) # main.py
+    app=Flask(__name__)
+    app.config['SECRET_KEY']='hard to guess string'  # to secure from CSRF token.
+        app.config dictionary is a place to store configuration variables used by flask,extensions or the application itself.
+ 3) # main.py
+    from flask_wtf import FlaskForm
+    from wtforms import StringField, SubmitField
+    from wtforms.validators import DataRequired
+    class NameForm(FlaskForm):
+    	name=StringField('What is your name ?',validators=[ DataRequired() ])
+    	submit=SubmitField('Submit')
+    
+    Some fields are :
+        a) BooleanField      : Checkbox with True or False
+	b) DateField         : Text field that accepts a datetime.date value
+ 	c) DateTimeField     : Text field that accepts a datetime.datetime value
+ 	d) DecimalField      : Text field that accepts a decimal.Decimal value
+ 	e) FileField         : File upload field
+ 	f) HiddenField       : Hidden text field
+	g) MultipleFileField : Multiple file upload field
+        h) FieldList  	     : List of fields of a given type
+	i) FloatField        : Text field that accepts a floating-point value
+	j) FormField         : Form embedded as a field in a container form
+	k) IntegerField      : Text field that accepts an integer value
+        l) PasswordField     : Password text field
+	m) RadioField        : List of radio buttons
+        n) SelectField       : Drop-down list of choices
+        o) SelectMultipleField : Drop-down list of choices with multiple selection
+        p) SubmitField       : Form submission button
+	q) StringField       : Text field
+        r) TextAreaField     : Multiple-line text field
+    Some Validators are :
+       a) DataRequired  : Validates that the field contains data after type converion
+       b) Email         : Validates an email address
+       c) EqualTo       : Compares the values of two fields(useful for password and confirm password)
+       d) InputRequired : Validates that the field contains data after type converion
+       e) Length        : Validates the length of the string entered.
+       f) NumberRange   : Validates that the value entered is within a numeric range.
+       g) Optional      : Allows empty input in the field, skipping additional validators.
+       h) URL           : validates a URL
+              and many more validators are there in flask docs.
+  
+ 4) HTML rendering of Forms :
+    <form method="POST">
+        {{ form.hidden_tag() }}         <!--For CSRF protection-->
+	{{ form.name.label }} {{ form.name(id='my-text-field') }}     <!--id is optional argument-->
+	{{ form.submit() }} 
+    </form> 
+
+ 5) We can also use bootstrap here : 
+   {% import "bootstrap/wtf.html" as wtf %}
+   {{ wtf.quick_form(form) }}
+
+ 6) The complete template is :
+  <!--index.html-->
+  {% extends "base.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+  {% block title %}Index{% endblock %}
+
+  {% block page_content %}
+    <div class="page-header">
+        <h1>Hello {% if name %}{{name}} {% else %} Stranger {% endif %}!</h1>
+    </div>
+    {{ wtf.quick_form(form) }}
+  {% endblock %}
+
+ Form handling in View Functions :
+ 1) # main.py
+ @app.route('/',methods=['GET','POST'])
+ def index():
+    name=None
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():   # returns True when form is submitted.
+        name = form.name.data
+        form.name.data = ''
+    return render_template('index.html',form=form,name=name)
+
+ 2) Redirects and User Sessions :
+    If we enter our name and submit it, and then click the refresh button in your browser , we get an warning message before submitting the form again.
+This happens because browsers repeat the last request they sent when they are asked to refresh a page. When the last request sent is a POST request with form data, a refresh would cause a duplicate form submission.   
+    But this approach brings a second problem. When the application handles the POST request, it has access to the name entered by the user in form.name.data, but as soon as that request ends the form data is lost. Because the POST request is handled with a redirect. Applications can remember things from one request to the next by storing them in the user "session". 
+ 
+ 3) # main.py
+ from flask import Flask,request,make_response,render_template,session,redirect,url_for
+ @app.route('/',methods=['GET','POST'])
+ def index():
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():
+        session['name'] = form.name.data
+        return redirect(url_for('index'))      # endpoint name
+    return render_template('index.html',form=form,name=session.get('name'))
+
+ *) By default the endpoint of a route is the name of the view function attached to it.
+
+ 4) Message Flashing :
+  It could be a confirmation message, a warning, or an error.
+  
+  #main.py
+  from flask import Flask,request,make_response,render_template,session,redirect,url_for,flash
+  @app.route('/',methods=['GET','POST'])
+  def index():
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():
+        old_name=session.get('name')
+        if old_name is not None and old_name!=form.name.data :
+            flash('Looks like you have changed your name !')
+        session['name'] = form.name.data
+        return redirect(url_for('index'))
+    return render_template('index.html',form=form,name=session.get('name'))
+
+   Here each time a name is submitted it is compared against the name stored in the user session, which will have been put there during a previous submission of the same form. If the two names are different, the flash() function is invoked with a message.
+   To render the message in template use get_flashed_messages() function :
+   templates/base.html
+   {% block content %}
+   <div class="container">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% block page_content %}
+    {% endblock %}
+   </div>
+  {% endblock %}
+

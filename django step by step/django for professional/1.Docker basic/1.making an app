@@ -1,0 +1,101 @@
+
+1) mkdir hello
+
+2) cd hello
+
+3) pip3 install pipenv
+
+4) pipenv install django
+
+5) pipenv shell
+
+6) django-admin startproject hello_project .
+
+7) cd hello_project
+
+8) python manage.py runserver
+
+9) python manage.py startapp pages
+
+10) python manage.py migrate
+
+11) python manage.py runserver
+
+12)
+# hello_project/settings.py
+
+INSTALLED_APPS = [
+    #...........
+    'pages.apps.PagesConfig',
+]
+
+13)
+# hello_project/urls.py
+
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('pages.urls')),
+]
+
+14) 
+# pages/views.py
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def home_page_view(request):
+    return HttpResponse('Hello Django')
+
+15) 
+# pages/urls.py
+
+from django.urls import path
+from .views import home_page_view
+
+urlpatterns=[
+    path('',home_page_view,name='home'),
+]
+
+16) python manage.py runserver
+
+17) deactivate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+
+1) another.php :
+
+<h2><?php echo $title; ?></h2>
+
+<h3><?php echo $name; ?></h3>
+
+2) site.php :
+
+<body>
+<?php 
+     $title="Programming" ;
+     $name="php" ;
+     include "another.php" ;
+?>
+</body>
+
+
+.....................................********************************...................................
+
+1) another.php :
+
+<h2>
+     $feetInMile=340;
+     function fun($name){
+        echo "Hello $name";
+     }
+</h2>
+
+2) site.php :
+
+<body>
+<?php 
+     include "another.php" ;
+     echo $feetInMile;
+     fun("Bhaskar");
+?>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

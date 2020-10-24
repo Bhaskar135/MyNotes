@@ -1,0 +1,208 @@
+
+1) In this section, the text area field where posts are entered will be upgraded to support the Mark‐down syntax and present a rich-text preview of the post. Some package required :
+    a) flask-pagedown : A PageDown(a client-side Markdown-to-HTML converter implemented in Java‐Script) wrapper for Flask that integrates PageDown with Flask-WTF forms.
+    b) markdown : A server-side Markdown-to-HTML converter implemented in Python.
+    c) bleach : An HTML sanitizer implemented in Python.
+
+2) pip install flask-pagedown markdown bleach
+
+3) The Flask-PageDown extension defines a PageDownField class that has the same interface as the TextAreaField from WTForms. Before this field can be used, the extension needs to be initialized.
+
+ # app/__init__.py :
+ from flask_pagedown import PageDown
+ # ...
+ pagedown = PageDown()
+ # ...
+ def create_app(config_name):
+     # ...
+     pagedown.init_app(app)
+     # ...
+
+4) The body field of the PostForm must be changed to a PageDownField.
+
+# app/main/forms.py
+
+from flask_pagedown.fields import PageDownField
+class PostForm(FlaskForm):
+    body = PageDownField("What's on your mind?", validators=[Required()])
+    submit = SubmitField('Submit')
+
+5) The Markdown preview is generated with the help of the PageDown libraries, so these must be added to the template.
+     
+    # templates/base.html
+     {% block content %}
+         <div class="container">
+             {% block page_content %}
+             {% endblock %}
+         </div>
+         {% block scripts %}
+         {% endblock %}
+     {% endblock %}
+
+     # templates/index.html
+     {% block scripts %}
+         {{ super() }}
+         {{ pagedown.include_pagedown() }}
+     {% endblock %} 
+
+6) Write <h1>Hello Flask</h1> on the post field and see the difference.
+
+7) Handling Rich Text on the Server :
+  a) When the form is submitted, only the raw Markdown text is sent with the POST request; the HTML preview that is shown on the page is discarded. Sending the generated HTML preview with the form can be considered a security risk.
+
+  b) To avoid any risks, only the Markdown source text is submitted, and once in the server it is converted again to HTML using Markdown, a Python Markdown-to-HTML converter.
+
+  c) The resulting HTML is sanitized with Bleach to ensure that only a short list of allowed HTML tags are used.
+
+  d) The conversion of the Markdown blog posts to HTML can be done in the _posts.html template, but this is inefficient as posts will have to be converted every time they are rendered to a page. To avoid this repetition, the conversion can be done once when the blog post is created and then cached in the database.
+
+  e) The HTML code for the rendered blog post is cached in a new field added to the Post model that the template can access directly. The original Markdown source is also kept in the database in case the post needs to be edited.
+
+  f) # app/models.py
+ 
+  from markdown import markdown
+  import bleach
+
+  class Post(db.Model):
+      # ...
+      body_html = db.Column(db.Text)
+      # ...
+      @staticmethod
+      def on_changed_body(target, value, oldvalue, initiator):
+          allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code','em', 'i', 'li', 'ol', 'pre', 'strong', 'ul','h1', 'h2', 'h3', 'p']
+          target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'),tags=allowed_tags, strip=True))
+  
+  db.event.listen(Post.body, 'set', Post.on_changed_body)
+
+  g) The on_changed_body() function is registered as a listener of SQLAlchemy’s “set” event for body , which means that it will be automatically invoked whenever the body field is set to a new value.
+
+  h) The actual conversion is done in three steps : 
+       i) First, the markdown() function does an initial conversion to HTML. 
+      ii) The result is passed to clean() , along with the list of approved HTML tags. The clean() function removes any tags not on the whitelist.
+     iii) The final conversion is done with linkify() that converts any URLs written in plain text into proper <a> links.
+
+  i) The last change is to replace post.body with post.body_html in the template.
+
+  # app/templates/_posts.html
+  ...
+     <div class="post-body">
+        {% if post.body_html %}
+           {{ post.body_html | safe }}
+        {% else %}
+           {{ post.body }}
+        {% endif %}
+     </div>
+  ...
+ 
+    *) The | safe suffix when rendering the HTML body is there to tell Jinja2 not to escape the HTML elements.
+
+Permanent Links to Blog Posts : Every blog post have a unique url of the post which have details of the post. When we click on a post it opens a new page with a unique id and details of the post.
+
+1) # app/main/views.py
+@main.route('/post/<int:id>')
+def post(id):
+    post = Post.query.get_or_404(id)
+    return render_template('post.html', posts=[post])
+
+2) # templates/_posts.html
+
+<ul class="posts">
+    {% for post in posts %}
+        <li class="post">
+            {{ moment.include_jquery() }}
+            {{ moment.include_moment() }}
+           <div class="post-date">{{ moment(post.timestamp).fromNow() }}</div>
+           <div class="post-author">
+               <a href="{{ url_for('.user', username=post.author.username) }}">
+                   {{ post.author.username }}
+               </a>
+           </div>
+           <div class="post-body">
+                {% if post.body_html %}
+                    {{ post.body_html | safe }}
+                {% else %}
+                    {{ post.body }}
+                {% endif %}
+                <div class="post-footer">
+                    <a href="{{ url_for('.post', id=post.id) }}">
+                    <span class="label label-default">Permalink</span>
+                    </a>
+                </div>
+            </div>
+       </li>
+    {% endfor %}
+</ul>
+
+3) templates/post.html
+
+{% extends "base.html" %}
+{% block title %}Flasky - Post{% endblock %}
+{% block page_content %}
+    {% include '_posts.html' %}
+{% endblock %}
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

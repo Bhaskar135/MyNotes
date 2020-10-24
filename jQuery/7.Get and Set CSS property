@@ -1,0 +1,93 @@
+
+1) The .css() method lets you retrieve and set the values of CSS properties.
+
+2) Get CSS property : In getting CSS property if the matched set contains more than one element, it will return the value from the first element.
+    
+     var backgroundColor = $('li').css('background-color');  // The color will be returned as an RGB value.
+
+3) Set CSS property : 
+     $('li').css('background-color','#272727');
+     
+    *) When dealing with dimensions that are specified in pixels. you can increase and decrease the values using the += and -= operators.
+          $('li').css('padding-left','+=20');
+
+    Setting Multiple CSS property :
+          $('li').css({
+              'background-color' : '#272727' ,
+	      'font-family' : 'Courier'
+          });
+
+ eg, 
+        <ul>
+            <li>Hello jQuery</li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function(){
+                var backgroundColor = $('li').css('background-color');
+                $('ul').append('<p>Color was: ' + backgroundColor +'</p>');
+                $('li').css({
+                    'background-color':'#c5a996' ,
+                    'border': '1px solid #fff',
+                    'color':'#000',
+                    'font-family':'Georgia',
+                    'padding-left':'+=75',
+                });
+            });
+        </script>
+
+4) It is better to change the value of a class attribute (to trigger new CSS rules in the style sheet) rather than to change CSS properties from within the JavaScript file itself.
+
+5) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

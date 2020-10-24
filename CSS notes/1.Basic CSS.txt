@@ -1,0 +1,66 @@
+1) Basic 
+ External css: 
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Introducing CSS</title>
+ <link href="practice1.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+ <h1>From Garden to Plate</h1>
+ <p>A <i>potager</i> is a French term for an
+ ornamental vegetable or kitchen garden ... </p>
+ <h2>What to Plant</h2>
+ <p>Plants are chosen as much for their functionality
+ as for their color and form ... </p>
+</body>
+</html>
+
+practice1.css :
+body {
+    font-family: Arial, Verdana, sans-serif;
+}
+h1, h2 {
+    color: #ee3e80;
+}
+p {
+    color: #665544;
+}
+
+Internal css: 
+<html>
+<head>
+ <title>Using Internal CSS</title>
+ <style type="text/css">
+ body {
+ font-family: arial;
+ background-color: rgb(185,179,175);}
+ h1 {
+ color: rgb(255,255,255);}
+ </style>
+</head>
+<body>
+ <h1>Potatoes</h1>
+ <p>There are dozens of different potato varieties. They are usually described as early, second early and maincrop.</p>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

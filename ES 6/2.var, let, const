@@ -1,0 +1,81 @@
+
+1) let :
+
+a) let allows you to declare variables that are limited to the scope of a block statement, or expression on which it is used, unlike the var keyword, which defines a variable globally, or locally to an entire function regardless of block scope. 
+
+  for(var j=0;j<3;j++){
+     console.log("j is",j); // it prints 1,2,3
+  }
+  console.log("j is",j);  // it prints 1,2,3
+
+  for(let i=0;i<3;i++){
+     console.log("i is",i);  // it prints 1,2,3
+  }
+  console.log("i is",i);   // It will show error because let can't give permission to access outside of scope.
+
+b) The other difference between var and let is that the latter is initialized to a value only when a parser evaluates it.
+
+  console.log(a);  // print undefined
+  var a=10;
+
+  console.log(b);  // show error But no giving error if it is declared before printing.
+  let b=5;
+
+
+2) const :
+
+a) const variable can be declared only once.
+
+b) can not assign a new value.
+
+c) similar scoping rule as 'let'.
+
+eg, const  pi=3.1415;
+
+d) const person={ name :"Bhaskar" };
+   person.name="Dipankar";    //Not error
+   const person={ name :"Bhaskar" };   // error because person can not be replaced only its property's vaue can be changed.
+
+e) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

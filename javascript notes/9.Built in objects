@@ -1,0 +1,145 @@
+
+1) browser object model : The Browser Object Model contains object that deals only with objects that represent the current browser window. It contains objects that model things like browser history and device's screen.
+
+2) document object model : The Document Object Model uses objects to create a representation of the current page. It creates a new object for each element within the page.
+
+3) global javascripts objects : It represent things that the JavaScript language needs to create a model of. For example, there is an object that deals only with dates and times.
+
+browser object model : 
+   a) It creates a model of the browser window.
+   b) The topmost object is the window object which represents current browser window.
+   c) Its child objects represent other browser features.
+
+   WINDOW(current browser window)
+    |
+     -->DOCUMENT(current web page)
+    |
+     -->HISTORY(pages in browser history)
+    |
+     -->LOCATION(url of current page)
+    |
+     -->NAVIGATOR(information about browser)
+    |
+     -->SCREEN(device's display information)
+
+      eg, i) window.print() method will show the browser's print dialog box.
+         ii) window.screen.width, window.screen.height will give you width and height of the device's screen.
+
+document object model : The topmost object if the document object, which represents the page as a whole. Its child objects represent other items on the page.
+
+  <!DOCTYPE html>
+  <html>
+     <head>
+        <title></title>
+     </head>
+     <body>
+        <div align='center'>
+            <p>text</p>
+        </div>
+     </body>
+  </html>
+
+    document
+      |
+       --><html>
+            |
+             --><head>
+            |     |
+            |      --><title>
+            |
+             --><body>
+                  |
+                   --><div>-->attribute
+                        |
+                         --><p>
+                             |
+                              -->text
+                  
+  eg,i) document.getElementById('one') gets an HTML element by the value of its id attribute.
+    ii) document.lastModified will give the date that the page was last updated.
+
+global javascripts objects : These objects start with a capital letter. eg, String, Date, Number, Math, Boolean
+
+The window object of BOM :
+
+       Property                              Description
+ a) window.innerHeight          Height of window (excluding browser chrome/user interface) (in pixels)
+ b) window.innerWidth           Width of window (excluding browser chrome/user interface) (in pixels)
+ c) window.pageXOffset          Distance document has been scrolled horizontally (in pixels)
+ d) window.pageYOffset          Distance document has been scrolled vertically (in pixels)
+ e) window.screenX              X-coordinate of pointer, relative to top left corner of screen (in pixels)
+ f) window.screenY              Y-coordinate of pointer, relative to top left corner of screen (in pixels)
+ g) window.location             Current URL of window object (or local file path)
+ h) window.document             Reference to document object, which is used to represent the current page contained in window
+ i) window.history              Reference to history object for browser window or tab, which contains details of the pages that have been viewed in that window 
+ j) window.history.length       Number of items in history object for browser window 
+ k) window.screen               Reference to screen object
+ l) window.screen.width         Accesses screen object and finds value of its width property (in pixels)
+ m) window.screen.height        Accesses screen object and finds value of its height property (in pixels)
+
+      Method                              Description
+ a) window.alert()              Creates dialog box with message.
+ b) window.open()               Opens new browser window with URL specified as parameter(If browser has pop-up blocking software installed. This method may not work.)
+ c) window.print()              Tells browser that user wants to print contents of current page.
+
+        eg, 
+        <div id="info">Hello javascript</div>
+        <script>
+            var msg='<h1>browser window</h1><p>width:'+window.innerWidth+'</p>';
+            msg+='<p>height: '+window.innerHeight+'</p>';
+            msg+='<h2>history</h2><p>items: '+window.history.length+'</p>';
+            msg+='<h2>screen</h2><p>width: '+window.screen.width+'</p>';
+            msg+='<p>height: '+window.screen.height+'</p>';
+            var el=document.getElementById('info');
+            el.innerHTML=msg;
+            window.alert('Current page: '+window.location);
+        </script>
+
+Document Object Model :
+      property                         Description
+ a) document.title              Title of current document
+ b) document.lastModified       Date on w hich document was last modified
+ c) document.URL                Returns string containing URL of current document
+ d) document.domain             Returns domain of current document
+
+      Method                                             Description
+ a) document.write()
+ b) document.getElementById()
+ c) document.querySelectorAll()           Returns list of elements that match a CSS selector, which is specified as a parameter
+ d) document.createElement()              Creates new element
+ e) document.createTextNode()             Creates new text node
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

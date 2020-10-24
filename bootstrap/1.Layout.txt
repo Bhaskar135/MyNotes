@@ -1,0 +1,154 @@
+1) There are two types of containers : 
+    a) .container-fluid : It is a full-width box and will stretch the layout to fit the entire width of the browser window.There is some left and right padding added.
+          <div class="container-fluid">
+              ...
+          </div>
+ 
+    b) .container : It will have a fixed width based on the size of your device's viewport.
+          <div class="container">
+              ...
+          </div>
+
+2) There are five different sizes in Bootstrap, with the following width values:
+        Extra small <576px
+        Small ≥576px
+        Medium ≥768px
+        Large ≥992px
+      Extra large ≥1200px
+
+3) Creating a layout without a container : If you want a full width layout but you don't want the default left and right padding it can be achieve by just removing the <div> with the container class on it.
+ 
+4) Multiple containers on a single page :
+     <div class="container">
+         ......
+     </div>
+     <div class="container">
+         ......
+     </div>
+
+5) Bootstrap contains 12 columns.
+
+6) Inserting rows into your layout :
+    <div class="container">
+	<div class="row">
+	    <!-- insert column code here //-->
+        </div>
+        <div class="row">
+	    <!-- insert column code here -->
+        </div>
+    </div>
+
+7) Adding columns to your layout : In Bootstrap there were five different column class widths to choose from :
+    
+    a) extra small : The class is .col-# , where -# is equal to a number from 1 to 12. The extra smallcolumn class is for targeting mobile devices that have a max-width of 544 pixels.
+    
+    b) small : The class is .col-sm-# . It is targeted for devices with a resolution greater than 544 pixels but smaller than 720 pixels.
+
+    c) medium : The class is .col-md-# . This column class is for devices greater than 720 pixels and smaller than 940 pixels.
+
+    d) large : The class is .col-lg-# . This column class targets devices that are larger than 940 pixels but smaller than 1140 pixels.
+
+    e) extra large : The class is .col-xl-# . This column class option is for all resolutions greater than or equal to 1140 pixels.
+
+8) For building a responsive website use either the medium or large column classes.
+
+9) Creating a two column layout :
+   <div class="container-fluid">
+       <div class="row">
+           <div class="col-md-6">
+                <!-- column 1 -->
+           </div>
+           <div class="col-md-6">
+                <!-- column 2 -->
+           </div>
+       </div>
+   </div>
+
+10) What if we wanted to have a different layout for the columns on smaller devices that didn't set them all to 100% width. That can be done by mixing
+column classes :
+    a) Adding additional classes to each of our column <div>s will allow us to target the grid layout for different devices.
+    
+    b) The new layout look like :
+            i) The first two columns should be 50% of the layout
+           ii) The third column should stretch 100% of the layout and be below the first two
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-xs-6">
+                <!-- column 1 //-->
+            </div>
+            <div class="col-md-4 col-xs-6">
+                <!-- column 2 //-->
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <!-- column 3 //-->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

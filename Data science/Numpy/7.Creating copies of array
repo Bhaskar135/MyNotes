@@ -1,0 +1,19 @@
+
+import numpy as np
+x=np.random.randint(0,10,(3,3))
+x
+
+o/p : array([[8, 7, 5],
+             [4, 7, 8],
+             [9, 4, 3]])
+
+x_sub=x[:2,:2].copy()      # copying the array
+x_sub
+
+o/p : array([[8, 7],
+             [4, 7]])
+
+  If we now modify this subarray, the original array is not touched:
+
+x_sub[0,1]=3
+

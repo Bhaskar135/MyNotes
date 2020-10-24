@@ -1,0 +1,30 @@
+
+1) GET method :
+
+site.php : 
+
+<body>
+    <form action="site.php" method="get">
+        Name <input type="text" name="name">
+        <button type="submit">Submit</button>
+    </form>
+    
+    <?php
+        echo $_GET["name"];
+    ?>
+</body>
+
+2) POST method
+
+site.php : 
+
+<body>
+    <form action="site.php" method="post">
+        Password <input type="password" name="password">
+        <button type="submit">Submit</button>
+    </form>
+    
+    <?php
+        echo $_POST["password"];
+    ?>
+</body>

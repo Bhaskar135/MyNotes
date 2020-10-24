@@ -1,0 +1,84 @@
+User Avatars :
+1) Users create an account at https://gravatar.com and then upload their images.
+
+2) (venv)$ python
+   >>> import hashlib
+   >>> hashlib.md5('john@example.com',encode('utf-8')).hexdigest()
+    'd4c74594d841139328695756648b6bd6'
+
+3) You can type https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6 in your browser's address bar to get the avatar image for the email address john@example.com .
+
+4) A few query string arguments can be used to configure the characteristics of the avatar image.
+
+      Argument name        Description
+           s               Image size, in pixels
+           r               Image rating. Options are "g","pg","r", and "x"
+           d               The default image generator for users who have no avatars registered with the Gravatar service. Options are "404" to return a 404 error, a URL that points to a default image, or one of the following image generators : "mm","identicon","monsterid","wavatar","retro",or "blank"
+          fd               Force to use default avatars.
+
+5) # app/models.py
+ 
+import hashlib
+from flask import request
+
+class User(UserMixin, db.Model):
+   #......
+   def gravatar(self, size=100, default='identicon', rating='g' ):
+      url='https://secure.gravatar.com/avatar'
+      hash=hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+      return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url=url,hash=hash,size=size,default=default,rating=rating)
+
+(venv)$ flask shell
+>>>u=User(email='john@example.com')
+
+>>>u.gravatar()
+'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=100&d=identicon&r=g'
+
+>>>u.gravatar(size=256)
+'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=256&d=identicon&r=g'
+
+6) The gravatar() method can also be invoked from jinja2 templates. Eg a 256 pixel avatar can be added to the profile page.
+
+# app/templates/user.html
+......
+<img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
+   <div class="profile-header">
+     ........
+   </div>
+.......
+
+7) If a large number of avatars need to be generated for a page, Then
+
+ # app/models.py
+ class User(UserMixin, db.Model):
+     #.......
+     avatar_hash= db.Column(db.String(32))
+     
+     def __init__(self,**kwargs):
+         #.......
+         if self.email is not None and self.avatar_hash is None:
+             self.avatar_hash=self.gravatar_hash()
+     
+     def change_email(self,token):
+         #.......
+         self.email=new_email
+         self.avatar_hash=self.gravatar_hash()
+         db.session.add(self)
+         return True
+ 
+     def gravatar_hash(self):         # To avoid duplicating the logic to compute the gravatar hash
+         return hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+
+     def gravatar(self, size=100, default='identicon',rating='g'):
+         if request.is_secure:
+             url='https://secure.gravatar.com/avatar'
+         else:
+             url='http://www.gravatar.com/avatar'
+         hash=self.avatar_hash or self.gravatar_hash()
+         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url=url, hash=hash, size=size, default=default, rating=rating )
+
+             During model initialization, the hash is stored in the avatar_hash model column. If the user updates the email address, then the hash is recalculated. The gravatar() method uses the stored hash if available, and if not, it generates a new hash as before. 
+
+
+
+

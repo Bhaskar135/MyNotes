@@ -1,0 +1,64 @@
+
+ Requests :
+
+1) jQuery provides several methods that handle Ajax requests.
+
+2) The .load() method operates on a jQuery selection (like most jQuery methods). It loads new HTML content into the selected element(s).
+
+    Method                             Description
+  i) .load()             Loads HTML fragments into an element. It is the simplest method for retrieving data.
+
+ ii) $.get()             Loads data using the HTTP GET method. Used to request data from the server.
+
+iii) $.post()            Loads data using the HTTP POST method. Used to send data that updates data on server.
+
+ iv) $.getJSON()         Loads JSON data using a GET request. Used for JSON data.
+
+  v) $.getScript()       Loads and executes JavaScript data using GET. Used for JavaScript (e.g., JSONP) data.
+
+ vi) $.ajax()            This method is used to perform all requests. The above methods all use this under the hood.
+
+
+ Responses :
+
+1) When using the .load() method, the HTML returned from the server is inserted into a jQuery selection.
+
+2) For the other methods, you specify what should be done when the data that is returned using the jqXHR object.
+
+3) jQuery has an object called jqXHR, which makes it easier to handle the data that is returned from the server.
+
+   jqXHR Properties                  Description
+  i) responseText                Text-based data returned
+
+ ii) responseXML                 XML data returned
+
+iii) status                      Status code
+
+ iv) statusText                  Status description (typically used to display information about an error if one occurs)
+
+
+   jqXHR Methods                   Description
+  i) .done()                     Code to run if request was successful
+
+ ii) .fail()                     Code to run if request was unsuccessful
+
+iii) .always()                   Code to run if request succeeded or failed
+
+ iv) .abort()                    Halt the communication
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

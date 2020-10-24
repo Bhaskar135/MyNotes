@@ -1,0 +1,9 @@
+
+1) Associative arrays have key and value. It acts like dictionary of python.
+
+<body>
+    <?php
+        $grades=array("Bhaskar"=>"A+","Dipankar"=>"B+","David"=>"A");
+        echo $grades["Dipankar"];
+    ?>
+</body>

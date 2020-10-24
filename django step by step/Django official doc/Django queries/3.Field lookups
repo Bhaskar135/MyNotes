@@ -1,0 +1,138 @@
+
+from django.db import models
+
+class Blog(models.Model):
+    name = models.CharField(max_length=100)
+    tagline = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+class Entry(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    pub_date = models.DateField()
+    mod_date = models.DateField()
+    authors = models.ManyToManyField(Author)
+    number_of_comments = models.IntegerField()
+    number_of_pingbacks = models.IntegerField()
+    rating = models.IntegerField()
+
+    def __str__(self):
+        return self.headline
+
+
+Field lookups : The field specified in a lookup has to be the name of a model field. There’s one exception though, in case of a ForeignKey you can specify the field name suffixed with _id.
+
+   Example : Entry.objects.filter(blog_id=4)
+
+   a) __exact : An “exact” match. For example:
+
+        >>> Entry.objects.get(headline__exact="Cat bites dog")
+
+   b) __iexact : A case-insensitive match. So, the query:
+
+        >>> Blog.objects.get(name__iexact="beatles blog")
+
+   c) __contains (Like query) : Case-sensitive containment test. Example:
+
+        >>> Entry.objects.get(headline__contains='Lennon')
+
+   d) __icontains : Case-insensitive containment test. Example:
+
+        >>> Entry.objects.get(headline__icontains='Lennon')
+
+   e) __in : In a list, tuple, or queryset. Examples:
+
+        >>> Entry.objects.filter(id__in=[1, 3, 4])
+        >>> Entry.objects.filter(headline__in='abc')
+
+     You can also use a queryset to dynamically evaluate the list of values instead of providing a list of literal values:
+
+        >>> inner_qs = Blog.objects.filter(name__contains='Cheddar')
+        >>> entries = Entry.objects.filter(blog__in=inner_qs)
+
+     If you need extract only one field(i.e one column of a table) in the result, then use 
+        values() : results dictionary in a list. or
+      
+        values_list() : results tuple in a list.
+
+        >>> inner_qs = Blog.objects.filter(name__contains='Ch').values('name')
+        >>> entries = Entry.objects.filter(blog__name__in=inner_qs)
+
+   f) __gt : Greater than. Example:
+
+        >>> Entry.objects.filter(id__gt=4)
+
+   g) __gte : Greater than or equal to.
+
+   h) __lt : Less than.
+
+   i) __lte :  Less than or equal to.
+
+   j) __startswith : Case-sensitive starts-with. Example:
+
+        >>> Entry.objects.filter(headline__startswith='Lennon')
+
+   k) __istartswith : Case-insensitive starts-with. Example:
+
+        >>> Entry.objects.filter(headline__istartswith='Lennon')
+
+   l) __endswith : Case-sensitive ends-with. Example:
+
+        >>> Entry.objects.filter(headline__endswith='Lennon')
+
+   m) __iendswith : Case-insensitive ends-with. Example:
+
+        >>> Entry.objects.filter(headline__iendswith='Lennon')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

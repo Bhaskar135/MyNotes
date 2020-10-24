@@ -1,0 +1,130 @@
+
+
+c) Slicing an array : i.e making subarray
+
+1)  To access a slice of an array x :
+        x[start:stop:step]
+
+2) If any of these are unspecified, they default to the values start=0 , stop=size of dimension , step=1 .
+
+3) Example :
+
+x = np.arange(10)    
+x
+Out[16]: array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+x[:5]
+# first five elements
+Out[17]: array([0, 1, 2, 3, 4])
+
+x[5:]
+# elements after index 5
+Out[18]: array([5, 6, 7, 8, 9])
+
+x[4:7]
+# middle subarray
+Out[19]: array([4, 5, 6])
+
+x[::2]
+# every other element
+Out[20]: array([0, 2, 4, 6, 8])
+
+x[1::2]
+# every other element, starting at index 1
+Out[21]: array([1, 3, 5, 7, 9])
+  
+when the step value is negative the defaults for start and stop are swapped. This becomes a convenient way to reverse an array:
+x[::-1]
+# all elements, reversed
+Out[22]: array([9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
+
+x[5::-2]
+# reversed every other from index 5
+Out[23]: array([5, 3, 1])
+
+Multidimensional subarrays :
+
+1)  To access a slice of an 2D array x :
+        x[start:stop:step , start:stop:step ]       # 1st is for row, 2nd is for column
+
+2) If any of these are unspecified, they default to the values start=0 , stop=size of dimension , step=1 .
+
+3) Example :
+
+import numpy as np
+x=np.random.randint(0, 10, (3, 3))
+x
+o/p : array([[1, 6, 3],
+             [0, 9, 0],
+             [4, 5, 0]])
+
+x[:2,:2]  # 2 rows and 2 columns
+o/p : array([[1, 6],
+             [0, 9]])
+
+x[:2,::2]  # 2 rows and all columns with step 2 
+o/p : array([[1, 3],
+             [0, 0]])
+
+4) Subarrays can be reversed :
+
+x[::-1,::-1]
+array([[0, 5, 4],
+       [0, 9, 0],
+       [3, 6, 1]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,591 @@
+1) django-admin startproject blog_project
+2) python manage.py startapp blog
+3) python manage.py migrate
+4) python manage.py runserver
+5) # blog_project/settings.py
+	INSTALLED_APPS = [
+	    'blog.apps.BlogConfig',
+	]
+6) # blog/models.py
+	from django.db import models
+	class Post(models.Model):
+	    title=models.CharField(max_length=200)
+	    author=models.ForeignKey('auth.User',on_delete=models.CASCADE,)
+	    body=models.TextField()
+	    def __str__(self):
+	        return self.title
+
+7) python manage.py makemigrations blog
+8) python manage.py migrate blog
+9) python manage.py createsuperuser
+10) # blog/admin.py
+	from django.contrib import admin
+	from .models import Post
+	admin.site.register(Post)
+
+11) # blog/urls.py
+	from django.urls import path
+	from .views import BlogListView
+	urlpatterns=[
+		path('',BlogListView.as_view(),name='home'),
+	]
+
+12) # blog_project/urls.py
+	from django.contrib import admin
+	from django.urls import path,include
+
+	urlpatterns = [
+    		path('admin/', admin.site.urls),
+    		path('', include('blog.urls')),
+	]
+13) # blog/views.py
+	from django.views.generic import ListView
+	from .models import Post
+	class BlogListView(ListView):
+    	    model=Post
+    	    template_name='home.html'
+
+14) # templates/base.html
+{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+            </header>
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+15) # blog_project/settings.py
+	TEMPLATES=[
+	    {
+	        'DIRS':[os.path.join(BASE_DIR,'templates')],
+	    },
+	]
+16) # templates/home.html
+	{% extends 'base.html' %}
+	{% block content %}
+    	{% for post in object_list %}
+        	<div class="post-entry">
+            		<h2><a href="{% url 'post_detail' post.pk %}">{{post.title}}</a></h2>
+            		<p>{{post.body}}</p>
+        	</div>
+    	{% endfor %}
+	{% endblock content %}
+17) make a project level folder 'static'
+18) # blog_project/settings.py
+	STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]  # at bottom
+19) #static/css/base.css
+body{
+    font-family: 'Source Sans Pro',sans-serif;
+    font-size: 18px;
+}
+header {
+    border-bottom:1px solid #999;
+    margin-bottom:2rem;
+    display:flex;
+}
+header h1 a{
+    color: red;
+    text-decoration: none;
+}
+.nav-left{
+    margin-right: auto;
+}
+.nav-right{
+    display: flex;
+    padding-top: 2rem;
+}
+.post-entry{
+    margin-bottom: 2rem;
+}
+.post-entry h2{
+    margin: 0.5rem 0; 
+}
+.post-entry h2 a,.post-entry h2 a:visited {
+    color: blue;
+    text-decoration: none;
+}
+.post-entry p{
+    margin: 0;
+    font-weight: 400;
+}
+.post-entry h2 a:hover {
+    color: red;
+}
+
+20) Now we can add the functionality for individual blog pages.Now we create a new view 'DetailView'
+	from django.views.generic import ListView,DetailView
+	from .models import Post
+	class BlogListView(ListView):
+    	    model=Post
+    	    template_name='home.html'
+
+	class BlogDetailView(DetailView):
+    	    model=Post
+    	    template_name='post_detail.html'
+
+21) By default DetailView will provide a context object we can use in our template called either 'object' or lowercased name of our model(here 'post').It's possible to explicitly name the context object in our view using 'context_object_name'.Also DetailView expects either a primary key or a slug passed to it as the identifier.
+
+ # templates/post_detail.html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="post-entry">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
+    </div>
+{% endblock content %}
+
+22) # blog/urls.py
+from django.urls import path
+from .views import BlogListView,BlogDetailView
+urlpatterns = [
+    path('post/<int:pk>/',BlogDetailView.as_view(),name='post_detail'),
+    path('',BlogListView.as_view(),name='home'),
+]
+
+23) python manage.py runserver
+	check -> http://127.0.0.1:8000/post/1/  or  http://127.0.0.1:8000/post/2/
+24) Now we test our model(Post including its str representation) and views(ListView and DetailView). 
+   # blog/tests.py
+   from django.contrib.auth import get_user_model      #to reference our active user
+   from django.test import TestCase
+   from django.urls import reverse
+   from .models import Post
+   class BlogTests(TestCase):
+       def setUp(self):
+           self.user=get_user_model().objects.create_user(username='testuser',email='test@email.com',password='secret')
+           self.post=Post.objects.create(title='A good title',body='Nice body content',author=self.user,)
+       def test_string_representation(self):		#testing str representation of Post model
+           post=Post(title='A sample title')
+           self.assertEqual(str(post),post.title)
+       def test_post_content(self):
+           self.assertEqual(f'{self.post.title}','A good title')
+           self.assertEqual(f'{self.post.author}','testuser')       #since username is 'testuser' in setUp function
+           self.assertEqual(f'{self.post.body}','Nice body content')
+       def test_post_list_view(self):			  #testing ListView
+           response=self.client.get(reverse('home'))
+           self.assertEqual(response.status_code,200)
+           self.assertContains(response,'Nice body content')
+           self.assertTemplateUsed(response,'home.html')
+       def test_post_detail_view(self):                   #testing DetailView
+           response=self.client.get('/post/1/')
+           no_response=self.client.get('/post/100000/')
+           self.assertEqual(response.status_code,200)
+           self.assertEqual(no_response.status_code,404)
+           self.assertContains(response,'A good title')
+           self.assertTemplateUsed(response,'post_detail.html')
+
+25) Working with forms --->
+# templates/base.html
+{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+        </header>
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+26) # blog/urls.py
+    from django.urls import path
+    from .views import BlogListView,BlogDetailView,BlogCreateView
+    urlpatterns = [
+    	path('post/new/',BlogCreateView.as_view(),name='post_new'),		# new
+    	path('',BlogListView.as_view(),name='home'),
+    	path('post/<int:pk>/',BlogDetailView.as_view(),name='post_detail'),
+    ]
+
+27) create a new view
+    # blog/views.py
+    from django.views.generic.edit import CreateView 
+    class BlogCreateView(CreateView):
+        model=Post
+        template_name='post_new.html'
+        fields=['title','author','body']
+
+28) # templates/post_new.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>New post</h1>
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}			<!-- output our form data(element of fields) -->
+        <input type="submit" value="Save" />
+    </form>
+{% endblock content %}
+
+29) python manage.py runserver
+
+30) But a error occured after submitting the form. It's complaining that we did not specify where to send the user after successfully submitting the form. Let's send the user to the detail page.
+
+31) To do that add a 'get_absolute_url' to our model.
+    # blog/models.py
+    from django.db import models
+    from django.urls import reverse
+    class Post(models.Model):
+        title=models.CharField(max_length=200)
+        author=models.ForeignKey('auth.User',on_delete=models.CASCADE,)
+        body=models.TextField()
+        def __str__(self):
+            return self.title
+        def get_absolute_url(self):
+            return reverse('post_detail',args=[str(self.id)])
+
+32) To edit post 
+# templates/post_detail.html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="post-entry">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
+    </div>
+    <a href="{% url 'post_edit' post.pk %}">+ Edit blog Post</a>
+{% endblock content %}
+
+33) # templates/post_edit.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Edit post</h1>
+    <form action="" method="post"> {%csrf_token%}
+        {{ form.as_p }}
+        <input type="submit" value="Update" />
+    </form>
+{%endblock content%}
+
+34) To our view import UpdateView  
+from django.views.generic.edit import UpdateView 
+class BlogUpdateView(UpdateView):
+    model=Post
+    template_name='post_edit.html'
+    fields=['title','body']
+
+35) # blog/urls.py
+from .views import BlogUpdateView
+urlpatterns = [
+    path('post/<int:pk>/edit/',BlogUpdateView.as_view(),name='post_edit'),
+    path('post/new/',BlogCreateView.as_view(),name='post_new'),
+    path('post/<int:pk>/',BlogDetailView.as_view(),name='post_detail'),    
+    path('',BlogListView.as_view(),name='home'),
+]
+
+36) Delete a post by using DeleteView
+
+37) # template/post_detail.html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="post-entry">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
+    </div>
+    <a href="{% url 'post_edit' post.pk %}">+ Edit blog Post</a>
+    <a href="{% url 'post_delete' post.pk %}">+ Delete blog Post</a>
+{% endblock content %}
+
+38) # template/post_delete.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Delete post</h1>
+    <form action="" method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object.title }}"?</p>         # here instead of 'object.title' we can also use 'post.title'.Both are provided by DetailView
+        <input type="submit" value="Confirm" />
+    </form>
+{% endblock content %}
+
+39) Import DeleteView and reverse_lazy. reverse_lazy as opposed to just reverse so that it won't execute the URL redirect until our view has finished deleting the blog post.
+from django.views.generic.edit import DeleteView 
+from django.urls import reverse_lazy
+class BlogDeleteView(DeleteView):
+    model=Post
+    template_name='post_delete.html'
+    success_url=reverse_lazy('home')
+
+40) # blog/urls.py
+from .views import BlogDeleteView
+urlpatterns = [
+    path('post/<int:pk>/delete/',BlogDeleteView.as_view(),name='post_delete'),
+]
+
+50) python manage.py runserver
+
+51) Now we have to do four new test
+# blog/tests.py
+class BlogTests(TestCase):
+    def test_get_absolute_url(self):
+        self.assertEqual(self.post.get_absolute_url(),'/post/1/')
+    def test_post_create_view(self):
+        response=self.client.post(reverse('post_new'),{'title':'New title','body':'New text','author':self.user,})
+        self.assertEqual(response.status_code,200)
+        self.assertContains(response,'New title')
+        self.assertContains(response,'New text')
+    def test_post_update_view(self):
+        response=self.client.post(reverse('post_edit',args='1'),{        #passing primary key as argument
+            'title':'Updated title',
+            'body':'Updated text',
+        })
+        self.assertEqual(response.status_code,302)
+    def test_post_delete_view(self):
+        response=self.client.get(reverse('post_delete',args='1'))
+        self.assertEqual(response.status_code,200)
+
+
+52) User accounts
+   a) Login : For Login we use LoginView
+	i) Update project level urls.py file
+		# blog_project/urls.py
+	        from django.contrib import admin
+                from django.urls import path,include
+		urlpatterns = [
+    			path('admin/', admin.site.urls),
+    			path('accounts/',include('django.contrib.auth.urls')),
+    			path('', include('blog.urls')),
+		]
+	ii) Make a folder 'registration' inside 'templates'.Inside 'registration' make a file 'login.html'
+               # templates/registration/login.html
+		{% extends 'base.html' %}
+		{% block content %}
+		<h2>Log In</h2>
+		<form action="" method="post">
+    			{% csrf_token %}
+    			{{form.as_p}}
+    			<button type="submit">Log In</button>
+		</form>
+		{% endblock content %}
+	iii) The final step is to specify where to redirect the user upon a successful log in. At the bottom
+	of the 'settings.py' file add the following: 
+		# blog_project/settings.py
+		LOGIN_REDIRECT_URL='home' 
+	iv) Let's update our base.html template so we display a message to users whether they are logged
+	in or not. 
+
+{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+        </header>
+        {% if user.is_authenticated %}                <!--New-->
+            <p>Hi {{user.username}} </p>		<!--New-->
+        {% else %}					<!--New-->
+            <p>You are not logged in.</p>		<!--New-->
+            <a href="{% url 'login' %}">Log In</a>	<!--New-->
+        {% endif %}					<!--New-->
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+	
+
+b) Logout : 
+	   i) In 'base.html' file add a line 
+	{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+        </header>
+        {% if user.is_authenticated %}
+            <p>Hi {{user.username}} </p>
+            <p><a href="{% url 'logout' %}">Log out</a></p>
+        {% else %}
+            <p>You are not logged in.</p>
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+ii) Update 'settings.py' file by adding at the bottom :
+	LOGOUT_REDIRECT_URL='home'
+
+c) signup :
+   i) Django provides us with a form class 'UserCreationForm' to register new user easily. By default
+      it comes with three fields : username , password1, and password2.
+   ii) Create a new app : 'accounts' for sign up page.  
+	python manage.py startapp accounts
+	# blog_project/settings.py
+	INSTALLED_APPS = [
+		'accounts.apps.AccountsConfig',
+	]
+   iii) Add a project-level url pointing to 'accounts' url..
+	# blog_project/urls.py
+	from django.contrib import admin
+	from django.urls import path,include
+	urlpatterns = [
+    		path('admin/', admin.site.urls),
+    		path('accounts/',include('django.contrib.auth.urls')),
+    		path('accounts/',include('accounts.urls')),
+    		path('', include('blog.urls')),
+	]
+ iv) create accounts/urls.py
+# accounts/urls.py
+from django.urls import path
+from .views import SignUpView
+urlpatterns = [
+    path('signup/',SignUpView.as_view(),name='signup'),
+]
+
+v) #templates/registration/login.html
+ {% extends 'base.html' %}
+{% block content %}
+	<h2>Log In</h2>
+	<form action="" method="post">
+    	{% csrf_token %}
+    	{{form.as_p}}
+    	<button type="submit">Log In</button>
+	</form>
+	<a href="{% url 'signup' %}">Signup here</a>
+{% endblock content %}
+
+
+vi) # accounts/views.py
+from django.contrib.auth.forms import  UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
+
+class SignUpView(generic.CreateView):
+    form_class=UserCreationForm
+    success_url=reverse_lazy('login')
+    template_name='signup.html'
+
+vii) make a 'signup.html' file in templates.
+ <!-- templates/signup.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Sign up</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign up</button>
+</form>
+{% endblock content %}
+
+53) python manage.py runserver
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

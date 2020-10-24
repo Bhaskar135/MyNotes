@@ -1,0 +1,65 @@
+
+1) Window object : The browser represents each window or tab using a window object. The location property of the window object w ill tell you the URL of the current page.
+
+2) Document object : The current web page loaded into each window is modelled using a document object.
+
+3) DOM tree : 
+<!DOCTYPE html>
+<html>
+   <head>
+      <title> This is a title </title>
+      <link rel="stylesheet" href="css_file.css"/>
+   </head>
+   <body>
+      <a> Anchor tag</a>
+   </body>
+</html>
+
+1)document : a)<html> : i)<head>  :  i)<title>
+                                    ii)<link> : i)rel  ii)href 
+ 
+                        ii)<body> :  i)<a>
+
+4) Linking to a Javascript file from an HTML file :  <script src="js/filename.js"></ script>
+
+5) Example :
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Constructive &amp; Co. </title>
+    </head>
+<body>
+    <hl>Constructive &amp; Co. </hl>
+    <script>document.write(' <h3>Welcome !</h3>');</script>
+<p>For all orders and inquiries please call <em>555-3344</em> </p>
+</body>
+</html>
+
+6) Javascript is case sensitive.
+
+7) Comments : a)Single line comment(//)   b)Multi line comment(/*  */)
+
+8) Variable : 
+  a) var quantity=3;
+  b) var price, quantity, total;
+  c) var price=5, quantity=14;
+
+9) Rules for naming variables :
+  a) The name must begin with a letter, dollar sign ($),or an underscore (_). It must not start with a number.
+  b) The name can contain letters,numbers, dollar sign ($), or an underscore (_). Note that you must not use a dash(-) or a period (.) in a variable name.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

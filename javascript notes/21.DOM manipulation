@@ -1,0 +1,199 @@
+
+DOM manipulation : 
+   a) Several methods let you create new nodes, add nodes to a tree, and remove nodes from a tree. Some methods are : createElement(), createTextNode(), appendChild()/removeChild(). This is called DOM manipulation.
+
+   b) DOM manipulation can be safer than using innerHTML. But it can be slower. 
+
+innerHTML :
+   <span id="one">Hello Javascript</span>
+   <script>
+       var firstItem = document.getElementById('one');
+       var itemContent = firstItem.innerHTML;
+       firstItem.innerHTML = '<a href=\"http:llexample.org\">'+itemContent+'</a>' ;
+   </script>
+
+1) Adding elements using DOM manipulation :
+ It involves three steps:
+   a) createElement() : creating a new element node using the createElement() method.
+   b) createTextNode() : createTextNode() creates a new text node. You can skip this step if you want to attach an empty element to the DOM tree.
+   c) appendChild() : you can add element to the DOM tree using the appendChild() method.
+
+      *) The insertBefore() is an another method used to add a new element before the selected DOM node.
+
+   eg, <ul>
+            <li>Hello C</li>
+            <li>Hello C++</li>
+            <li>Hello Java</li>
+       </ul>
+       <script>
+            var newElement=document.createElement('li');
+            var newText=document.createTextNode('Hello python');
+            newElement.appendChild(newText);
+            var element=document.getElementsByTagName('ul')[0];
+            element.appendChild(newElement);
+       </script>
+
+2) Removing elements using DOM manipulation :
+   a) Store the element to be removed in a variable
+   b) Store the parent of that element in a variable 
+   c) Remove the element from its parent element. removeChild() method is used.It requires one parameter: the element you want to remove.
+
+   eg,  <ul>
+            <li>Hello C</li>
+            <li>Hello C++</li>
+            <li>Hello Java</li>
+            <li>Hello Python</li>
+        </ul>
+        <script>
+            var removeE1=document.getElementsByTagName('li')[1];
+            var containerE1=document.getElementsByTagName('ul')[0];
+            containerE1.removeChild(removeE1);
+        </script>
+
+3) Accessing and changing attribute nodes : Two steps to accessing and updating attributes :
+    a) Select the element node that carries the attribute.
+    b) Use one of the following methods or properties to work with that element's attributes.
+
+       Properties                    Description
+     1) className               Gets or sets the value of the class attribute. 
+
+     2) id                      Gets or sets the value of the id attribute. 
+
+       Method                        Description
+     1) getAttribute()         Gets the value of an attribute.
+   
+     2) hasAttribute()         Checks if element node has a specified attribute.
+
+     3) setAttribute()         Sets the value of an attribute.
+
+     4) removeAttribute()      Removes an attribute from an element node.
+
+    *) Before you work with an attribute, it is good practice to check whether it exists.
+
+   eg, <p id="one" class="test">Hello Javascript</p>
+       <span id="scriptResults">Hello Python</span>
+       <script>
+            var firstItem = document.getElementById('one'); 
+            if(firstItem.hasAttribute('class')) {
+                var attr = firstItem.getAttribute('class'); 
+                var el = document.getElementById('scriptResults');
+                el.innerHTML = '<h1>The firstItem has a class name : '+attr+ '</h1>';
+            }
+       </script>
+
+
+4) Creating attributes and changing their values : setAttribute() method takes two parameters the attribute name and the value for the attribute.
+     eg,
+        <ul>
+            <li id="one">Hello javascript</li>
+            <li>Hello React.js</li>
+            <li>Hello Angular.js</li>
+            <li>Hello node.js</li>
+        </ul>
+        <script>
+            var firstItem = document.getElementById('one');
+            firstItem.className = 'complete';      // better way than setAttribute() method for setting class or id name.
+            var fourthItem = document.getElementsByTagName('li').item(3);
+            fourthItem.setAttribute('class','cool');
+            document.write(fourthItem.getAttribute('class'));
+        </script>
+
+5) Removing attributes : 
+    a) It is good practice to check for its existence before attempting to remove it.
+    b) To remove an attribute from an element, first select the element and then call removeAttribute() .
+    c) It has one parameter: the name of the attribute to remove.
+      
+      eg,<ul>
+            <li id="one" class="hot">Hello javascript</li>
+            <li>Hello React.js</li>
+            <li>Hello Angular.js</li>
+            <li>Hello node.js</li>
+        </ul>
+        <script>
+            var firstItem = document.getElementById('one'); 
+            if(firstItem.hasAttribute('class')) {
+                firstItem.removeAttribute('class');
+            }
+        </script>
+
+
+6) Some examples :
+
+ a) Adding element in DOM tree :
+        <ul>
+            <li id="one" class="hot">Hello javascript</li>
+            <li>Hello React.js</li>
+            <li>Hello Angular.js</li>
+            <li>Hello node.js</li>
+        </ul>
+        <script>
+            var firstItem = document.getElementsByTagName('ul')[0]; 
+            var newEl=document.createElement('li');
+            var newTextNode=document.createTextNode("Hello django");
+            newEl.appendChild(newTextNode);
+            firstItem.appendChild(newEl);
+        </script>
+
+ b) Adding new element at the beginning of list : Using parent.insertBefore(newItem,target);
+        <ul>
+            <li id="one" class="hot">Hello javascript</li>
+            <li>Hello React.js</li>
+            <li>Hello Angular.js</li>
+            <li>Hello node.js</li>
+        </ul>
+        <script>
+            var parentEl=document.getElementsByTagName('ul')[0];
+            var newEl=document.createElement('li');
+            var newTextNode=document.createTextNode("Hello django");
+            newEl.appendChild(newTextNode);
+            parentEl.insertBefore(newEl,parentEl.firstChild);
+        </script>
+
+ c) Updating class name and print total elements in a node list in heading :
+        <h1>Hello Javascript</h1>
+        <ul>
+            <li id="one" class="hot">Hello javascript</li>
+            <li>Hello React.js</li>
+            <li>Hello Angular.js</li>
+            <li>Hello node.js</li>
+        </ul>
+        <script>
+            var listItems = document.querySelectorAll('li');
+            var i;
+            for (i = 0; i < listItems.length; i++) {
+                listItems[i].className = 'cool'; 
+            }
+            var heading = document.querySelector('h1');
+            var headingText = heading.firstChild.nodeValue;
+            var totalItems = listItems.length ;
+            var newHeading = headingText + ' <span>' + totalItems+ '</span>';
+            heading.textContent = newHeading;
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

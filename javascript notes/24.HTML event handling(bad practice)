@@ -1,0 +1,50 @@
+
+
+1) In the HTML, the first <input> element has an attribute called onblur (triggered when the user leaves the element). The value of the attribute is the name of the function that it should trigger.
+
+eg,
+<form method="post" action="http://www.example.org/register">
+     <label for="username">Create a username: </label>
+     <input type="text" id="username" onblur="checkUsername()"/>
+     <div id="feedback"></div>
+     <label for="password">Create a password:</label>
+     <input type="password" id="password"/>
+     <input type="submit" value="Sign up!"/>
+</form>
+<script>
+     function checkUsername() {
+         var elMsg = document.getElementById('feedback') ;
+         var elUsername = document.getElementById('username'); // Get username input
+         if(elUsername.value.length<5) {
+              elMsg.textContent='Username must be 5 characters or more'; // Set msg
+         }else {
+              elMsg.textContent = '';
+         }
+     }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

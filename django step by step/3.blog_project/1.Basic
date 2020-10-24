@@ -1,0 +1,71 @@
+
+1) mkdir blog
+
+2) cd blog
+
+3) pip3 install pipenv
+
+4) pipenv install django
+
+5) pipenv shell
+
+6) django-admin startproject blog_project
+
+7) cd blog_project
+
+8) python manage.py runserver
+
+9) python manage.py startapp blog
+
+10) python manage.py migrate
+
+11) python manage.py runserver
+
+12) # blog_project/settings.py
+	INSTALLED_APPS = [
+	    'blog.apps.BlogConfig',
+	]
+
+13)   # blog/models.py
+	from django.db import models
+	class Post(models.Model):
+	    title=models.CharField(max_length=200)
+	    author=models.ForeignKey('auth.User',on_delete=models.CASCADE,)
+	    body=models.TextField()
+	    def __str__(self):
+	        return self.title
+
+14) python manage.py makemigrations blog
+
+15) python manage.py migrate blog
+
+16) python manage.py createsuperuser
+
+17) # blog/admin.py
+	from django.contrib import admin
+	from .models import Post
+	admin.site.register(Post)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,95 @@
+
+1) Once you have a jQuery selection, you can add more elements to it, or you can filter the selection to work with a subset of the elements.
+
+2) Adding elements to a selection :
+   
+    Method            Description
+   .add()          Selects all elements that contain the text specified
+
+3) Filtering with a second selector :
+
+ Method               Description
+.filter()          Finds elements in matched that in turn match a second selector
+
+.find()            Finds descendants of elements in matched set that match the selector
+
+.not()/:not()      Finds elements that do not match the selector
+
+.has()/:has()      Finds elements from the matched set that have a descendant that matches the selector
+
+:contains()        Selects all elements that contain the text specified (parameter is case sensitive)
+
+    *) :not() is faster than .not() and :has() is faster than .has()
+
+   Method               Description  
+   .is()          Checks whether current selection matches a condition (returns Boolean)
+
+     eg,
+        <ul>
+            <li>Hello jQuery</li>
+            <li class="hot">Hello python</li>
+            <li class="hot"><em>Hello javascript</em></li>
+            <li class="hot">Hello java</li>
+        </ul>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            var $listItems = $('li');
+            $listItems.filter('.hot:last').removeClass('hot');
+            $('li:not(.hot)').addClass('cool');
+            $listItems.has('em').addClass('complete');
+            $listItems.each(function(){
+                var $this= $(this);
+                if($this.is('.hot')) {
+                    $this.prepend('Priority item: ');
+                }
+            });
+            $('li:contains("jQuery")').append('(local)');
+        </script>
+
+4) Finding items by order from a selection : Each item returned by a jQuery selector is given an index number, which can be used to filter the selection.
+
+   Method                    Description
+   .eq()             The element that matches the index number    eg, $('li').eq(0)
+
+   :lt()             Elements with an index less than the number specified    eg, $('li:lt(2)')
+
+   :gt()             Elements with an index greater than the number specified   eg, $('li:gt(2)')
+
+ eg,
+   $(function(){
+      $('li:lt(2)').removeClass('hot');
+      $('li').eq(0).addClass('complete');
+      $('li:gt(2)').addClass('cool');
+   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,31 @@
+
+1)
+
+<body>
+    <?php
+        $isMale=true;
+        $isTall=false;
+        if($isMale && $isTall){
+            echo "You are tall male.";
+        }elseif($isMale && !$isTall) {
+            echo "You are short male.";
+        }else{
+            echo "Not male";
+        }
+    ?>
+</body>
+
+2) 
+
+<body>
+    <?php
+        function getMax($num1,$num2){
+            if($num1>$num2){
+                return $num1;
+            }else{
+                return $num2;
+            }
+        }
+        echo getMax(3,9);
+    ?>
+</body>

@@ -1,0 +1,14 @@
+
+<body>
+    <?php include "header.html" ?>
+    This is content box....
+    <?php include "footer.html" ?>
+</body>
+
+header.html :
+   This is a header....
+
+footer.html :
+   This is a footer....
+
+

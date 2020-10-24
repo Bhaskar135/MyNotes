@@ -1,0 +1,47 @@
+
+1) pip install Flask-WhooshAlchemy
+
+2) import flask_whooshalchemy as wa
+
+3) 
+app.config['WHOOSH_BASE']='whoosh'
+
+class Course(db.Model):
+    __searchable__=['name','description']
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(30))
+    description=db.Column(db.String(100))
+
+wa.whoosh_index(app,Course)
+
+4) flask shell
+
+>>> from fulltext import *
+>>> flaskcourse = Course(name='The flask course', description='How to use flask')
+>>> db.session.add(flaskcourse)
+>>> db.session.commit()
+>>> sqlcourse= Course(name='The SQL Course', description='How to use SQL')
+>>> db.session.add(sqlcourse)
+>>> db.session.commit()
+>>> pythoncourse= Course(name='The Python Course', description='How to use Python')
+>>> db.session.add(pythoncourse)
+>>> db.session.commit()
+
+>>> results = Course.query.whoosh_search('course').all()
+>>> for r in results :
+        print(r.name)
+>>> pythonresults=Course.query.whoosh_search('python').all()
+>>> for pr in pythonresults:
+        print(pr.name)
+
+
+
+
+
+
+
+
+
+
+
+

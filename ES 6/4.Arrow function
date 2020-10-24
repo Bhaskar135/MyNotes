@@ -1,0 +1,77 @@
+
+1) consize code.
+
+2) implicit return.
+
+3) no "this" binding.
+
+Example :
+
+const squared = (x,y) => x*y;
+console.log(squared(5,6));
+
+    Equivalent to :
+
+// const squared=function(x){
+//     return x*x;
+// }
+// console.log(squared(5,6));
+
+Example :
+
+const courses=["Java","Python","Javascript"];
+const mysirg="mysirg";
+const newArr=courses.map((course) => (      // map() acts like for loop
+    {course_name :`${course}`,site:`${mysirg}`}
+));
+console.table(newArr);
+
+     Equivalent to :
+
+const courses=["Java","Python","Javascript"];
+const mysirg="mysirg";
+const newArr=courses.map(function(course){      // map() acts like for loop
+    return {course_name :`${course}`,site:`${mysirg}`};
+});
+console.table(newArr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+

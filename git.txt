@@ -1,0 +1,23 @@
+git config --global user.name "Bhaskar135"
+
+git config --global user.email "bhaskarjg25@gmail.com"
+
+https://github.com/Bhaskar135/MyNotes.git
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

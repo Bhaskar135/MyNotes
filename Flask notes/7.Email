@@ -1,0 +1,119 @@
+Email :
+  1) pip install flask-mail
+  2) Flask-Mail SMTP server configuration :
+        a) MAIL_SERVER : localhost (default) : hostname or ip address of the email server
+        b) MAIL_PORT : 25 : port of the email server
+        c) MAIL_USE_TLS : False : Enable transport layer security
+        d) MAIL_USE_SSL : False : Enable secure sockets layer security 
+	e) MAIL_USERNAME : None : Mail account username
+        f) MAIL_PASSWORD : None : Mail account password
+
+  3) Instantiate the Mail object 
+     # main.py
+        from flask_mail import Mail,Message
+    	
+	app.config['MAIL_SERVER']='smtp.gmail.com'
+	app.config['MAIL_PORT']=587
+	app.config['MAIL_USE_TLS']=True
+	app.config['MAIL_USERNAME']='email username'   #example@gmail.com
+	app.config['MAIL_PASSWORD']='email password'
+	app.config['MAIL_DEFAULT_SENDER']=('Sender name','Sender email') 
+
+	mail=Mail(app)
+
+  (venv)$ export MAIL_USERNAME=gogoib570@gmail.com
+  (venv)$ export MAIL_PASSWORD=your gmail password  
+                          
+  4) # main.py
+	@app.route('/mail-create')
+	def mail-create():
+    	    db.session.commit()
+            message=Message("A new message",recipients=['memihi3420@emailnube.com'])    # 1st argument is subject and 2nd is receiver
+    	    message.body='This is my 1st email from flask'
+            mail.send(message)
+            return '<h1>Message successfull...</h1>'
+
+  5) We can also make html page for body of the email :
+  # templates/email-send1.html
+   <h1>This is a email body..</h1>
+  
+  6) # main.py
+    @app.route('/mail-create')
+    def mail-create():
+        db.session.commit()
+        message=Message("New email",recipients=['bhaskarjyotigogoi269@gmail.com'])
+        message.body=render_template('email-send1.html')
+        mail.send(message)
+        return '<h1>Message successfull...</h1>'
+
+  7) Sending Asynchronous Email : mail.send() function blocks for a few second while the email is sent. To avoid unnecessary delays during request handling, use thread.
+  # main.py
+  from threading import Thread
+  
+  @app.route('/mail-create')
+  def mail_create():
+     db.session.commit()
+     message=Message("New email",recipients=['bhaskarjyotigogoi269@gmail.com'])
+     message.body=render_template('email-send1.html')
+     new_thread=Thread(target=send_mail,args=[message])
+     new_thread.start()
+     return '<h1>Message successfull...</h1>'
+
+  def send_mail(message):
+     with app.app_context():
+        mail.send(message)
+
+  8) One more way from book to send mail :
+     a) from flask_mail import Mail,Message
+        import os
+        app.config['MAIL_SERVER']='smtp.gmail.com'
+	app.config['MAIL_PORT']=587
+	app.config['MAIL_USE_TLS']=True
+	app.config['MAIL_USERNAME']=os.environ.get('MAIL_USERNAME')
+	app.config['MAIL_PASSWORD']=os.environ.get('MAIL_PASSWORD')
+	app.config['FLASKY_MAIL_SUBJECT_PREFIX']='It is a subject'      # Subject of the email
+	app.config['MAIL_DEFAULT_SENDER']=('Flasky','gogoib570@gmail.com') 
+	app.config['FLASKY_ADMIN']=os.environ.get('FLASKY_ADMIN')	# Here it is receiver
+
+     	mail=Mail(app)
+
+ 	def send_email(to,subject,template,**kwargs):
+            msg=Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX']+subject,       # FLASKY_ADMIN is the receiver here
+                        recipients=[to])
+            msg.body = render_template(template+'.txt',**kwargs)
+            msg.html = render_template(template+'.html',**kwargs)
+            mail.send(msg)
+ 
+     b) #main.py
+    @app.route('/',methods=['GET','POST'])
+    def index():
+        form=NameForm() # object of NameForm() class
+        if form.validate_on_submit():
+            user=User.query.filter_by(username=form.name.data).first()
+            if user is None :
+                user=User(username=form.name.data)
+                ..........
+                if app.config['FLASKY_ADMIN']:
+                    send_email(app.config['FLASKY_ADMIN'],'New user','mail/new_user',user=user)     # calling send_email() function
+            
+            else:
+                session['known']=True
+            session['name']=form.name.data
+        .........
+     c) make a templates/mail/user.txt and templates/mail/user.html
+           Here we have to provide three environment variable from the command prompt - MAIL_USERNAME,MAIL_PASSWORD,FLASKY_ADMIN
+
+     d) Sending Asynchronous Email :
+     from threading import Thread
+
+     def send_async_email(app,msg):
+         with app.app_context():
+             mail.send(msg)
+
+     def send_email(to,subject,template,**kwargs):
+         .........
+         thr=Thread(target=send_async_email,args=[app,msg])  
+	 thr.start()
+         return thr
+
+

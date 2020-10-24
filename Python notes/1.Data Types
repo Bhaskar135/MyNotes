@@ -1,0 +1,46 @@
+1) Comment : # This is a comment
+
+2) Number(int,float,Decimal,Fraction,complex numbers): operator +,-,*,/(returns floating point),//(floor division),%(modulus),**(power),=(assign)
+ Python follow PE(M&D)(A&S) :
+ P :Parentheses
+ E :Exponents
+ M :Multiplication
+ D :Division
+ A :Addition
+ S :Subtraction
+
+3) Strings :'hello' or "hello"
+   \' used to escape quote.
+  'doesn\'t' =>"doesn't"
+
+4) \n used for new line.
+   But if we don't want to interpreted as special characters, use r (raw string).
+   print('Here some \n name') output: Here some 
+                                        name 
+   but print(r'Here some \n name') output: Here some \n name
+
+5) String literals cn span multiple lines("""...""" or '''...''').
+ 
+6) String can be concatenated with (+) and repeated with (*)
+
+7) word='Python'
+   print(word[0])  output: P
+   print(word[-1]) output: n
+   print(word[0:2])  output: Py # slicing allows to obtain a substring.
+   print(word[:2]+word[2:])  output: Python
+
+8) Python strings are immutable.
+
+9) len() returns length of a string.
+   eg : s='Bhaskar'
+        print( len(s) )
+
+10) s='bhaskar'
+   print( "Value is {}".format(s) )
+
+
+
+
+
+
+

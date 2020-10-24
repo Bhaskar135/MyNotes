@@ -1,0 +1,30 @@
+Dates and Times localization :
+ 1) pip install flask-moment
+
+ 2) # main.py
+    from flask_moment import Moment
+    moment = Moment(app) 
+
+ 3) templates/base.html
+  {% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.locale('en') }}  <!-- language -->
+  {% endblock %}
+  Since this is a predefined block in the flask-Bootstrap base template,the location in templates/base.html where this block is inserted does not matter.
+
+ 4) To work with timestamps, Flask-Moment makes a 'moment' object available to templates. In index function passing a variable called current_time to the template for rendering.
+ # main.py
+ from datetime import datetime
+ @app.route('/')
+ def index():
+     return render_template('index.html',current_time=datetime.utcnow())
+
+ 5) Below code shows how this 'current_time' variable is rendered.
+ 
+{% block page_content %}
+    <h1>Hello World</h1>
+    <p>The local date and time is {{ moment(current_time).format('LLL') }} </p>
+    <p>That was {{ moment(current_time).fromNow(refresh=True) }} </p>
+
+{% endblock %}
