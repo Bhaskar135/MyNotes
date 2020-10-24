@@ -1,0 +1,140 @@
+
+Field Types :
+
+1) BooleanField :
+
+ a) A true/false field. 
+
+ b) The default form widget for this field is CheckboxInput, or NullBooleanSelect if null=True.
+
+ c) The default value of BooleanField is None .
+
+2) CharField : 
+
+  CharField(max_length=None)
+
+ a) A string field, for small- to large-sized strings.
+
+ b) The default form widget for this field is a TextInput.
+
+ c) CharField has one extra required argument 'max_length'
+
+3) TextField :
+
+4) DateField : 
+
+   DateField(auto_now=False, auto_now_add=False)
+
+ Has a few extra, optional arguments:
+
+ a) DateField.auto_now : Automatically set the field to now every time the object is saved.
+
+ b) DateField.auto_now_add : Automatically set the field to now when the object is first created. 
+
+5) DateTimeField :
+
+   DateTimeField(auto_now=False, auto_now_add=False)
+
+ a) A date and time, represented in Python by a datetime.datetime instance. Takes the same extra arguments as DateField.
+
+ b) The default form widget for this field is a single DateTimeInput. 
+
+6) DecimalField
+
+   DecimalField(max_digits=None, decimal_places=None)
+
+ a) DecimalField.max_digits : The maximum number of digits allowed in the number. Note that this number must be greater than or equal to decimal_places.
+
+ b) DecimalField.decimal_places : The number of decimal places to store with the number.
+
+ c) The default form widget for this field is a NumberInput when localize is False or TextInput otherwise.
+
+7) EmailField :
+
+   EmailField(max_length=254)
+
+8) FileField :
+   
+   FileField(upload_to=None, max_length=100)
+
+ class MyModel(models.Model):
+    # file will be uploaded to MEDIA_ROOT/uploads
+    upload = models.FileField(upload_to='uploads/')
+
+9) ImageField :
+
+   ImageField(upload_to=None, height_field=None, width_field=None, max_length=100)
+
+10) IntegerField :
+
+   IntegerField()
+ 
+ a) The default form widget for this field is a NumberInput when localize is False or TextInput otherwise.
+
+11) TimeField :
+
+    TimeField(auto_now=False, auto_now_add=False)
+
+12) URLField :
+
+    URLField(max_length=200)
+
+ a) A CharField for a URL.
+
+ b) The default form widget for this field is a URLInput.
+
+ c) URLField takes the optional max_length argument. If you don’t specify max_length, a default of 200 is used.
+
+
+Field Option :
+
+1) null : If True, Django will store empty values as NULL in the database. Default is False.
+
+2) blank : If True, the field is allowed to be blank. Default is False.
+
+3) choices : If this is given, the default form widget will be a select box instead of the standard text field and will limit choices to the choices given.
+
+YEAR_IN_SCHOOL_CHOICES = [
+    ('FR', 'Freshman'),
+    ('SO', 'Sophomore'),
+    ('JR', 'Junior'),
+    ('SR', 'Senior'),
+    ('GR', 'Graduate'),
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

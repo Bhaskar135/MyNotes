@@ -1,0 +1,1257 @@
+1) mkdir news
+2) cd news
+2.1) pip3 install virtualenv
+3) pipenv install django==2.1
+4) pipenv shell
+5) django-admin startproject newspaper_project
+6) cd newspaper_project
+7) python manage.py startapp users
+8) python manage.py runserver
+9) We didn't run migrate command yet.After creating our new custom user model we run the migrate command.
+10) # newspaper_project/settings.py
+  INSTALLED_APPS = [
+    'users.apps.UsersConfig',
+  ]
+11) At the bottom of the file use :
+	AUTH_USER_MODEL='users.CustomUser'
+12) If we just want to add additional information about user then use 'AbstractUser' otherwise for full customization use 'AbstractBaseUser'..
+# users/models.py
+from django.contrib.auth.models import AbstractUser 
+from django.db import models
+class CustomUser(AbstractUser):
+    age=models.PositiveIntegerField(null=True,blank=True)
+
+   null is database-related.It can store a database entry as NULL,meaning no value.
+   blank is validation-related, if blank=True a from will allow an empty value,whereas if blank=False then a value is required.
+13) there are two ways in which we would interact with our new CustomUser model.
+    a) When a user sign up for a new account on our website.(UserCreationForm)
+    b) Within the admin app the superusers can modify the existing users.(UserChangeForm)
+14) Make 'forms.py' within 'users' app .
+	# users/forms.py
+	from django import forms
+	from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+	from .models import CustomUser
+        class CustomUserCreationForm(UserCreationForm):
+    		class Meta(UserCreationForm.Meta):
+        		model=CustomUser
+        		fields=UserCreationForm.Meta.fields+('age',)     # Meta.fields just displays the default settings of username/password.
+
+    	class CustomUserChangeForm(UserChangeForm):
+        	class Meta:
+            		model=CustomUser
+            		fields=UserChangeForm.Meta.fields
+
+15) Update our admin.py file since Admin is tightly coupled to the default User model.We will extend the
+existing 'UserAdmin' class to use our new CustomUser model.
+# users/admin.py
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .forms import CustomUserCreationForm,CustomUserChangeForm
+from .models import CustomUser
+class CustomUserAdmin(UserAdmin):
+    add_form=CustomUserCreationForm
+    form=CustomUserChangeForm
+    model=CustomUser
+    list_display=['email','username','age','is_staff',]		# without using list_display django dispay some other fields.
+
+admin.site.register(CustomUser,CustomUserAdmin)
+
+16) python manage.py makemigrations users
+17) python manage.py migrate
+18) python manage.py createsuperuser
+19) python manage.py runserver
+20) User authentication :
+  i) Create 'registration' folder within 'templates'(project-level). 
+  ii) # newspaper_project/settings.py
+TEMPLATES = [
+    {
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
+    },
+]
+
+21) Now we tell django where to send users after login or logout of a site . Add these at the bottom of settings.py 
+# newspaper_project/settings.py
+   LOGIN_REDIRECT_URL='home'
+   LOGOUT_REDIRECT_URL='home'
+22) create four new templates :
+	a)'login.html' inside registration folder.
+	b)'base.html' inside template outside registration.
+	c)'home.html' inside template outside registration.
+	d)'signup.html' inside template outside registration.
+23)templates/base.html :
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Newspaper App</title>
+</head>
+<body>
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+</body>
+</html>
+
+24) templates/home.html :
+{% extends 'base.html' %}
+{% block title %}
+    Home
+{% endblock title %}
+{% block content %}
+{% if user.is_authenticated %}
+    Hi {{ user.username }}!
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+{% else %}
+    <p>You are not logged in</p>
+    <a href="{% url 'login' %}">Login</a>|
+    <a href="{% url 'signup' %}">Sign up</a>
+{% endif %}
+{% endblock content %}
+
+25) templates/registration/login.html
+{% extends 'base.html' %}
+{% block title %}
+    Log In
+{% endblock title %}
+{% block content %}
+<h2>Log In</h2>
+<form action="" method="post"> {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Log In</button>
+</form>
+{% endblock content %}
+
+26) templates/signup.html
+{% extends 'base.html' %}
+{% block title %}
+    Sign Up
+{% endblock title %}
+{% block content %}
+<h2>Sign up</h2>
+<form action="" method="post"> {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Sign Up</button>
+</form>
+{% endblock content %}
+
+27) We don't want to build a 'pages' app just yet.so we can use the shortcut of importing TemplateView.
+28) Now we include both 'users' app and the built in auth app. Because built in auth app already provides
+views and urls for login and logout.But for signup we will need to create our own view and url.
+# newspaper_project/urls.py
+from django.contrib import admin
+from django.urls import path,include
+from django.views.generic.base import TempateView
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('users/',include('users.urls')),
+    path('users/',include('django.contrib.auth.urls')),
+    path('',TemplateView.as_view(template_name='home.html'),name='home'),
+]
+
+29) Make 'urls.py' file in users app.
+# users/urls.py
+from django.urls import path
+from .views import SignUpView
+urlpatterns = [
+    path('signup/',SignUpView.as_view(),name='signup'),
+]
+
+30) # users/views.py
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from .forms import CustomUserCreationForm
+class SignUpView(CreateView):
+    form_class=CustomUserCreationForm		# to redirect to login once a user sign up successfully.
+    success_url=reverse_lazy('login')
+    template_name='signup.html'
+
+31) python manage.py runserver
+32) Currently under fields we're using Meta.fields which displays the default settings of username/password.
+But we can explicitly set which fields we want displayed. let's update to ask for username/email/password.
+We don't need to include the password fields because they are required.
+# users/forms.py
+from django import forms
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+from .models import CustomUser
+class CustomUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model=CustomUser
+        fields=('username','email','age',)
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model=CustomUser
+        fields=('username','email','age',)
+
+33) python manage.py runserver
+34) In the previous we displayed our homepage by including view logic in our urls.py file.Instead we 
+should create 'pages' app for all our static pages.
+35) python manage.py startapp pages
+36) # newspaper_project/settings.py
+INSTALLED_APPS = [
+    'pages.apps.PagesConfig',
+]
+37) Update our project level urls.py file.Remove the import of TemplateView and update the '' route 
+to include the pages app.
+# newspaper_project/urls.py
+from django.contrib import admin
+from django.urls import path,include
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('users/',include('users.urls')),
+    path('users/',include('django.contrib.auth.urls')),
+    path('',include('pages.urls')),
+]
+
+38) # pages/urls.py
+from django.urls import path
+from .views import HomePageView
+urlpatterns = [
+    path('',HomePageView.as_view(),name='home'),
+]
+
+39) # pages/views.py 
+from django.views.generic import TemplateView
+class HomePageView(TemplateView):
+    template_name='home.html'
+    
+40) python manage.py runserver
+41)Tests
+    a) currently our project has four pages :
+       home.html, signup.html, login.html, logout.html
+    	we need to test only first two. 'Log in' and 'Log out' are rely on internal views and url routes of Django.
+    b) Django's SimpleTestCase will suffice for testing the homepage but 'signup' page uses the database so
+      we'll need to use TestCase too.
+    c) We have urls,templates and views for each of our two new pages we'll add tests for each.
+
+# pages/tests.py
+from django.contrib.auth import get_user_model
+from django.test import SimpleTestCase,TestCase
+from django.urls import reverse
+class HomePageTests(SimpleTestCase):
+    def test_home_page_status_code(self):       # test for homepage exist or not
+        response=self.client.get('/')
+        self.assertEqual(response.status_code,200)
+    def test_view_url_by_name(self):            # test for url of homepage
+        response=self.client.get(reverse('home'))
+        self.assertEqual(response.status_code,200)
+    def test_view_uses_correct_template(self):   # test for view of homepage
+        response=self.client.get(reverse('home'))
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'home.html')
+
+class SignupPageTests(TestCase):
+    username='newuser'
+    email='newuser@gmail.com'
+    def test_signup_page_status_code(self):  # test for signup page
+        response=self.client.get('/users/signup/')
+        self.assertEqual(response.status_code,200)
+    def test_view_url_by_name(self):    # test for url of signup page
+        response=self.client.get(reverse('signup'))
+        self.assertEqual(response.status_code,200)
+    def test_view_uses_correct_template(self):  # test for view of signup page
+        response=self.client.get(reverse('signup'))
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,'signup.html')
+    def test_signup_form(self):  # signup page has a form.here we testing when a username and email address are posted they match what is stored on the CustomUser model.
+        new_user=get_user_model().objects.create_user(self.username,self.email)
+        self.assertEqual(get_user_model().objects.all().count(),1)
+        self.assertEqual(get_user_model().objects.all()[0].username,self.username)
+        self.assertEqual(get_user_model().objects.all()[0].email,self.email)
+        
+42) python manage.py test
+43) Bootstrap 
+44) use bootstrap starter template and navbar in base.html
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>{% block title %}Newspaper App{% endblock title %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+      <a class="navbar-brand" href="{% url 'home' %}">Newspaper</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.username}}</a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+              <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+            </div>
+          </li>
+        </ul>
+          
+        
+        {% else %}
+        <form class="form-inline ml-auto">
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log In</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary ml-2">Sign up</a>
+        </form>
+        {% endif %}
+      </div>
+    </nav>
+    <div class="container">
+      {% block content %}
+      {% endblock content %}
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
+
+45) python manage.py runserver
+46) Make the Log In button green in login.html
+{% extends 'base.html' %}
+{% block title %}
+    Log In
+{% endblock title %}
+{% block content %}
+<h2>Log In</h2>
+<form action="" method="post"> {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-success">Log In</button> 
+</form>
+{% endblock content %}
+
+47) The sign up form does not look so great..So we install a third party package 'django-crispy-forms'
+48) pipenv install django-crispy-forms
+49) add it in INSTALLED_APPS list of settings.py file
+# newspaper_project/settings.py
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'crispy_forms',   # 3rd party
+    'users.apps.UsersConfig',
+    'pages.apps.PagesConfig',
+]
+
+50) We are using Bootstrap4 so we should also add that config to our settings.py file on the bottom.
+	CRISPY_TEMPLATE_PACK='bootstrap4'
+51) In signup.html template first we load 'crispy_forms_tags' at the top and then swap out {{form.as_p}}
+for {{ form|crispy }}
+<!--templates/signup.html-->
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Sign Up
+{% endblock title %}
+{% block content %}
+<h2>Sign up</h2>
+<form action="" method="post"> {% csrf_token %}
+    {{ form|crispy }}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-success">Sign Up</button>
+</form>
+{% endblock content %}
+
+52) python manage.py runserver
+53) Password Change and reset
+a) Password Change :
+   http://127.0.0.1:8000/users/password_change/
+   Now customize the password change page. Django already created the views and URLs for us, we only need to add new templates.
+   i) templates/registration/password_change_form.html
+  ii) templates/registration/password_change_done.html
+  # templates/registration/password_change_form.html
+  {% extends 'base.html' %}
+  {% block title %}Password Change{% endblock title %}
+  {% block content %}
+  <h1>Password change</h1>
+  <p>Please enter your old password, for security's sake, and then enter your new password twice so we can verify you typed it in correcty</p>
+  <form action="" method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input class="btn btn-success" type="submit" value="Change my password">
+  </form>
+  {% endblock content %}
+
+  # password_change_done.html
+   {% extends 'base.html' %}
+   {% block title %}Password Change Successful{% endblock title %}
+   {% block content %}
+       h1>Password change successful</h1>
+       <p>Your Password was changed.</p>
+   {% endblock content %}
+
+b) Password reset :
+   Django already provides a default implementation that we will use and then customize the templates. The only configuration required 
+   is telling Django how to send emails. In production we'll use the email service 'SendGrid' to actually send the emails
+   but for testing purposes we can rely on Django's console backend setting which outputs the email text to our command line console
+   instead.
+   At the bottom of settings.py 
+   # newspaper_project/settings.py
+   EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+   
+   python manage.py runserver
+   navigate to http://127.0.0.1:8000/users/password_reset/
+   upon submission you'll then be redirected to the password reset done page at : http://127.0.0.1:8000/users/password_reset/done/
+   i) make 4 html files in templates/registration
+       templates/registration/password_reset_form.html
+       templates/registration/password_reset_done.html
+       templates/registration/password_reset_confirm.html
+       templates/registration/password_reset_complete.html
+   ii) # templates/registration/password_reset_form.html
+      {% extends 'base.html' %}
+	{% block title %}Forget Your Password?{% endblock title %}
+	{% block content %}
+	<h1>Forget your password?</h1>
+	<p>Enter your email address below, and we'll email instructions for setting a new one.</p>
+	<form action="" method="POST">
+            {% csrf_token %}
+    	    {{ form.as_p }}
+    	    <input class="btn btn-success" type="submit" value="Send me instructions!">
+	</form>
+	{% endblock content %}
+   iii) # templates/registration/password_reset_done.html
+       {% extends 'base.html' %}
+       {% block title %}Email Sent{% endblock title %}
+       {% block content %}
+       <h1>Check your inbox.</h1>
+       <p>We've emailed you instructions for setting your password.
+            You should receive the email shortly!
+       </p>
+       {% endblock content %}
+    iv) # templates/registration/password_reset_confirm.html
+       {% extends 'base.html' %}
+       {% block title %}Enter new password{% endblock title %}
+       {% block content %}
+       <h1>Set a new password!</h1>
+       <form method="post">
+           {% csrf_token %}
+           {{ form.as_p }}
+       <input class="btn btn-success" type="submit" value="Change my password">
+       </form>
+       {% endblock content %} 
+     v) # templates/registration/password_reset_complete.html
+	{% extends 'base.html' %}
+        {% block title %}Password reset complete{% endblock title %}
+        {% block content %}
+            <h1>Password reset complete</h1>
+            <p>Your new password has been set. You can log in now on the <a href="{% url 'login' %}">log in page</a>.</p>
+        {% endblock content %}
+
+Email ( Using SendGrid ) :
+  1) Create a account.
+  2) We have one choice to make Web API or SMTP Relay. For simple website use SMTP for large scale website use Web API.
+  3) Click button under "SMTP Relay" to proceed.
+  4) Create an API key.Enter name for your API key.I have choosen "Newspaper" here.Click on Create key button.
+  5) It generate a EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT, EMAIL_USE_TLS
+  6) In settings.py add the following code.
+	EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+	EMAIL_HOST='smtp.sendgrid.net'
+	EMAIL_HOST_USER='apikey'
+	EMAIL_HOST_PASSWORD='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'
+	EMAIL_PORT=587
+	EMAIL_USE_TLS=True
+  7) python manage.py runserver
+  8) Go back to the SendGrid " Integrate using our Web API or SMTP Relay " page.
+  9) Select the checkbox next to "I've updated my settings."
+  10) "Next: Verify Integration."
+  11) http://127.0.0.1:8000/users/password_reset/
+  12) Enter an existing user's email.
+  13) Upon submission it will redirect to  http://127.0.0.1:8000/users/password_reset/done/
+  14) Now check your email.
+  15) Final step go back to the SendGrid page. Click the button to "Verify Integration."
+
+Custom Email
+1) Create password_reset_email.html in templates/registration.
+2) # templates/registration/password_reset_email.html
+{% load i18n %} {% autoescape off %}
+{% trans "Hi" %} {{ user.get_username }},
+{% trans "We've received a request to reset your password. If you didn't make this request, you can safely ignore this email. Otherwise, click the button below to reset your pssword." %}
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+{% endblock reset_link %}
+{% endautoescape %}
+3) Create password_reset_subject.txt in templates/registration
+# templates/registration/password_reset_subject.txt
+ Please reset your password
+
+Creating Article
+1) python manage.py startapp articles
+2) add it to INSTALLED_APPS.
+# newspaper_project/settings.py
+INSTALLED_APPS = [
+    ..........
+    'crispy_forms',   # 3rd party
+    'users.apps.UsersConfig',
+    'pages.apps.PagesConfig',
+    'articles.apps.ArticlesConfig',
+]
+
+3) change TIME_ZONE = 'UTC' to TIME_ZONE = 'Asia/Kolkata' in settings.py
+4) # articles/models.py
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.urls import reverse
+class Article(models.Model):
+    title=models.CharField(max_length=255)
+    body=models.TextField()
+    date=models.DateTimeField(auto_now_add=True)
+    author=models.ForeignKey(get_user_model(),on_delete=models.CASCADE,)
+    def __str__(self):
+        return self.title
+    def get_absolute_url(self):
+        return reverse('article_detail',args=[str(self.id)])
+
+5) python manage.py makemigrations articles
+6) python manage.py migrate
+7) # articles/admin.py
+from django.contrib import admin
+from .models import Article
+admin.site.register(Article)
+8) python manage.py runserver
+9) visit http://127.0.0.1:8000/admin/
+10) create some articles..
+11) #newspaper_project/urls.py
+from django.contrib import admin
+from django.urls import path,include
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('users/',include('users.urls')),
+    path('users/',include('django.contrib.auth.urls')),
+    path('articles/',include('articles.urls')),
+    path('',include('pages.urls')),
+]
+12) create urls.py in 'articles' app.
+13)# articles/urls.py
+from django.urls import path
+from .views import ArticleListView
+urlpatterns=[
+    path('',ArticleListView.as_view(),name='article_list'),
+]
+14)# articles/views.py
+from django.views.generic import ListView
+from .models import Article
+class ArticleListView(ListView):
+    model=Article
+    template_name='article_list.html'
+
+15)create templates/article_list.html
+16)# templates/article_list.html
+{% extends 'base.html' %}
+{% block title %}Articles{% endblock title %}
+{% block content %}
+    {% for article in object_list %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">{{ article.title }}</span> &middot;
+                <span class="text-muted">by {{ article.author }}|{{ article.date }}</span>
+            </div>
+            <div class="card-body">
+                {{ article.body }}
+            </div>
+            <div class="card-footer text-center text-muted">
+                <a href="#">Edit</a> | <a href="#">Delete</a>
+            </div>
+        </div>
+        <br/>
+        {% endfor %}
+    {% endblock content %}    
+17) visit http://127.0.0.1:8000/articles/
+18) Now we add edit and delete options(articles/1/edit/  or articles/1/delete/ ).
+19) #articles/urls.py
+from django.urls import path
+from .views import ( ArticleListView,ArticleUpdateView,ArticleDetailView,ArticleDeleteView,ArticleCreateView, )
+urlpatterns=[
+    path('<int:pk>/edit/',ArticleUpdateView.as_view(),name='article_edit'),
+    path('<int:pk>/',ArticleDetailView.as_view(),name='article_detail'),
+    path('<int:pk>/delete/',ArticleDeleteView.as_view(),name='article_delete'),
+    path('new/',ArticleCreateView.as_view(),name='article_new'),
+    path('',ArticleListView.as_view(),name='article_list'),
+]
+20) Now we create DetailView,UpdateView, DeleteView.
+21) #articles/views.py
+from django.views.generic import ListView,DetailView 
+from django.views.generic.edit import UpdateView,DeleteView,CreateView
+from django.urls import reverse_lazy
+from .models import Article
+class ArticleListView(ListView):
+    model=Article
+    template_name='article_list.html'
+
+class ArticleDetailView(DetailView):
+    model=Article
+    template_name='article_detail.html'
+
+class ArticleUpdateView(UpdateView):
+    model=Article
+    fields=('title','body',)
+    template_name='article_edit.html'
+
+class ArticleDeleteView(DeleteView):
+    model=Article
+    template_name='article_delete.html'
+    success_url=reverse_lazy('article_list')
+
+22) create three file in templates folder(article_detail.html, article_edit.html, article_delete.html).
+23) # templates/article_detail.html
+{% extends 'base.html' %}
+{% block content %}
+<div class="article-entry">
+    <h2>{{ object.title }}</h2>
+    <p>by {{ object.author }}|{{ object.date }}</p>
+    <p>{{ object.body }}</p>
+</div>
+<p>
+    <a href="{% url 'article_edit' article.pk %}">Edit</a>|
+    <a href="{% url 'article_delete' article.pk %}">Delete</a>
+</p>
+<p>Back to <a href="{% url 'article_list' %}">All Articles</a></p>
+{% endblock content %}
+
+24) # templates/article_edit.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Edit</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-info ml-2" type="submit">Update</button>
+    </form>
+{% endblock content %}
+
+25) # templates/article_delete.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Delete</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{article.title}}"?</p>
+        <button class="btn btn-danger ml-2" type="submit">Confirm</button>
+    </form>
+{% endblock content %}
+
+26) As a final step we can add the edit and delete links to our lists page at the div class for card-footer.
+{% extends 'base.html' %}
+{% block title %}Articles{% endblock title %}
+{% block content %}
+    {% for article in object_list %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">{{ article.title }}</span> &middot;
+                <span class="text-muted">by {{ article.author }}|{{ article.date }}</span>
+            </div>
+            <div class="card-body">
+                {{ article.body }}
+            </div>
+            <div class="card-footer text-center text-muted">
+                <a href="{% url 'article_edit' article.pk %}">Edit</a> | <a href="{% url 'article_delete' article.pk %}">Delete</a>
+            </div>
+        </div>
+        <br/>
+    {% endfor %}
+{% endblock content %}    
+
+27) python manage.py runserver
+28) visit http://127.0.0.1:8000/articles/
+29) Now we create our article by using CreateView.
+30) # articles/views.py
+from django.views.generic import ListView,DetailView 
+from django.views.generic.edit import UpdateView,DeleteView,CreateView
+from django.urls import reverse_lazy
+from .models import Article
+
+........
+class ArticleCreateView(CreateView):
+    model=Article
+    template_name='article_new.html'
+    fields=('title','body','author',)
+
+31) # articles/urls.py
+from django.urls import path
+from .views import ( ArticleListView,ArticleUpdateView,ArticleDetailView,ArticleDeleteView,ArticleCreateView, )
+urlpatterns=[
+    .........
+    path('new/',ArticleCreateView.as_view(),name='article_new'),
+    path('',ArticleListView.as_view(),name='article_list'),
+]
+32) create templates/article_new.html
+# templates/article_new.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>New article</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-success ml-2" type="submit">Save</button>
+    </form>
+{% endblock content %}
+
+33) # templates/base.html
+.........
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+      <a class="navbar-brand" href="{% url 'home' %}">Newspaper</a>
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a href="{% url 'article_new' %}">+ New</a>
+        </li>
+      </ul>
+      {% endif %}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+..........
+</body>
+
+34) #templates/home.html
+{% extends 'base.html' %}
+{% block title %}
+    Home
+{% endblock title %}
+{% block content %}
+<div class="jumbotron" >
+    <h1 class="display-4">Newspaper app</h1>
+    <p class="lead">A Newspaper website built with Django.</p>
+    <p class="lead"><a class="btn btn-primary btn-lg" href="{% url 'article_list' %}" role="button">View All Articles</a></p>
+</div>
+{% endblock content %}
+
+35) Visit http://127.0.0.1:8000/
+
+Permissions and Authorization
+1) authorization is  who is authorized to view areas of your site. Authorization restricts access; authentication enables
+a user sign up and log in flow.
+2) At present the author on a new article can be set to any user.So we make the article so that the only author can edit it.
+3) Improved CreateView
+4) We will remove author from the fields and instead set it automatically via the form_valid method.
+# articles/views.py
+
+......
+class ArticleCreateView(CreateView):
+    model=Article
+    template_name='article_new.html'
+    fields=('title','body')
+    def form_valid(self,form):
+        form.instance.author=self.request.user
+        return super().form_valid(form)
+
+5) Now reload the browser and add new article.But now author is no longer a field.
+
+Authorizations
+1) It restrict the access of unauthorized user. But here any random logged-out user who knows the correct URL can access any part of the site.
+2) Log out first. What happens if you go to it directly: http://127.0.0.1:8000/articles/new/  .The page is still there but
+if we try to create new article it show an error.Because our model expects an author field which is linked to the current logged-in user.
+But since we are not logged in,there is no author.
+
+Mixins
+1) Some examples are TemplateResponseMixin, LoginRequiredMixin, UserPassesTestMixin.
+2) We want to set some authorizations so only logged-in users can access the site. To do this we can use a mixin(kind of multiple
+inheritance to avoid duplicate code).
+3) To restrict view access to only logged in users, Django has a LoginRequiredMixin.
+4) Import the LoginRequiredMixin at the top and then add LoginRequiredMixin to ArticleCreateView, ArticleDeleteView,
+ArticleUpdateView, ArticleDetailView, ArticleListView. Make sure that mixin is to the left of every view so it will be
+read first. And add login_url='login' to every view(If not add this, it show same error).
+# articles/views.py 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView,DetailView 
+from django.views.generic.edit import UpdateView,DeleteView,CreateView
+from django.urls import reverse_lazy
+from .models import Article
+class ArticleListView(LoginRequiredMixin,ListView):
+    model=Article
+    template_name='article_list.html'
+    login_url='login' # new
+
+class ArticleDetailView(LoginRequiredMixin,DetailView):
+    model=Article
+    template_name='article_detail.html'
+    login_url='login' # new
+   
+class ArticleUpdateView(LoginRequiredMixin,UpdateView):
+    model=Article
+    fields=('title','body',)
+    template_name='article_edit.html'
+    login_url='login' # new
+
+class ArticleDeleteView(LoginRequiredMixin,DeleteView):
+    model=Article
+    template_name='article_delete.html'
+    success_url=reverse_lazy('article_list')
+    login_url='login' # new
+
+class ArticleCreateView(LoginRequiredMixin,CreateView):
+    model=Article
+    template_name='article_new.html'
+    fields=('title','body')
+    login_url='login' # new
+    def form_valid(self,form):
+        form.instance.author=self.request.user
+        return super().form_valid(form)
+
+5) Now run and play with it.
+6) But there is still the issue of our edit and delete views. Any logged in user can make changes to any article.
+We want to restrict this access so that only the author of an article has this permission.
+7) To do this we use UserPassesTestMixin.
+#articles/views.py
+from django.contrib.auth.mixins import (LoginRequiredMixin,UserPassesTestMixin) 
+........
+class ArticleDetailView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
+    model=Article
+    template_name='article_detail.html'
+    login_url='login' # new
+    def test_func(self):
+        obj=self.get_object()       # get the object return by view using get_object()
+        return obj.author==self.request.user    # check the author of object is the user or not.If not then error occur.
+
+class ArticleUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model=Article
+    fields=('title','body',)
+    template_name='article_edit.html'
+    login_url='login' # new
+    def test_func(self):
+        obj=self.get_object()
+        return obj.author==self.request.user
+.......
+
+Comments in articles
+1) Create a comment model in articles app.
+# articles/models.py 
+class Comment(models.Model):
+    article=models.ForeignKey(Article,on_delete=models.CASCADE)
+    comment=models.CharField(max_length=140)
+    author=models.ForeignKey(get_user_model(),on_delete=models.CASCADE,)
+    def __str__(self):
+        return self.comment
+    def get_absolute_url(self):
+        return reverse('article_list')
+
+2) python manage.py makemigrations articles
+3) python manage.py migrate
+4) # articles/admin.py
+from django.contrib import admin
+from .models import Article,Comment
+admin.site.register(Article)
+admin.site.register(Comment)
+5) python manage.py runserver
+6) navigate to http://127.0.0.1:8000/admin/
+7) In each article we get only information about article. But we want to show comments also related to that article.
+8) To do that we use two inline views in TabularInline and StackedInline in admin.py.
+9) First we check with StackedInline
+# articles/admin.py
+from django.contrib import admin
+from .models import Article,Comment
+class CommentInline(admin.StackedInline):
+    model=Comment
+    extra=0    # for remove extra rows.
+class ArticleAdmin(admin.ModelAdmin):
+    inlines=[
+        CommentInline,
+    ]
+admin.site.register(Article,ArticleAdmin)
+admin.site.register(Comment)
+10) visit http://127.0.0.1:8000/admin/ and click on Articles.
+11) Now try it with TabularInline. We only need to change our CommentInline from admin.StackedInline to admin.TabularInline.
+# articles/admin.py
+from django.contrib import admin
+from .models import Article,Comment
+class CommentInline(admin.TabularInline):
+    model=Comment
+    extra=0
+class ArticleAdmin(admin.ModelAdmin):
+    inlines=[
+        CommentInline,
+    ]
+admin.site.register(Article,ArticleAdmin)
+admin.site.register(Comment)
+
+Template
+12) Since comment lives within our existng articles app we only need to update the existing templates for article_list.html.
+13) We want to display all comments related to a specific article. In our case,working with a foreign key,We want to follow a relationship backward:
+for each Article look up related Comment models. To do that we use 'related_name' .
+14) # articles/models.py
+.........
+class Comment(models.Model):
+    article=models.ForeignKey(Article,on_delete=models.CASCADE,related_name='comments',)
+    comment=models.CharField(max_length=140)
+    author=models.ForeignKey(get_user_model(),on_delete=models.CASCADE,)
+    def __str__(self):
+        return self.comment
+    def get_absolute_url(self):
+        return reverse('article_list')
+
+15) python manage.py makemigrations articles
+16) python manage.py migrate
+17) python manage.py runserver
+18) Add comment in article_list.html 
+# templates/article_list.html
+{% extends 'base.html' %}
+{% block title %}Articles{% endblock title %}
+{% block content %}
+    {% for article in object_list %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">{{ article.title }}</span> &middot;
+                <span class="text-muted">by {{ article.author }}|{{ article.date }}</span>
+            </div>
+            <div class="card-body">
+                <p>{{ article.body }}</p>
+                <a href="{% url 'article_edit' article.pk %}">Edit</a> | <a href="{% url 'article_delete' article.pk %}">Delete</a>
+            </div>
+            <div class="card-footer">
+                {% for comment in article.comments.all %}
+                <p><span class="font-weight-bold">{{ comment.author }} &middot;</span>
+                {{ comment }}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+        <br/>
+    {% endfor %}
+{% endblock content %}    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

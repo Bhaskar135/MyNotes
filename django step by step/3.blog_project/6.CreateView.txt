@@ -1,0 +1,87 @@
+
+1) Working with forms --->
+# templates/base.html
+{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+                <div class="nav-right">
+                    <h1><a href="{% url 'post_new' %}">+New Blog Post</a></h1>
+                </div>
+        </header>
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+2) # blog/urls.py
+    from django.urls import path
+    from .views import BlogListView,BlogDetailView,BlogCreateView
+    urlpatterns = [
+    	path('post/new/',BlogCreateView.as_view(),name='post_new'),		# new
+    	path('',BlogListView.as_view(),name='home'),
+    	path('post/<int:pk>/',BlogDetailView.as_view(),name='post_detail'),
+    ]
+
+3) create a new view
+    # blog/views.py
+    from django.views.generic.edit import CreateView 
+    class BlogCreateView(CreateView):
+        model=Post
+        template_name='post_new.html'
+        fields=['title','author','body']
+
+4) # templates/post_new.html
+{% extends 'base.html' %}
+{% block content %}
+    <h1>New post</h1>
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}			<!-- output our form data(element of fields) -->
+        <input type="submit" value="Save" />
+    </form>
+{% endblock content %}
+
+5) python manage.py runserver
+
+6) But a error occured after submitting the form. It's complaining that we did not specify where to send the user after successfully submitting the form. Let's send the user to the detail page.
+
+7) To do that add a 'get_absolute_url' to our model.
+    # blog/models.py
+    from django.db import models
+    from django.urls import reverse
+    class Post(models.Model):
+        title=models.CharField(max_length=200)
+        author=models.ForeignKey('auth.User',on_delete=models.CASCADE,)
+        body=models.TextField()
+        def __str__(self):
+            return self.title
+        def get_absolute_url(self):
+            return reverse('post_detail',args=[str(self.id)])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

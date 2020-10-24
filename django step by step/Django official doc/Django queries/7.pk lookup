@@ -1,0 +1,19 @@
+
+These three statements are equivalent:
+
+>>> Blog.objects.get(id__exact=14) # Explicit form
+>>> Blog.objects.get(id=14) # __exact is implied
+>>> Blog.objects.get(pk=14) # pk implies id__exact
+
+
+# Get blogs entries with id 1, 4 and 7
+>>> Blog.objects.filter(pk__in=[1,4,7])
+
+# Get all blog entries with id > 14
+>>> Blog.objects.filter(pk__gt=14)
+
+pk lookups also work across joins. For example, these three statements are equivalent:
+
+>>> Entry.objects.filter(blog__id__exact=3) # Explicit form
+>>> Entry.objects.filter(blog__id=3)        # __exact is implied
+>>> Entry.objects.filter(blog__pk=3)        # __pk implies __id__exact

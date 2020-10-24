@@ -1,0 +1,115 @@
+a) mkdir helloworld
+b) cd helloworld
+c) pip3 install pipenv
+d) pipenv install django
+e) pipenv shell
+1) django-admin startproject helloworld_project
+1.1) cd helloworld_project
+2) python manage.py runserver
+3) python manage.py startapp pages
+4) # helloworld_project/settings.py
+	INSTALLED_APPS = [
+                #........
+		'pages.apps.PagesConfig',
+	]
+4.1) # pages/views.py
+  from django.http import HttpResponse
+  def homePageView(request):
+      return HttpResponse('Hello world')
+
+         Or 
+
+  from django.shortcuts import render
+  def homePageView(request):
+      return render(request,'home.html')
+
+4.2) # pages/urls.py
+  from django.urls import path
+  from .views import homePageView
+  urlpatterns=[
+     path('',homePageView,name='home'),
+  ]
+
+5) # helloworld_project/urls.py
+	from django.contrib import admin
+	from django.urls import path,include
+	urlpatterns = [
+    		path('admin/', admin.site.urls),
+    		path('',include('pages.urls')),
+	]
+
+5.1) python manage.py runserver
+
+6) # pages/urls.py
+	from django.urls import path
+	from.views import HomePageView,AboutPageView
+	urlpatterns = [
+    		path('about/',AboutPageView.as_view(),name='about'),
+    		path('',HomePageView.as_view(),name='home'),
+	]
+7) #pages/views.py 
+	from django.views.generic import TemplateView
+	class HomePageView(TemplateView):
+    		template_name='home.html'
+	class AboutPageView(TemplateView):
+    		template_name='about.html'
+8) templates/base.html
+	<header>
+    		<a href="{% url 'home' %}">Home</a>|<a href="{% url 'about' %}">About</a>
+	</header>
+	{% block content %}
+	{% endblock content %}
+9) templates/home.html 
+	{% extends 'base.html' %}
+	{% block content %}
+		<h1>HomePage</h1>
+	{% endblock content %}
+10) templates/about.html 
+	{% extends 'base.html' %}
+	{% block content %}
+		<h1>About page</h1>
+	{% endblock content %}
+
+10.1) # settings.py
+        TEMPLATES=[
+	   {
+              'DIRS' : [os.path.join(BASE_DIR,'templates')],
+           },
+        ]
+ 
+11) # pages/tests.py 
+	Since we're using SimpleTestCase here since we aren't using a database. If we were using a database, we'd instead use TestCase.
+	
+        from django.test import SimpleTestCase
+	class SimpleTests(SimpleTestCase):
+	    def test_home_page_status_code(self):
+		response=self.client.get('/')
+		self.assertEqual(response.status_code,200)
+            def test_about_page_status_code(self):
+		response=self.client.get('/about/')
+		self.assertEqual(response.status_code,200)
+12) python manage.py test
+13) python manage.py runserver
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8) python manage.py runserver

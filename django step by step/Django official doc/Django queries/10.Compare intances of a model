@@ -1,0 +1,20 @@
+
+To compare two model instances, use the standard Python comparison operator, the double equals sign: ==. Behind the scenes, that compares the primary key values of two models.
+
+Using the Entry example above, the following two statements are equivalent:
+
+>>> some_entry == other_entry
+>>> some_entry.id == other_entry.id
+
+
+
+
+
+
+
+
+
+
+
+
+

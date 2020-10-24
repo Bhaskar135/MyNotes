@@ -1,0 +1,105 @@
+
+1) # blog_project/urls.py
+	from django.contrib import admin
+	from django.urls import path,include
+
+	urlpatterns = [
+    		path('admin/', admin.site.urls),
+    		path('', include('blog.urls')),
+	]
+
+2) # blog/urls.py
+	from django.urls import path
+	from .views import BlogListView
+	urlpatterns=[
+		path('',BlogListView.as_view(),name='home'),
+	]
+
+3) # blog/views.py
+	from django.views.generic import ListView
+	from .models import Post
+	class BlogListView(ListView):
+    	    model=Post
+    	    template_name='home.html'
+
+4) # blog_project/settings.py
+	TEMPLATES=[
+	    {
+	        'DIRS':[os.path.join(BASE_DIR,'templates')],
+	    },
+	]
+
+5)  # templates/base.html
+{% load static %}
+<html>
+    <head>
+        <title>Django blog</title>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    </head>
+    
+    <body>
+        <div>
+            <header>
+                <div class="nav-left">
+                    <h1><a href="{% url 'home' %}">Django blog</a></h1>
+                </div>
+               
+            </header>
+            {%block content%}
+            {%endblock content%}
+        
+        </div>
+    </body>
+</html>
+
+6)# templates/home.html
+	{% extends 'base.html' %}
+	{% block content %}
+    	{% for post in object_list %}
+        	<div class="post-entry">
+            		<h2><a href="#">{{post.title}}</a></h2>
+            		<p>{{post.body}}</p>
+        	</div>
+    	{% endfor %}
+	{% endblock content %}
+
+7)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
