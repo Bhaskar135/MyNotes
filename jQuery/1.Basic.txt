@@ -1,0 +1,34 @@
+
+1) jQuery lets you find elements using CSS-style selectors and then do something with the elements using jQuery methods.
+
+2) jQuery() or $() lets you find one or more elements in the page. It creates an object called jQuery which holds references to those elements. 
+      $('li.hot')
+
+3) jQuery() method : $('li.hot').addClass('complete');
+
+4) eg :
+        <div id="page">
+            <h1 id="header">List</h1>
+            <h2>Buy groceries</h2>
+            <ul>
+              <li id="one" class="hot"><em>fresh</em> figs </li>
+              <li id="two" class="hot">pine nuts</li>
+              <li id="three" class ="hot">honey</li>
+              <li id="four">balsamic vinegar</li>
+            </ul>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(':header').addClass('headline');
+            $('li:lt(3)').hide().fadeIn(1500);
+            $('li').on('click', function() {
+                $(this).remove();
+            });
+        </script>
+
+    Here first three list will apear after 1500 ms. When we click a list item it will remove from the browser.
+
+
+
+
+

@@ -1,0 +1,117 @@
+
+1) Retrieve or set box dimension :
+
+  Method            Description
+ .height()      Height of box (no margin, border, padding)
+
+ .width()       Width of box (no margin, border, padding)
+
+
+2) Retrieve box dimensions only 
+ 
+   Method                Description
+ .innerHeight()       Height of box plus padding
+ 
+ .innerWidth()        Width of box plus padding 
+
+ .outerHeight()       Height of box plus padding and border
+
+ .outerWidth()        Width of box plus padding and border 
+
+.outerHeight(true)    Height of box plus padding, border, and margin
+
+.outerWidth(true)     Width of box plus padding, border, and margin
+
+     eg, The page displays the height of ul
+    
+        <h2>Web design</h2>
+        <ul id="page">
+            <li id="one">Hello C</li>
+            <li id="two">Hello python</li>
+            <li>Hello java</li>
+        </ul>
+        <p>Hello jQuery</p>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function(){
+                var listHeight= $('#page').height();
+                $('ul').append('<p>Height: '+listHeight+'px</p>');
+                $('li').width('50%') ;    // sets the width 50% of the width it was when the page loaded 
+                $('li#one').width(125);   // sets the width 125px
+                $('li#two').width('75%');
+            }) ;
+        </script>
+
+ 3) Window and page dimensions 
+
+ Method                    Description
+.height()             Height of the jQuery selection
+
+.width()              Width of the jQuery selection
+
+.scrollLeft()         Gets the horizontal position of the scroll bar for the first element in the jQuery selection, or sets the horizontal scroll bar position for matched nodes
+
+.scrollTop()          Gets the vertical position of the scroll bar for the first element in the jQuery selection, or sets the vertical scroll bar position for matched nodes
+
+ 4) The .offset() and .position() methods can be used to determine the position of elements on the page.
+
+ Method                    Description
+.offset()             Gets or sets coordinates of the element relative to the top left-hand corner of the document object(including padding)
+
+.position()           Gets or sets coordinates of the element relative to any ancestor that has been taken out of normal flow (using CSS box offsets). If no ancestor is out of normal flow, it will return the same as .offset()(excluding padding)
+
+   Each of them returns an object that has two properties:
+   top - the position from the top of the document or containing element.
+
+   left - the position from the left of the document or containing element.
+
+   To get the offset or position, store the object that is returned by these methods in a variable. Then use the l eft or r i ght properties of the object to retrieve their position.
+
+   var offset = $('div').offset();
+   var text = ' Left : ' + offset.left + ' Right: ' + offset.right;
+
+eg,
+    <div>
+        <ul>
+            ........
+            <li>Hello python</li>
+            <li>Hello jQuery</li>
+        </ul>
+        <div id="slideAd" style="background-color: rgb(117, 160, 160);height:100px;width:550px;position:absolute;right:0px;">
+            Buy ListKing Pro for only $1.99
+        </div>
+        <p id="footer" style="background-color: rgb(157, 182, 182);">&copy; Good programming</p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+            var $window = $(window) ;
+            var $slideAd = $('#slideAd') ;
+            var endZone = $('#footer').offset().top - $window.height();
+            $window.on('scroll',function(){
+                if((endZone) < $window.scrollTop()) {
+                    $slideAd.animate({'right':'0px'}, 250);
+                }else {
+                    $slideAd.stop(true).animate({'right':'-360px'},250);
+                }
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,150 @@
+
+1) Basic effects
+
+     Method           Description
+    .show()         Displays selected elements
+    .hide()         Hides selected elements
+    .toggle()       Toggles between showing and hiding selected elements
+
+
+2) Fading effects 
+
+     Method                      Description
+   .fadeIn()                 Fades in selected elements making them opaque
+   .fadeOut()                Fades out selected elements making them transparent
+   .fadeTo(speed,opacity)    Changes opacity of selected elements
+     
+       speed : in ms, slow, fast.
+     opacity : between 0 and 1
+     
+   .fadeToggle(speed)        Hides or shows selected elements by changing their opacity (the opposite of their current state)
+
+
+3) Sliding effects
+
+     Method                Description
+   .slideUp(speed)       Hides selected elements with a sliding motion
+  .slideDown(speed)      Show selected elements with a sliding motion
+ .slideToggle(speed)     Hides or shows selected elements with a sliding motion (in the opposite direction to its current state)
+
+
+4) Custom effects
+
+     Method              Description
+     .delay()           Delays execution of subsequent items in queue
+     .stop()            Stops an animation if it is currently running
+   .animate()           Creates custom animations
+
+
+    eg, 
+       <h2>Hello Web design</h2>
+        <ul>
+            <li>Hello jQuery</li>
+            <li>Hello python</li>
+            <li>Hello javascript</li>
+            <li>Hello java</li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('h2').hide().slideDown();
+                var $li = $('li');
+                $li.hide().each(function(index) {
+                    $(this).delay(700 * index).fadeIn(700);   
+                });
+                $li.on('click',function(){    
+                    $(this).fadeOut(700);
+                });
+            });
+        </script>
+
+5) Animation effect :
+    a) The .animate() method allows you to create some of your own effects and animations by changing CSS properties.
+
+    b) You can animate any CSS property whose value can be represented as a number,eg, height, width, and font-size. But not those whose value would be a string, such as font-family or text-transfonn.
+ 
+    c) The CSS properties are written using camelCase notation, eg border-top-left-radius would become borderTopLeftRadius .
+
+    d) The CSS properties are specified using object literal notation.The method can also take three optional parameters, shown below.
+
+        .animate({
+            // Styles you want to change
+        }[,speed][, easing][, complete]);
+
+        *) speed indicates the duration of the animation in milliseconds. (It can also take the keywords slow and fast.)
+
+        *) easing can have two values: linear (the speed of animation is uniform); or swing (speeds up in the middle of the transition. and is slower at start and end)
+
+        *) complete is used to call a function that should run when the animation has finished.
+
+ 
+ Example of jQuery properties that are equivalent to CSS property :
+
+bottom,   left,   right,   top,   backgroundPositionX,   backgroundPositionY,   height,   width, maxHeight,   minHeight,   maxWidth,   minWidth,    margin,   marginTop,   marginBottom,   marginLeft,    marginRight,   outlineWidth,   fontSize,   letterSpacing,     borderBottomWidth,   padding,   paddingTop,    paddingBottom,   paddingLeft,   paddingRight,   borderleftWidth,    wordSpacing,   lineHeight,    textIndent,   borderRadius,   borderWidth,   borderRightWidth,   borderTopWidth,   borderSpacing
+
+    eg,
+        <ul>
+            <li>Hello jQuery</li>
+            <li>Hello python</li>
+            <li>Hello javascript</li>
+            <li>Hello java</li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('li').on('click', function() {
+                    $(this).animate({      // $(this) creates a new jQuery object holding the element the user clicked on.
+                        opacity : 0.0,
+                        paddingLeft: '+=80'
+                    },500,function() {    // this anonymous function run after completion of effect.
+                        $(this).remove();
+                    });
+                });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+
+1) Inserting new elements involves two steps:
+    a) Create the new elements in a jQuery object
+
+    b) Adding new elements to the page
+
+2) 
+    a) Create the new elements in a jQuery object : 
+         var $newFragment=$('<li>');
+      or var $newItem= $('<li class="new">item</li>');
+
+    b) You can use the following methods to add the content to the DOM tree :
+        i) .before()   : This method inserts content before the selected element(s) .
+       
+       ii) .after()    : This method inserts content after the selected element (s) .
+
+      iii) .prepend()  : This method inserts content inside the selected element(s), after the opening tag. There are also .prependTo() method.
+
+              eg,  abc.prepend(def) adds def to abc 
+                   abc.prependTo(def) adds abc to def
+
+       iV) .append()   : This method inserts content inside the selected element(s), before the closing tag. There are also .appendTo() method.
+      
+              eg,  abc.append(def) adds def to abc 
+                   abc.appendTo(def) adds abc to def
+
+3) Example :
+        <ul>
+            <li class="hot">Hello Python</li>
+            <li>Hello Django</li>
+            <li class="hot">Hello jQuery</li>
+            <li id="one">Hello React</li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('ul').before('<p class="notice">Programmng trends</p>');
+                $('li.hot').prepend('+ ');
+                $newListItem = $('<li><em>Hello </em> Angular</li>');
+                $('li:last').after($newListItem);
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,61 @@
+
+
+$('#content').load('jq-ajax3.html #content');
+
+1) $('#content') : This creates a jQuery object with the element whose id attribute has a value of content.
+
+2) jq-ajax3.html : This is the URL of the page you want to load the HTML from. There must be a gap between jq-ajax3.html and #content
+
+3) #content : This is the fragment of the HTML page to show.
+
+
+ Example : When users dick on any of the links in the <nav> element. a click event will trigger an anonymous function that loads new content into the page.
+
+    <nav>
+        <a href="jq-load.html" class="current">Home</a>
+        <a href="jq-load2.html">Route</a>
+        <a href="jq-load3.html">Toys</a>
+    </nav>
+    <section id="content">
+        <div id="container">
+            Hello This is Ajax tutorial. Ajax makes your apps more interactive, beautiful..
+        </div>
+    </section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $('nav a').on('click',function(e){
+            e.preventDefault();
+            var url = this.href ;
+            $('nav a.current').removeClass('current');
+            $(this).addClass('current');
+            $('#container').remove();
+            $('#content').load(url +'#content').hide().fadeIn('slow'); 
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

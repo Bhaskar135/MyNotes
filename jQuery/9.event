@@ -1,0 +1,160 @@
+
+1) The .on() method is used to handle all events. It needs two parameters :
+    a) event name
+    b) the code you want to run. This could be a named function or an anonymous function.
+
+    eg, $('li').on('click',function() {        // to give two or more event on a single element they write like .on('click mouseout',........)
+            $(this).addClass('complete'); 
+        });
+
+2) jQuery event :
+
+   UI          focus,blur,change
+
+   Keyboard    input,keydown,keyup,keypress
+
+   Mouse       click,dblclick,mouseup,mousedown,mouseover,mousemove,mouseout,hover
+
+   Form        submit,select,change
+
+   Document    ready,load,unload
+
+   Browser     error,resize,scroll
+
+eg,     <ul>
+            <li id="1"><span>Hello jQuery</span></li>
+            <li id="2"><span>Hello Javascript</span></li>
+            <li id="3"><span>Hello Python</span></li>
+            <li id="4"><span>Hello Django</span></li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                var ids='';
+                var $listItems = $('li');
+                $listItems.on('mouseover click',function(){
+                    ids= this.id;
+                    $listItems.children('span').remove();
+                    $(this).append('<span class="priority">' +ids+ '</span>');
+                }) ;
+                $listItems.on('mouseout', function(){
+                    $(this).children('span').remove();
+                }) ;
+            });
+        </script>
+
+3) Event object : Every event handling function receives an event object. It has methods and properties related to the event that occurred.
+   eg,
+     $(function() {
+        $('#one').on('click',function(event){
+            document.write(event.type);
+        });
+     });
+
+   Property                    Description
+    type                 Type of event(eg, click, mouseover)
+    
+    which                Button or key that was pressed
+    
+    data                 An object literal containing extra information passed to the function when the event fires
+
+    target               DOM element that initiated the event
+
+    pageX                Mouse position from left edge of viewport
+
+    pageY                Mouse position from top of viewport
+
+    timeStamp            Number of milliseconds from Jan 1st, 1970, to when the event was triggered. timeStamp property does not display in Firefox.
+
+    Method                     Description
+  .preventDefault()      Prevents the default (eg,submitting a form)
+
+  .stopPropagation()     Stops the event bubbling up to ancestors
+
+    eg,
+        <ul>
+            <li><span>Hello Javascript</span></li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('li').on('click',function(event){
+                    $('li span').remove() ;
+                    var date = new Date() ;
+                    date.setTime(event.timeStamp);
+                    var clicked= date.toDateString();
+                    $(this).append('<span class="date">' +clicked+ ' ' + event.type + '</span>' );
+                }) ;
+            });
+        </script>
+
+4) Addition parameters for event handlers : 
+      
+        <ul>
+            <li id="one">Hello jQuery</li>
+            <li id="two">Hello python</li>
+            <li id="three">Hello javascript</li>
+            <li id="four">Hello java</li>
+        </ul>
+        <div id="notes"></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                var listItem, itemStatus , eventType;
+                $('ul').on(
+                    'click mouseover',
+                    ':not(#four)',
+                    {status: 'important'},      // this object literal notaion is access by data prperty
+                    function(event) {
+                        listItem = 'Item: ' + event.target.textContent + '<br/>';
+                        itemStatus = 'Status: ' + event.data.status + '<br/>';
+                        eventType = 'Event : ' + event.type;
+                        $('#notes').html(listItem + itemStatus + eventType);
+                });
+            });
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

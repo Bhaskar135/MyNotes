@@ -1,0 +1,116 @@
+
+1) It looks very similar to object literal syntax, but it is not an object. It is just plain text .
+
+   {
+       "location": "San Francisco, CA" ,
+       "capacity": 270 ,
+       "booking": true
+   }
+
+   The value can be any of the following data types : 
+
+   Datatype          Description
+   string            Text (must be written in quotes)
+
+   number            Number
+
+   Boolean           Either true or false
+
+   array             Array of values - this can also be an array of objects
+ 
+   object            JavaScript object - this can contain child objects or arrays
+
+   null              This is when the value is empty or missing
+
+2) Eg,
+     i) The object on the left represents a series of three events, stored in an array called events. The array uses square bracket notation, and it holds three objects (one for each event).
+
+    {
+     "events": [
+          {
+           "location": "San Francisco, CA",
+               "date": "May 1 11 ,
+                "map": "img/map-ca.png"
+          },
+          {
+           "location": "Austin, TX",
+               "date": "May 15",
+               "map ": "img/map-tx.png"
+          },
+          {
+           "location": "New York, NY",
+               "date": "May 30",
+                "map": "img/map-ny.png"
+          }
+       ]
+    }
+
+    *) JSON.stringify() converts JavaScript objects into a string, formatted using JSON. This allows you to send JavaScript objects from the browser to server. This is known as serializing an object.
+
+    *) When JSON data is sent from a server to a web browser, it is transmitted as a string. When it reaches the browser, your script must then convert the string into a JavaScript object. This is known as deserializing an object. This is done using JSON.parse().
+    
+    *) When a server responds to any request, it should send back a status message, to indicate if it completed the request. The values can be:
+
+          200            The server has responded and all is ok
+          304            Not modified
+          404            Page not found
+          500            Internal error on the server
+
+    *) If you run the code locally, you will not get a server status property
+
+    eg,
+  
+       var xhr = new XMLHttpRequest();
+
+       xhr.onload = function() {       // When response has loaded
+          if(xhr.status === 200) {
+             // If server status was ok
+             document.getElementById('content').innerHTML = xhr.responseText ;   // Update
+          }
+       };
+       xhr.open('GET','data/data.html',true);     // prepare the request
+       xhr.send(null);       // send the request
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

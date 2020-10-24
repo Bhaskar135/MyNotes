@@ -1,0 +1,84 @@
+
+1) Ajax is a technique for loading data into part of a page without having to refresh the entire page. The data is often sent in a format called JavaScript Object Notation (or JSON).
+
+2) Ajax uses an asynchronous processing model. This means the user can do other things while the web browser is waiting for the data to load, speeding up the user experience.
+
+3) How AJAX works :
+   
+  a) The request : The browser request data from the server. Browsers implement an object called XMLHttpRequest to handle AJAX request. Once a request has been made the browser does not wait for a response from the server.
+
+  b) On the server : The server responds with data (usually HTML, XML or JSON )
+
+  c) The response : When the server has finished responding to the request, the browser will fire an event. This event can be used to trigger a javascript function that will process the data.
+
+4) Handling AJAX requests and responses : 
+     
+     a) Request :
+           var xhr = new XMLHttpRequest();         // Creating an XMLHttpRequest object
+	   xhr.open('GET','data/test.json', true);
+           xhr.send('search=ardui no');
+
+           The XMLHttpRequest object's open() method prepares the request. It has three parameters : 
+                i) The HTTP method
+               ii) The url of the page that will handle your request
+              iii) A Boolean indicating if it should be asynchronous 
+           
+           The send() method is the one that sends the prepared request to the server.
+
+     b) Response :
+           xhr.onload = function() {
+		if(xhr.status === 200) {
+                   // Code to process the resul ts from the server
+                }
+           }
+
+   When the browser has received and loaded a response from the server, the on load event will fire. This will trigger a function (here, it is an anonymous function).
+ 
+   The function checks the status property of the object. This is used to make sure the server's response was okay.(If this property is blank, check the set up of the server.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

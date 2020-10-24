@@ -1,0 +1,78 @@
+
+1) When you select one or more elements, a jQuery object is returned.
+
+2) Single element : If a selector returns one element, the jQuery object contains a reference to just one element node.
+     eg, $('ul')
+
+3) Multiple elements : If a selector returns several elements, the jQuery object contains references to each element by using index.
+      $('li') 
+
+    *) When you make a selection, the jQuery object that is created has a property called length, which will return the number of +elements in the object.
+
+4) Caching a jQuery object : $('li');
+                             $listItems=$('li');
+
+5) jQuery method that get and set data :
+     a) If a jQuery objects holds more than one element after selection then also we will retrieve information from only the first element in the matched set.
+          eg, $('li')
+              var content=$('li').html();
+
+        To get the content of all of the elements use .each() method.
+
+     b) If a jQuery objects holds more than one element after selection then the method will update all of the elements in the matched set.
+          eg, $('li').html('Updated');
+              
+6) Looping : In plain JavaScript, if you wanted to do the same thing to several elements, you would need to write code to loop through all of the elements you selected. With jQuery, when a selector returns multiple elements, you can update all of them using the one method. 
+
+     eg, $('li.hot').addClass('favorite');
+
+7) Chaining : The process of placing several methods in the same selector is referred to as chaining.
+
+     eg, $('li[id!="one"]').hide().delay(5OO).fadeIn(1400);
+     
+      hide() : hides the elements
+     delay() : creates a pause
+    fadeIn() : fades in the elements
+
+8) ready() method : .ready() method checks that the page is ready for your code to work with.
+         
+     $(document).ready(function(){
+         // Your script goes here.
+     });
+
+     Or a shortcut is :
+     $(function(){
+	//Your script here;
+     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

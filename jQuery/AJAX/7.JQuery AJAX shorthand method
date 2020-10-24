@@ -1,0 +1,74 @@
+
+1) These methods do not work on a selection like other jQuery methods, that is why you prefix them with only the $ symbol.
+
+2) They are usually triggered by an event.
+
+
+        Method                                    Description
+$.get(url[, data][, callback][, type])          HTTP GETrequest for data
+
+$.post(url[, data][, callback][, type])         HTTP POST to update data on the server
+
+$.getJSON(url[, data][, callback])              Loads JSON data using a GET request
+
+$.getScript(url[, callback])                    Loads and executes JavaScript (e.g., JSONP) using a GET request
+
+     The parameters in square brackets are optional.
+
+     i) url specifies where the data is fetched from.
+
+    ii) data provides any extra information to send to the server.
+
+   iii) callback indicates that the function should be called when data is returned (can be named or anonymous).
+
+    iV) type shows the type of data to expect from the server.
+
+eg, users vote for their favorite t-shirt without leaving the page.
+
+<div class="third">
+                   <a href="vote.php?vote=gray">
+                       <img src="img/t-gray.png" id="gray" alt="gray" />
+                   </a>
+</div>
+<div class="third">
+                   <a href="vote.php?vote=yellow">
+                       <img src="img/t-yellow.png " id="yellow" alt="yellow" />
+                   </a>
+</div>
+<div class="third">
+                   <a href="vote.php?vote=green">
+                       <img src="img/t-green.png" id="green" alt="green" />
+                   </a>
+</div>
+
+$('#selector a').on('click',function(e) {
+     e.preventDefault() ;
+     var queryString = 'vote=' +event.target.id;
+     $.get('votes.php' , queryString , function(data) {
+         $('#selector').html(data) ;
+     }) ;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
