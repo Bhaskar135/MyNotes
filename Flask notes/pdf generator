@@ -1,0 +1,65 @@
+
+1) pip install pdfkit
+
+2) sudo apt-get install wkhtmltopdf
+
+3) pdf.py :
+
+from flask import Flask,render_template, make_response
+import pdfkit
+
+app=Flask(__name__)
+
+@app.route('/<name>/<location>')
+def pdf_template(name,location):
+    rendered = render_template('index.html',name=name,location=location)
+    pdf=pdfkit.from_string(rendered,False)
+
+    response=make_response(pdf)
+    response.headers['Content-Type']="application/pdf"
+    response.headers['Content-Disposition']="inline;filename=output.pdf"      # here instead of inline we can also write 'attachment'
+
+    return response
+
+4) index.html :
+
+Name {{name}}
+
+Location {{location}}
+
+5) Adding CSS style to the pdf :
+
+pdf.py :
+
+@app.route('/<name>/<location>')
+def pdf_template(name,location):
+    #...............
+    css=['static/style/main.css']
+    pdf=pdfkit.from_string(rendered,False,css=css)
+    #...............
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

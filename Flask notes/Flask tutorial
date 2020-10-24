@@ -1,0 +1,2352 @@
+Creating the Application Directory
+ 1) git clone https://github.com/miguelgrinberg/flasky.git
+ 2) cd flasky
+ 3) git checkout 1a
+	or create empty application directory as follows :
+ 1) mkdir flasky
+ 2) cd flasky
+
+Creating a virtual environment with Python 3
+ 1) sudo apt-get install python3-venv
+ 2) python3 -m venv venv
+
+Working with virtual environment :
+ source venv/bin/activate (for linux,mac os)
+	or
+ venv\scripts\activate(for windows)
+
+ We can use python console by running venv/bin/python (on linux,mac os), venv\Scripts\python (windows)
+
+To deactivate virtual environment : type deactivate 
+
+To install flask : pip install flask 
+
+To check what packages are installed in the virtual environment : pip freeze
+
+Bsic application :
+ from flask import Flask
+ app=Flask(__name__)	# Flask application instance
+ 
+ @app.route('/')
+ def index():
+     return '<h1>Hello World</h1>'
+ 
+We can also write like this :
+ from flask import Flask
+ app=Flask(__name__)
+ 
+ def index():
+    return '<h1>Hello World</h1>'
+
+ app.add_url_rule('/','index',index) # 1st parameter is URL, 2nd is endpoint name,3rd is view function.
+
+To run the application :
+ 1) For Linux and macOS :
+     export FLASK_APP=main.py
+     flask run
+ 2) For Microsoft Windows :
+     export FLASK_APP=main.py
+     flask run
+
+We can also run the app by adding following to the script main.py :
+ if __name__=='__main__':
+     app.run()
+ 
+Dynamic routes :
+ from flask import Flask
+ app=Flask(__name__)
+
+ @app.route('/')
+ def index():
+     return '<h1>Hello World</h1>'
+
+ @app.route('/user/<name>')     # Dynamic route
+ def user(name):
+     return '<h1>Hello, {}!</h1>'.format(name)
+
+To enable the debug mode :
+ export FLASK_APP=main.py
+ export FLASK_DEBUG=1
+ flask run
+ By enabling debug mode Flask watches all the source  code files of your project and automatically restarts the server when any of the files are   modified.
+ Or app.run(debug=True)
+ Never enable debug mode on a production server.
+
+Jinja Template Engine :
+ <h1>Hello {{name}}</h1>
+ 
+ To render the template :
+  from flask import Flask,render_template
+  app=Flask(__name__)
+  @app.route('/user/<name>')
+  def user(name):
+      return render_template('base.html',name=name)
+
+ Variable of jinja template :
+ 1) Value from dictionary {{ mydict['key'] }}
+ 2) Value from list {{ mylist[3] }}
+ 3) Value from object's method {{ myobj.some_method() }}
+ 
+ Variables can be modified with filters :
+ 1) {{ name|capitalize }} : Converts first character of the value to uppercase and the rest to lowercase
+ 2) {{ name|lower }} : Converts the value to lowercase characters
+ 3) {{ name|upper }} : Converts the value to uppercase characters
+ 4) {{ name|title }} : Capitalizes each word in the value
+ 5) {{ name|trim }} : Removes leading and trailing whitespace from the value
+
+Control Structures:
+ 1) if else :
+    {% if user %}
+	Hello {{user}}
+    {% else %}
+	Hello, Stranger!
+    {% endif %}
+ 
+ 2) for loop :
+    <ul>
+	{% for comment in comments %}
+	    <li>{{ comment }}</li>
+	{% endfor %}
+    </ul>
+
+ 3) function : In jinja template it is called as macro.
+    {% macro render_comment(comment) %}
+    	<li>{{ comment }}</li>
+    {% endmacro %}
+    {% for comment in comments %}
+	{{ render_comment(comment) }}
+    {% endfor %}
+    
+    To make macros more reusable,they can be stored in another html file(eg. macros.html)
+    {% import 'macros.html' as macros %}
+    {% for comment in comments %}
+	 {{ macros.render_comment(comment) }}
+    {% endfor %}
+
+ 4) Inheritance :
+    base.html :
+    <html>
+    <head>
+        {% block head %}
+        <title>{% block title %}{% endblock %} - My Application</title>
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        {% endblock %}
+    </body>
+    </html>
+   
+   index.html :
+   {% extends "base.html" %}
+   {% block title %}Index{% endblock %}
+   {% block head %}
+      {{ super() }}
+      <style>
+      </style>
+   {% endblock %}
+   {% block body %}
+   <h1>Hello, World!</h1>
+   {% endblock %}
+
+Bootstrap Integration :
+1) pip install flask-bootstrap
+2) from flask_bootstrap import Bootstrap
+   bootstrap=Bootstrap(app)
+3) templates/user.html 
+   {% extends "bootstrap/base.html" %}
+   {% block title %}Flasky{% endblock %}
+   {% block navbar %}
+   <div class="navbar navbar-inverse" role="navigation"> 
+     <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Flasky</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+            </ul>    
+        </div>
+     </div>
+   </div>
+   {% endblock %}
+   {% block content %}
+   <div class="container">
+      <div class="page-header">
+        <h1>Hello, {{ name }}</h1>
+      </div>
+   </div>
+   {% endblock %}
+
+4) Custom Error Pages : The most common errors are :
+    i) 404 : When the client requests a page or route that is not known.
+   ii) 500 : When there is an unhandled exception in the application.
+	
+   #main.py :
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'),404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('500.html'),500
+
+5) base.html :
+{% extends "bootstrap/base.html" %}
+{% block title %}
+    Flasky
+{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigtion</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Flasky</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% block page_content %}
+    {% endblock %}
+</div>
+{% endblock %}
+
+6) 404.html
+{% extends "base.html" %}
+{% block title %}Flasky - Page Not Found{% endblock %}
+{% block page_content %}
+    <div class="page-header">
+        <h1>Not Found</h1>
+    </div>
+{% endblock %}
+
+7) templates/user.html
+   {% extends "base.html" %}
+   {% block title %}Flasky{% endblock %}
+   {% block page_content %}
+      <div class="page-header">
+         <h1>Hello, {{name}}!</h1>   
+      </div>
+   {% endblock %}
+
+8) Links : url_for():
+   For : @app.route('/')
+         def index():
+             return render_template('index.html') 
+   use url_for('index') # index is function name
+   
+   For : def index():
+             return render_template('index.html') 
+         app.add_url_route('/','index1','index')
+   use url_for('index1') # index1 is the endpoint
+
+9) url_for('index',_external=True)  #absolute url: This type of link used for outside of the web browser, such as sending email.
+   url_for('user',name='john',page=2,version=1)    # dynamic url
+   return /user/john?page=2&version=1
+
+Static Files :
+ 1) Make a subdirectory 'static'
+ 2) to link static file : "{{ url_for('static',filename='something') }}"
+  
+Dates and Times localization :
+ 1) pip install flask-moment
+
+ 2) # main.py
+    from flask_moment import Moment
+    moment = Moment(app) 
+
+ 3) templates/base.html
+  {% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.locale('en') }}  <!-- language -->
+  {% endblock %}
+  Since this is a predefined block in the flask-Bootstrap base template,the location in templates/base.html where this block is inserted does not matter.
+
+ 4) To work with timestamps, Flask-Moment makes a 'moment' object available to templates. In index function passing a variable called current_time to the template for rendering.
+ # main.py
+ from datetime import datetime
+ @app.route('/')
+ def index():
+     return render_template('index.html',current_time=datetime.utcnow())
+
+ 5) Below code shows how this 'current_time' variable is rendered.
+ 
+{% block page_content %}
+    <h1>Hello World</h1>
+    <p>The local date and time is {{ moment(current_time).format('LLL') }} </p>
+    <p>That was {{ moment(current_time).fromNow(refresh=True) }} </p>
+
+{% endblock %}
+
+Web forms :
+ 1) pip install flask-wtf
+ 2) # main.py
+    app=Flask(__name__)
+    app.config['SECRET_KEY']='hard to guess string'  # to secure from CSRF token.
+        app.config dictionary is a place to store configuration variables used by flask,extensions or the application itself.
+ 3) # main.py
+    from flask_wtf import FlaskForm
+    from wtforms import StringField, SubmitField
+    from wtforms.validators import DataRequired
+    class NameForm(FlaskForm):
+    	name=StringField('What is your name ?',validators=[ DataRequired() ])
+    	submit=SubmitField('Submit')
+    
+    Some fields are :
+        a) BooleanField      : Checkbox with True or False
+	b) DateField         : Text field that accepts a datetime.date value
+ 	c) DateTimeField     : Text field that accepts a datetime.datetime value
+ 	d) DecimalField      : Text field that accepts a decimal.Decimal value
+ 	e) FileField         : File upload field
+ 	f) HiddenField       : Hidden text field
+	g) MultipleFileField : Multiple file upload field
+        h) FieldList  	     : List of fields of a given type
+	i) FloatField        : Text field that accepts a floating-point value
+	j) FormField         : Form embedded as a field in a container form
+	k) IntegerField      : Text field that accepts an integer value
+        l) PasswordField     : Password text field
+	m) RadioField        : List of radio buttons
+        n) SelectField       : Drop-down list of choices
+        o) SelectMultipleField : Drop-down list of choices with multiple selection
+        p) SubmitField       : Form submission button
+	q) StringField       : Text field
+        r) TextAreaField     : Multiple-line text field
+    Some Validators are :
+       a) DataRequired  : Validates that the field contains data after type converion
+       b) Email         : Validates an email address
+       c) EqualTo       : Compares the values of two fields(useful for password and confirm password)
+       d) InputRequired : Validates that the field contains data after type converion
+       e) Length        : Validates the length of the string entered.
+       f) NumberRange   : Validates that the value entered is within a numeric range.
+       g) Optional      : Allows empty input in the field, skipping additional validators.
+       h) URL           : validates a URL
+              and many more validators are there in flask docs.
+  
+ 4) HTML rendering of Forms :
+    <form method="POST">
+        {{ form.hidden_tag() }}         <!--For CSRF protection-->
+	{{ form.name.label }} {{ form.name(id='my-text-field') }}     <!--id is optional argument-->
+	{{ form.submit() }} 
+    </form> 
+
+ 5) We can also use bootstrap here : 
+   {% import "bootstrap/wtf.html" as wtf %}
+   {{ wtf.quick_form(form) }}
+
+ 6) The complete template is :
+  <!--index.html-->
+  {% extends "base.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+  {% block title %}Index{% endblock %}
+
+  {% block page_content %}
+    <div class="page-header">
+        <h1>Hello {% if name %}{{name}} {% else %} Stranger {% endif %}!</h1>
+    </div>
+    {{ wtf.quick_form(form) }}
+  {% endblock %}
+
+ Form handling in View Functions :
+ 1) # main.py
+ @app.route('/',methods=['GET','POST'])
+ def index():
+    name=None
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():   # returns True when form is submitted.
+        name = form.name.data
+        form.name.data = ''
+    return render_template('index.html',form=form,name=name)
+
+ 2) Redirects and User Sessions :
+    If we enter our name and submit it, and then click the refresh button in your browser , we get an warning message before submitting the form again.
+This happens because browsers repeat the last request they sent when they are asked to refresh a page. When the last request sent is a POST request with form data, a refresh would cause a duplicate form submission.   
+    But this approach brings a second problem. When the application handles the POST request, it has access to the name entered by the user in form.name.data, but as soon as that request ends the form data is lost. Because the POST request is handled with a redirect. Applications can remember things from one request to the next by storing them in the user "session". 
+ 
+ 3) # main.py
+ from flask import Flask,request,make_response,render_template,session,redirect,url_for
+ @app.route('/',methods=['GET','POST'])
+ def index():
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():
+        session['name'] = form.name.data
+        return redirect(url_for('index'))      # endpoint name
+    return render_template('index.html',form=form,name=session.get('name'))
+
+ *) By default the endpoint of a route is the name of the view function attached to it.
+
+ 4) Message Flashing :
+  It could be a confirmation message, a warning, or an error.
+  
+  #main.py
+  from flask import Flask,request,make_response,render_template,session,redirect,url_for,flash
+  @app.route('/',methods=['GET','POST'])
+  def index():
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():
+        old_name=session.get('name')
+        if old_name is not None and old_name!=form.name.data :
+            flash('Looks like you have changed your name !')
+        session['name'] = form.name.data
+        return redirect(url_for('index'))
+    return render_template('index.html',form=form,name=session.get('name'))
+
+   Here each time a name is submitted it is compared against the name stored in the user session, which will have been put there during a previous submission of the same form. If the two names are different, the flash() function is invoked with a message.
+   To render the message in template use get_flashed_messages() function :
+   templates/base.html
+   {% block content %}
+   <div class="container">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% block page_content %}
+    {% endblock %}
+   </div>
+  {% endblock %}
+
+ Database Management with Flask-SQLAlchemy :
+ 1) pip install flask-sqlalchemy
+ 2) URL :
+    MySQL : mysql://username:password@hostname/database
+    Postgres : postgresql://username:password@hostname/database
+    SQLite (Linux, macOS) : sqlite:////absolute/path/to/database
+    SQLite (Windows) :  sqlite:///c:/absolute/path/to/database
+ 3) from flask_sqlalchemy import SQLAlchemy
+    app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:@localhost/prac1'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+    db=SQLAlchemy(app)
+ 4) Model Definition :
+    class Role(db.Model):
+    __tablename__= 'roles'      # name of the table in database
+    id = db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(64),unique=True)
+    def __repr__(self):
+        return '<Role %r>' % self.name
+    
+    class User(db.Model):
+        __tablename__='users'
+        id=db.Column(db.Integer,primary_key=True)
+        username=db.Column(db.String(64), unique=True, index=True)
+        def __repr__(self):
+            return '<User %r>' % self.username
+    
+
+ 5) Some SQLAlchemy column types :
+    a) Integer : 32 bits integer
+    b) SmallInteger : 16 bits integer
+    c) BigInteger : Unlimited precision integer
+    d) Float : Floating-point number
+    e) Numeric : Fixed-point number 
+    f) String : Variable-length string
+    g) Text : Variable-length string, for large or unbounded length
+    h) Boolean : Boolean value
+    i) Date : Date value
+    j) Time : Time value
+    k) DateTime : Date and time value
+    l) Interval : Time interval
+    m) Enum : List of string values
+    
+   Some most common SQLAlchemy column options :
+    a) primary_key : Either True or False
+    b) unique : If True then do not allow duplicate values for this column.
+    c) index : If True, create an index for this column so that queries are more efficient.
+    d) nullable : If True then allow empty values for this column.
+    e) default : Define a default value for this column.
+
+ 6) Relationships :
+    a) For One-to-Many relationship from Role to User :
+       class Role(db.Model):
+           #.....
+           users=db.relationship('User',backref='role')
+
+       class User(db.Model):
+           #.....
+           role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))   # role_id is a foreign key. Here 'role' come from backref='role'
+       
+   'roles.id' argument specifies that the column should be interpreted as having id values from rows in the roles table. Here 'roles' is the database table name.
+    In Role class, users attribute will return the list of users associated with that role. The 'backref' argument defines the reverse direction of the relationship by adding a role to the User model. This attribute can be used on any instance of User model instead of the role_id foreign key to access the Role model as an object.
+
+ 
+ Common SQLAlchemy relationship options :
+ a) backref : add a back reference in the other model in the relationship.
+ b) primaryjoin : Specify the join condition between the two models explicitly (necessary for ambiguous relationships.)
+ c) lazy : Specify how the loaded items are to be loaded.
+           Some values :
+           i) select : items are loaded on demand the first time they are accessed.
+           ii) immediate : items are loaded when the source object is loaded.
+           iii) joined : items are loaded immediately, but as a join.
+           iv) subquery : items are loaded immediately, but as a subquery.
+           v) noload : items are never loaded.
+           vi) dynamic : instead of loading the items, the query that can load them is given.
+ d) uselist : if False, use a scalar instead of a list.
+ e) order_by : Specify the ordering used for the items in the relationship.
+ f) secondary : Specify the name of the association table to use in many-to-many relationships.
+ g) secondaryjoin : Specify the secondary join condition for many-to-many relationships when SQLAlchemy cannot determine it on its own.
+
+  The one-to-one relationship can be expressed the same way as one-to-many with the uselist option set to False within the db.relationship().
+  The many-to-one relationship can be expressed the same way as one-to-many but foreign key and db.relationship() definition both on the "many" side.
+  The many-to-many relationship require addition table called association table.
+
+ Database Operations
+ 1) Creating the tables :
+      (venv)flask shell
+            from main import db
+            db.create_all()
+ 
+ 2) To remove tables :
+      db.drop_all()
+ 
+ 3) Inserting rows by command line :
+      from main import Role,User
+      admin_role=Role(name='Admin')
+      mod_role=Role(name='Moderator')
+      user_role=Role(name='User')
+      
+      user_john=User(username='john',role=admin_role)
+      user_susan=User(username='susan',role=user_role)
+      user_david=User(username='david',role=user_role)
+	The objects exist only on the python side, they have not been written to the database yet.
+
+ 4) To write on the database use database session
+      db.session.add(admin_role).......... or db.session.add_all([admin_role,mod_role,user_role,user_john,user_susan,user_david])
+      After that db.session.commit()
+ 
+ 5) Modifying rows :
+      admin_role.name='Administrator'
+      db.session.add(admin_role)
+      db.session.commit()
+
+ 6) Deleting rows :
+      db.session.delete(mod_role)
+      db.session.commit()
+
+ 7) Querying rows :
+      a) Role.query.all()
+      b) User.query.filter_by(role=user_role).all()
+      c) If we exit the shell session, and start a brand new shell session, we have to re-create the python objects from their database rows.
+           user_role=Role.query.filter_by(name='User').first()
+      
+  Common SQLAlchemy query filters
+  a) filter() : Returns a new query that adds an additional filter to the original query.
+  b) filter_by() : Returns a new query that adds an additional equlity filter to the original query.
+  c) limit() : Returns a new query that limits the number of results of the original query to the given number.
+  d) offset() : Returns a new query that applies an offset into the list of results of the original query.
+  e) order_by() : Returns a new query that sorts the results of the original query according to the given criteria.
+  f) group_by() : Returns a new query that groups the results of the original query according to the given criteria.
+
+  Most common SQLAlchemy query executors :
+  a) all() : Returns all the results of a query as a list.
+  b) first() : Returns the first result of a query,or None if there are no results.
+  c) first_or_404() : Returns the first result of a query, or aborts the request and sends a 404 error as the response if there are no results.
+  d) get() : Returns the row that matches the given primary key, or None if no matching row is found.
+  e) get_or_404() : Returns the row that matches the given primary key, or if the key is not found, aborts the request and sends a 404 error as the response
+  f) count() : Returns the result count of the query
+  g) paginate() : Returns a pagination object that contains the specified range of results.
+
+  Relationships work similarly to queries :
+  1) from Role table to User table :
+        us=user_role.users
+        us
+  2) from User table to Role table :
+	us=user_role.users
+        us[0].role
+     
+        The user_role.users query internally calls all() to return the list of users. Because the query object is hidden, it is not possible to refine it with additional query filters.
+       The configuration of the relationship is modified with a lazy='dynamic' argument to request that the query is not automatically executed.
+
+ class Role(db.Model):
+    ........
+    users=db.relationship('User',backref='role',lazy='dynamic')
+    ........
+    
+  With this relationship configured in this way, user_role.users returns a query that hasn't executed yet, so filters can be added to it.
+     a) user_role.users.order_by(User.username).all()
+     b) user_role.users.count()
+
+  Database access in view functions :
+  # main.py :
+  @app.route('/',methods=['GET','POST'])
+  def index():
+    form=NameForm() # object of NameForm() class
+    if form.validate_on_submit():
+        user=User.query.filter_by(username=form.name.data).first()
+        if user is None :
+            user=User(username=form.name.data)
+            db.session.add(user)
+            db.session.commit()
+            session['known']=False
+        else:
+            session['known']=True
+        session['name']=form.name.data
+        form.name.data=''
+        return redirect(url_for('index'))
+    return render_template('index.html',form=form,name=session.get('name'),known=session.get('known',False))
+
+  # templates/index.html :
+  {% extends "base.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+  {% block title %}Flasky{% endblock %}
+
+  {% block page_content %}
+    <div class="page-header">
+        <h1>Hello {% if name %}{{name}} {% else %} Stranger {% endif %}!</h1>
+        {% if not known %}
+          <p>Pleased to meet you</p>
+        {% else %}
+          <p>Happy to see you again!</p>
+        {% endif %}
+    </div>
+    {{ wtf.quick_form(form) }}
+  {% endblock %}
+
+ Integration with the Python Shell :
+    Having to import the database instance and the models each time a shell session is started is tedious work. To avoid having to constantly repeat these steps, flask shell command can be configured to automatically import these objects.
+
+  # main.py
+  @app.shell_context_processor
+  def make_shell_context():
+      user_role=Role.query.filter_by(name='User').first()
+      return dict(db=db,User=User,Role=Role,user_role=user_role)
+    
+      Now you can check this in shell :
+        >>> flask shell
+        >>> app
+        >>> db
+
+  Database Migrations with Flask-Migrate
+  1) To update database tables use Flask-Migrate
+  2) pip install flask-migrate
+  3) # main.py
+     from flask_migrate import Migrate 
+     ......
+     migrate=Migrate(app,db)
+  4) flask db init
+         This command creates a migrations directory, where all the migration scripts will be stored.
+  
+     In alembic, a database migration is represented by a migration script.This script has two functions - upgrade() and downgrade() .
+     a) upgrade() : This function applies the database changes that are part of the migration.
+     b) downgrade() : This function removes them.
+       Procedure needs to be followed for Flask-Migrate :
+         i) Make the necessary changes to the model classes.
+        ii) Create an automatic migration script with the "flask db migrate" command. 
+       iii) Review the generated script and adjust it so that it accurately represents the changes that were made to the models.
+        iv) Add the migration script to source control.
+         v) Apply the migration to the database with the "flask db upgrade" command.
+  5) flask db migrate -m "initial migration" 
+  6) flask db upgrade 
+     For this first migration, this is equivalent to db.create_all() 
+
+  Adding more migrations :
+  1) Make necessary changes in the database models.
+  2) flask db migrate
+  3) Review the generated migration script and correct it if it has any inaccuracies.
+  4) flask db upgrade 
+
+  Procedure to expand the last migration script is as follows :
+     1) Remove the last migration from the database with "flask db downgrade"   (This may cause some data to be lost)
+     2) Delete the last migration script
+     3) Generate new database migration : flask db migrate
+     4) Review and apply the migration script as described previously.
+
+  Email :
+  1) pip install flask-mail
+  2) Flask-Mail SMTP server configuration :
+        a) MAIL_SERVER : localhost (default) : hostname or ip address of the email server
+        b) MAIL_PORT : 25 : port of the email server
+        c) MAIL_USE_TLS : False : Enable transport layer security
+        d) MAIL_USE_SSL : False : Enable secure sockets layer security 
+	e) MAIL_USERNAME : None : Mail account username
+        f) MAIL_PASSWORD : None : Mail account password
+
+  3) Instantiate the Mail object 
+     # main.py
+        from flask_mail import Mail,Message
+    	
+	app.config['MAIL_SERVER']='smtp.gmail.com'
+	app.config['MAIL_PORT']=587
+	app.config['MAIL_USE_TLS']=True
+	app.config['MAIL_USERNAME']='email username'   #example@gmail.com
+	app.config['MAIL_PASSWORD']='email password'
+	app.config['MAIL_DEFAULT_SENDER']=('Sender name','Sender email') 
+
+	mail=Mail(app)
+
+  (venv)$ export MAIL_USERNAME=gogoib570@gmail.com
+  (venv)$ export MAIL_PASSWORD=your gmail password  
+                          
+  4) # main.py
+	@app.route('/mail-create')
+	def mail-create():
+    	    db.session.commit()
+            message=Message("A new message",recipients=['memihi3420@emailnube.com'])    # 1st argument is subject and 2nd is receiver
+    	    message.body='This is my 1st email from flask'
+            mail.send(message)
+            return '<h1>Message successfull...</h1>'
+
+  5) We can also make html page for body of the email :
+  # templates/email-send1.html
+   <h1>This is a email body..</h1>
+  
+  6) # main.py
+    @app.route('/mail-create')
+    def mail-create():
+        db.session.commit()
+        message=Message("New email",recipients=['bhaskarjyotigogoi269@gmail.com'])
+        message.body=render_template('email-send1.html')
+        mail.send(message)
+        return '<h1>Message successfull...</h1>'
+
+  7) Sending Asynchronous Email : mail.send() function blocks for a few second while the email is sent. To avoid unnecessary delays during request handling, use thread.
+  # main.py
+  from threading import Thread
+  
+  @app.route('/mail-create')
+  def mail_create():
+     db.session.commit()
+     message=Message("New email",recipients=['bhaskarjyotigogoi269@gmail.com'])
+     message.body=render_template('email-send1.html')
+     new_thread=Thread(target=send_mail,args=[message])
+     new_thread.start()
+     return '<h1>Message successfull...</h1>'
+
+  def send_mail(message):
+     with app.app_context():
+        mail.send(message)
+
+  8) One more way from book to send mail :
+     a) from flask_mail import Mail,Message
+        import os
+        app.config['MAIL_SERVER']='smtp.gmail.com'
+	app.config['MAIL_PORT']=587
+	app.config['MAIL_USE_TLS']=True
+	app.config['MAIL_USERNAME']=os.environ.get('MAIL_USERNAME')
+	app.config['MAIL_PASSWORD']=os.environ.get('MAIL_PASSWORD')
+	app.config['FLASKY_MAIL_SUBJECT_PREFIX']='It is a subject'      # Subject of the email
+	app.config['MAIL_DEFAULT_SENDER']=('Flasky','gogoib570@gmail.com') 
+	app.config['FLASKY_ADMIN']=os.environ.get('FLASKY_ADMIN')	# Here it is receiver
+
+     	mail=Mail(app)
+
+ 	def send_email(to,subject,template,**kwargs):
+            msg=Message(app.config['FLASKY_MAIL_SUBJECT_PREFIX']+subject,       # FLASKY_ADMIN is the receiver here
+                        recipients=[to])
+            msg.body = render_template(template+'.txt',**kwargs)
+            msg.html = render_template(template+'.html',**kwargs)
+            mail.send(msg)
+ 
+     b) #main.py
+    @app.route('/',methods=['GET','POST'])
+    def index():
+        form=NameForm() # object of NameForm() class
+        if form.validate_on_submit():
+            user=User.query.filter_by(username=form.name.data).first()
+            if user is None :
+                user=User(username=form.name.data)
+                ..........
+                if app.config['FLASKY_ADMIN']:
+                    send_email(app.config['FLASKY_ADMIN'],'New user','mail/new_user',user=user)     # calling send_email() function
+            
+            else:
+                session['known']=True
+            session['name']=form.name.data
+        .........
+     c) make a templates/mail/user.txt and templates/mail/user.html
+           Here we have to provide three environment variable from the command prompt - MAIL_USERNAME,MAIL_PASSWORD,FLASKY_ADMIN
+
+     d) Sending Asynchronous Email :
+     from threading import Thread
+     
+     def send_async_email(app,msg):
+         with app.app_context():
+             mail.send(msg)
+
+     def send_email(to,subject,template,**kwargs):
+         .........
+         thr=Thread(target=send_async_email,args=[app,msg])  
+	 thr.start()
+         return thr
+
+
+  Large Application Structure :
+    1) Project_name : 
+         i) app                 : The flask application
+               a) templates 
+               b) static
+               c) main : 
+                    i) __init__.py
+                   ii) errors.py
+                  iii) forms.py
+                   iv) views.py
+               d) __init__.py
+               e) email.py
+               f) models.py
+         ii) migrations         : It contains the database migration scripts
+        iii) tests              : Unit tests are written           
+               a) __init__.py
+               b) test*.py
+         iv) venv
+          v) requirements.txt   :  lists the package dependencies so that it is easy to regenerate an identical virtual environment on a different pc.
+         vi) config.py  :  Stores the configuration settings.
+        vii) flasky.py  :  It defines the Flask application instance and some tasks.
+
+     2) In config.py, we use different databases during dvelopment, testing, and production so that they don't interfere with each other.
+     # config.py
+        import os
+	basedir=os.path.abspath(os.path.dirname(__file__))
+
+	class Config:       # base class
+            SECRET_KEY=os.environ.get('SECRET_KEY') or 'hard to guess string'
+    	    MAIL_SERVER=os.environ.get('MAIL_SERVER','smtp.gmail.com')
+    	    MAIL_PORT=int(os.environ.get('MAIL_PORT','587'))
+            MAIL_USE_TLS=os.environ.get('MAIL_USE_TLS','true').lower() in ['true','on','1']
+    	    MAIL_USERNAME=os.environ.get('MAIL_USERNAME')
+     	    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+            FLASKY_MAIL_SUBJECT_PREFIX='[Flasky]'
+            FLASKY_MAIL_SENDER='gogoib570@gmail.com'
+            FLASKY_ADMIN=os.environ.get('FLASKY_ADMIN')
+            SQLALCHEMY_TRACK_MODIFICATIONS=False
+            @staticmethod
+            def init_app(app):
+                pass
+
+       class DevelopmentConfig(Config):     #sub class
+           DEBUG=True
+           SQLALCHEMY_DATABASE_URI= os.environ.get('DEV_DATABASE_URL') or 'mysql+pymysql://root:root@localhost/dev'
+
+       class TestingConfig(Config):       #sub class
+           TESTING=True
+           SQLALCHEMY_DATABASE_URI=os.environ.get('TEST_DATABASE_URL') or 'mysql+pymysql://root:root@localhost/test'
+
+       class ProductionConfig(Config):       #sub class
+           SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL') or 'mysql+pymysql://root:root@localhost/prod'
+
+       config = {
+          'development': DevelopmentConfig,
+          'testing': TestingConfig,
+          'production':ProductionConfig,
+          'default':DevelopmentConfig
+       }
+    3) pip install flask-bootstrap
+       pip install flask-mail
+       pip install flask-moment
+       pip install flask-sqlalchemy
+
+    4) Making application instance
+     #app/__init__.py
+     from flask import Flask,render_template
+     from flask_bootstrap import Bootstrap
+     from flask_mail import Mail
+     from flask_moment import Moment
+     from flask_sqlalchemy import SQLAlchemy
+     from config import config
+
+     bootstrap=Bootstrap()       # Uninitialized by passing no arguments
+     mail=Mail()
+     moment=Moment()
+     db=SQLAlchemy()
+
+     def create_app(config_name):
+    	app=Flask(__name__)
+    	app.config.from_object(config[config_name])   # The application initialization is now done by using from_object() method from the Flask 							# configuration object 
+    	config[config_name].init_app(app)
+    	bootstrap.init_app(app)       # initialized 
+    	mail.init_app(app)
+    	moment.init_app(app)
+    	db.init_app(app)
+    	
+        # attach routes and custom error pages here
+    	
+        return app
+
+    5) Using blueprints to define routes and error handlers.
+    # app/main/__init__.py
+    from flask import Blueprint
+    main = Blueprint('main', __name__)	  # 1st argument is blueprint name and 2nd argument is the module or package where the blueprint is located.
+    from .import views, errors
+
+	These are in inactive state until the blueprint is registered with an application. Importing views.py and errors.py in it causes the routes   and error handlers to be associated with the blueprint.
+
+    Note : i) from .import <module_name>  : Here . represents the current package.
+          ii) from ..import <module_name>  : Here .. represents the parrent of the current package.
+
+    6) The blueprint is registered with the application inside te create_app() function :
+       # app/__init__.py
+       def create_app(config_name):
+	   #..........
+           from .main import main as main_blueprint
+           app.register_blueprint(main_blueprint)
+           return app
+    
+    7) # app/main/errors.py 
+       from flask import render_template
+       from .import main
+       
+       @main.app_errorhandler(404)
+       def page_not_found(e):
+           return render_template('404.html'),404
+
+       @main.app_errorhandler(500)
+       def internal_server_error(e):
+    	   return render_template('500.html'),500
+
+    8) # app/main/views.py 
+    from datetime import datetime
+    from flask import render_template, session, redirect, url_for
+    from .import main
+    from .forms import NameForm
+    from ..import db
+    from ..models import User,Role
+
+    @main.route('/',methods=['GET','POST'])
+    def index():
+        form=NameForm()
+        if form.validate_on_submit():
+            user=User.query.filter_by(username=form.name.data).first()
+            if user is None :
+                user=User(username=form.name.data)
+                db.session.add(user)
+                db.session.commit()
+                session['known']=False
+                if app.config['FLASKY_ADMIN']:
+                    send_email(app.config['FLASKY_ADMIN'],'New user','mail/new_user',user=user)
+            else:
+                session['known']=True
+            session['name']=form.name.data
+            form.name.data=''
+            return redirect(url_for('.index'))   # here '.index' can also be write like 'main.index' where 'main' is the name of the blueprint.
+        return render_template('index.html',form=form,name=session.get('name'),known=session.get('known',False),current_time=datetime.utcnow())
+
+     10) pip install flask-wtf
+     
+     11) # app/main/forms.py
+     from flask_wtf import FlaskForm
+     from wtforms import StringField, SubmitField
+     from wtforms.validators import DataRequired
+     
+     class NameForm(FlaskForm):
+         name=StringField('What is your name ?',validators=[DataRequired()] )
+         submit=SubmitField('Submit')
+
+     12) # flasky.py
+     import os
+     from app import create_app, db
+     from app.models import User, Role
+     from flask_migrate import Migrate
+
+     app=create_app(os.getenv('FLASK_CONFIG') or 'default')
+     migrate=Migrate(app,db)
+
+     @app.shell_context_processor
+     def make_shell_context():
+         return dict(db=db, User=User, Role=Role)
+
+     @app.cli.command()
+     def test():
+         """Run the unit tests."""
+         import unittest
+         tests=unittest.TestLoader().discover('tests')
+         unittest.TextTestRunner(verbosity=2).run(tests)
+
+    13) export FLASK_APP=flasky.py
+    14) export FLASK_DEBUG=1
+    15) We include a requirements.txt file that records all the package dependencies with exact version number.
+            pip freeze > requirements.txt
+    16) To build a replica of the virtual environment and run the following command on it :
+            pip install -r requirements.txt
+
+    17) Unit testing :
+       tests/test_basic.py :
+       
+    import unittest
+    from flask import current_app
+    from app import create_app,db
+
+    class BasicsTestCase(unittest.TestCase): 
+        def setUp(self):
+            self.app=create_app('testing')	# Creates an application configured for testing
+            self.app_context=self.app.app_context()     # activates the context
+            self.app_context.push()
+            db.create_all()
+    
+        def tearDown(self):         # database and application context are removed here
+            db.session.remove()
+            db.drop_all()
+            self.app_context.pop()
+
+        def test_app_exists(self):       # ensures application instance exists
+            self.assertFalse(current_app is None)
+
+        def test_app_is_testing(self):     # ensures application is running under the testing configuration
+            self.assertTrue(current_app.config['TESTING'])
+
+    setUp() method run before each test and tearDown() method run after each test.
+
+    18) Unit test launcher command :
+    # flasky.py
+    @app.cli.command()
+    def test():
+        """Run the unit tests."""
+        import unittest
+        tests=unittest.TestLoader().discover('tests')
+        unittest.TextTestRunner(verbosity=2).run(tests)
+    
+    19) flask test
+    20) # app/models.py
+from .import db
+class Role(db.Model):
+    __tablename__= 'roles'      # name of the table in database
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(64),unique=True)
+    users=db.relationship('User',backref='role',lazy='dynamic')
+    def __repr__(self):
+        return '<Role %r>' % self.name
+    
+class User(db.Model):
+    __tablename__='users'
+    id=db.Column(db.Integer,primary_key=True)
+    username=db.Column(db.String(64), unique=True, index=True)
+    role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))   # role_id is a foreign key. Here 'role' come from backref='role'
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+ User Authentication :
+ 1) Some packages used in authentication are :
+    a) Flask-Login : Management of user sessions for logged-in users
+    b) Werkzeug : Password hashing and verification
+    c) itsdangerous : Cryptographically secure token generation and verification
+    d) Flask-Mail
+    e) Flask-Bootstrap 
+    f) Flask-WTF
+ 
+ 2) Hashing Passwords with Werkzeug : Two functions can be used here.
+    a) generate_password_hash(password,method='pbkdf2:sha256',salt_length=8)
+          This function takes a plain-text password and returns the password hash as a string.
+    
+    b) check_password_hash(hash,password)
+          This function takes a password hash previously stored in the database and the password entered by the user.The return value is boolean.
+
+ 3) # app/models.py
+ from werkzeug.security import generate_password_hash,check_password_hash
+ class User(db.Model):
+    #.......
+    password_hash=db.Column(db.String(128))
+    
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self,password):
+        self.password_hash=generate_password_hash(password)  # make plain text to hash
+
+    def verify_password(self,password):
+        return check_password_hash(self.password_hash,password)  # to confirm password
+
+    def __repr__(self):
+        return '<User %r>' % self.name
+ 
+ 4) flask shell
+ >>> u=User()
+ >>> u.password='cat'
+ >>> u.password_hash
+ >>> u.verify_password('cat')
+ >>> u.verify_password('dog')
+
+5) Testing 
+# tests/test_user_model.py
+import unittest
+from app.models import User
+
+class UserModelTestCase(unittest.TestCase):
+    def test_password_setter(self):
+        u=User(password='cat')
+        self.assertTrue(u.password_hash is not None)
+
+    def test_no_password_getter(self):
+        u=User(password='cat')
+        with self.assertRaises(AttributeError):
+            u.password
+    
+    def test_password_verification(self):
+        u=User(password='cat')
+        self.assertTrue(u.verify_password('cat'))
+        self.assertFalse(u.verify_password('dog'))
+    
+    def test_password_salts_are_random(self):
+        u=User(password='cat')
+        u2=User(password='cat')
+        self.assertTrue(u.password_hash != u2.password_hash)
+
+ 6) flask test
+
+ 7) Creating an Authentication Blueprint    
+ # app/auth/__init__.py
+ from flask import Blueprint
+ auth=Blueprint('auth',__name__)
+ from .import views
+
+ 8) # app/auth/views.py
+ from flask import render_template
+ from . import auth
+ from .forms import LoginForm
+
+ @auth.route('/login',methods=['GET','POST'])
+ def login():
+    form = LoginForm()
+    return render_template('auth/login.html',form=form)
+
+ 9) Now attached the auth blueprint to application create_app() function.
+ # app/__init__.py
+ def create_app(config_name):
+    #........
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint,url_prefix='/auth')    # here url_prefix is optional argument.we can check url -->
+                                                                         #http://127.0.0.1:5000/auth/login
+    return app
+
+ 10) User Authentication with Flask-Login : 
+     a) pip install flask-login
+     b) Some methods of Flask-Login :
+        i) is_authenticated : Must be True if the user has valid login credentials.
+       ii) is_active : Must be True if the user is allowed to login or False otherwise. A False value can be used for disabled accounts.
+      iii) is_anonymous : Must always be False for regular users and True for a special user object that represents anonymous users.
+       iv) get_id() : Must return a unique identifier for the user, encoded as a Unicode string.
+              To implement these methods Flask-Login provides a UserMixin class.
+      
+  from flask_login import UserMixin
+  class User(UserMixin, db.Model):
+    __tablename__='users'
+    id=db.Column(db.Integer,primary_key=True)
+    email=db.Column(db.String(50), unique=True, index=True)
+    role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))
+    password_hash=db.Column(db.String(128))
+    
+
+ 11) Now initialised the Flask-Login in the application 
+  # app/__init__.py
+   from flask_login import LoginManager
+   login_manager=LoginManager()
+   login_manager.login_view='auth.login'
+   def create_app(config_name):
+       # ......
+       login_manager.init_app(app)
+
+       #........
+       return app
+ 
+ 12) # app/models.py : user loader function 
+ from . import login_manager
+
+@login_manager.user_loader           # this decorator is used to register the function with Flask-Login and call it when it needs to retrieve information about the login user.
+ def load_user(user_id):
+     return User.query.get(int(user_id))
+
+ 13) # app/auth/forms.py
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired, Length, Email
+
+class LoginForm(FlaskForm):
+    email=StringField('Email',validators=[ DataRequired(), Length(1,50), Email() ],render_kw={'placeholder':'Enter Email'})
+    password=PasswordField('Password',validators=[ DataRequired() ],render_kw={'placeholder':'Enter Password'})
+    remember_me=BooleanField('Keep me logged in')
+    submit=SubmitField('Log In')
+
+ 14) # templates/auth/login.html
+ <html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/login.css') }}">
+  </head>
+  <body>
+    <div id='outer-div'>
+      <div class="heading-container" style="background-color:#2d95af;height:50%">
+         <h3>Login</h3>
+      </div>
+      <form action="" method="post">
+  	<div class="container">
+           {{ form.hidden_tag() }}
+           {{ form.email.label }}{{ form.email }}
+           {{ form.password.label }}{{ form.password }}
+           {{ form.remember_me }}{{ form.remember_me.label }}
+           {{ form.submit(class='btn') }}
+        </div>
+        <div class="container clearfix" style="background-color:#f1f1f1">
+           <div class="reg">
+              New user ? Register <a href="{{ url_for('auth.register') }}">here</a> 
+           </div>
+           <div>
+             <a href="#">Forgot password ?</a> 
+           </div>
+        </div>
+     </form> 
+   </div>
+</body>
+</html>
+ 
+ 15) # app/templates/home.html
+   <body>
+     <h1>
+        Hello, {% if current_user.is_authenticated %}
+                   {{current_user.name}}
+               {% else %}
+                   Stranger
+               {% endif %}
+     </h1>
+   </body>
+
+       'current_user' variable is defined by Flask-Login and available to view functions and templates. The variable contains currently logged-in user or anonymous user object if the user is not logged in. Anonymous user objects have the is_authenticated property set to False.
+
+Signing users in : 
+
+1) # app/auth/views.py :
+from flask import render_template, redirect, request, url_for, flash
+from flask_login import login_user
+from . import auth
+from ..models import User
+from .forms import LoginForm
+
+@auth.route('/login',methods=['GET','POST'])
+def login():
+    form = LoginForm()       # object of LoginForm()
+    if form.validate_on_submit():
+        user=User.query.filter_by(email=form.email.data).first()
+        if user is not None and user.verify_password(form.password.data):
+            login_user(user,form.remember_me.data)      # remember_me is optional
+            next=request.args.get('next')
+            if next is None or not next.startswith('/'):
+                next=url_for('main.index')
+            return redirect(next)
+        flash('Invalid username or password.')
+    return render_template('auth/login.html',form=form)
+
+      Here if remember_me is True then long term cookie set to user's browser. If remeber_me is False then when user close the browser then again he will have to login.
+
+2) # app/templates/auth/login.html
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Flasky - Login{% endblock %}
+{% block page_content %}
+<div class="page-header">
+<h1>Login</h1>
+</div>
+<div class="col-md-4">
+{{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
+
+3) Signing Users Out : 
+ # app/auth/views.py
+from flask_login import login_user, logout_user, login_required
+@auth.route('/logout')
+@login_required
+def logout():
+   logout_user()
+   flash('You have been logged out.')
+   return redirect(url_for('main.index'))
+
+4) Testing Login :
+ # app/templates/home.html
+
+ Hello, {% if current_user.is_authenticated %}
+                {{current_user.name}}
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
+           {% else %}
+                Stranger
+                <a href="{{ url_for('auth.login') }}">Login</a>
+           {% endif %}
+
+5) flask shell
+>>> u = User(email='john@example.com', username='john', password='cat')
+>>> db.session.add(u)
+>>> db.session.commit()
+
+6) Adding a User Registration Form : 
+# app/auth/forms.py
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
+from wtforms import ValidationError
+from ..models import User
+
+..........
+
+class RegistrationForm(FlaskForm):
+    email=StringField('Email',validators=[ DataRequired(), Length(1,50), Email() ],render_kw={'placeholder':'Enter your Email'})
+    username=StringField('Username',validators=[DataRequired(), Length(1,64),Regexp('^[A-Za-z][A-Za-z0-9_.]*$',0,'Usernames must have only letters,numbers,dots or underscores') ])
+    password=PasswordField('Password',validators=[DataRequired(),EqualTo('password2',message='Passwords must match.')],render_kw={'placeholder':'Enter password'})
+    password2=PasswordField('Confirm password',validators=[DataRequired()],render_kw={'placeholder':'Confirm password'})
+    submit=SubmitField('Register')
+    def validate_email(self,field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('Email already registered.')
+
+7) # app/templates/auth/login.html
+<p>
+ New user?
+ <a href="{{ url_for('auth.register') }}">
+ Click here to register
+ </a>
+</p>
+
+8) Registering new users :
+
+# app/auth/views.py : 
+from .forms import LoginForm, RegistrationForm
+@auth.route('/register',methods=['GET','POST'])
+def register():
+    form=RegistrationForm()
+    if form.validate_on_submit():
+        user=User(name=form.name.data,email=form.email.data,password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('You can now login.')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/register.html',form=form)
+
+9) Generating account confirmation tokens with itsdangerous:
+ a) flask shell
+   >>> from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+   >>> s=Serializer(app.config['SECRET_KEY'],expires_in=3600)    # argument is encryption key and expire time.
+   >>> token=s.dumps({ 'confirm':23 })    # dumps() generates cryptographic signature for the data given as an argument(eg id )
+   >>> token
+   >>> data=s.loads(token)    # loads() decode the token.Yhe function verifies signature and expiration time and if both are valid, returns original data. If the token is invalid then exception is raised.  
+   >>> data
+
+10) # app/models.py
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
+from .import db
+
+class User(UserMixin, db.Model):
+    #......
+    confirmed=db.Column(db.Boolean,default=False)
+
+    def generate_confirmation_token(self,expiration=3600):   # validity time for token is 1 hour
+        s=Serializer(current_app.config['SECRET_KEY'],expiration)
+        return s.dumps({'confirm':self.id}).decode('utf-8')
+    
+    def confirm(self,token):      # verifies the token and if valid set confirmed=True. Also check id from the token matches the logged in user
+        s=Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data=s.loads(token.encode('utf-8'))
+        except:
+            return False
+        if data.get('confirm')!=self.id:
+            return False
+        self.confirmed=True
+        db.session.add(self)
+        return True
+
+11) Sending confirmation Emails :
+# app/auth/views.py
+from ..email import send_email
+
+@auth.route('/register',methods=['GET','POST'])
+def register():
+    form=RegistrationForm()
+    if form.validate_on_submit():
+        #......
+        db.session.add(user)
+        db.session.commit()
+        token=user.generate_confirmation_token()
+        send_email(user.email,'Confirm Your Account','auth/email/confirm',user=user,token=token)
+        flash('A confirmation email has been sent to you by email.')
+        return redirect(url_for('main.index'))
+    return render_template('auth/register.html',form=form)
+
+12) # app/templates/auth/email/confirm.txt :
+
+Dear {{ user.username }},
+Welcome to CIRR!
+To confirm your account please click on the following link:
+{{ url_for('auth.confirm',token=token, _external=True) }}
+Sincerely, 
+The CIRR Team
+Note: replies to this email address are not monitored. 
+
+13) # app/auth/views.py
+from flask_login import current_user
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm(token):
+   if current_user.confirmed:
+      return redirect(url_for('main.index'))
+   if current_user.confirm(token):
+      db.session.commit()
+      flash('You have confirmed your account. Thanks!')
+   else :
+      flash('The confirmation link is invalid or has expired.')
+   return redirect(url_for('main.index'))
+
+        When the users click on the link from the confirmation email they are asked to log in before they reach this view function. The function first checks if the logged-in user is already confirmed, and in that case it redirects to the home page. Because the actual token confirmation is done entirely in the User model, all the view function needs to do is call confirm() method from User model and then flash a message.
+
+        The unconfirmed users are allowed to do login but only show them a page that asks them to confirm their accounts before they can gain further access. This can be done using Flask's before_request() method.
+
+14) # app/auth/views.py
+ @auth.before_app_request
+ def before_request():
+     if current_user.is_authenticated and not current_user.confirmed and request.blueprint!='auth' and request.endpoint!='static':
+         return redirect(url_for('auth.unconfirmed'))
+
+ @auth.route('/unconfirmed')
+ def unconfirmed():
+     if current_user.is_anonymous or current_user.confirmed:
+         return redirect(url_for('main.index'))
+     return render_template('auth/unconfirmed.html')
+
+         The before_app_request handler will run when :
+  a) A user is logged in i.e. current_user.is_authenticated is True.
+  b) The account for the user is not confirmed.
+  c) The requested URL is outside of the authentication blueprint and is not for a static file.
+
+15) For the case if the original email was lost then :
+
+# app/auth/views.py
+@auth.route('/confirm')
+@login_required
+def resend_confirmation():
+    token=current_user.generate_confirmation_token()
+    send_email(current_user.email, 'Confirm Your Account', 'auth/email/confirm', user=current_user, token=token)
+    flash('A new confirmation email has been sent to you by email.')
+    return redirect(url_for('main.index'))
+
+User Roles :
+1)# app/models.py
+class Role(db.Model):
+    __tablename__= 'roles'      # name of the table in database
+    id = db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(64),unique=True)
+    default=db.Column(db.Boolean, default=False, index=True)
+    permissions=db.Column(db.Integer)
+    users=db.relationship('User',backref='role',lazy='dynamic')
+
+    def __repr__(self):
+        return '<Role %r>' % self.name
+
+    def __init__(self,**kwargs):
+        super(Role, self).__init__(**kwargs)
+        if self.permissions is None:
+            self.permissions=0
+
+  Here the default field should be True for only one role and False for all the others.
+  Here the permission field defines the list of permissions for the role. Since SQLAlchemy will set this field to None by default, a class constructor
+is added that sets it to 0 if an initial value isn't provided in the constructor arguments.
+        Task name                                Permission name    Permission value      
+    1) Follow users                                  FOLLOW              1
+    2) Comment on posts made by others               COMMENT             2
+    3) Write articles                                WRITE               4
+    4) Moderate comments made by others              MODERATE            8
+    5) Administration access                         ADMIN              16
+
+2) For a user role that gives users permission to follow other users and comment on posts, permission value is 1+2 =3.
+  # app/models.py
+  class Permission:
+     FOLLOW=1
+     COMMENT=2
+     WRITE=4
+     MODERATE=8
+     ADMIN=16
+
+3) # app/models.py
+ 
+ class Role(db.Model):
+    #........
+
+    def add_permission(self,perm):
+        if not self.has_permission(perm):
+            self.permissions += perm
+    
+    def remove_permission(self,perm):
+        if self.has_permission(perm):
+            self.permissions -= perm
+    
+    def reset_permissions(self):
+        self.permissions = 0
+
+    def has_permission(self,perm):
+        return self.permissions & perm == perm
+
+4) flask shell
+>>> r=Role(name='User')
+>>> r.add_permission(Permission.FOLLOW)
+>>> r.add_permission(Permission.WRITE)
+>>> r.has_permission(Permission.FOLLOW)
+True
+>>> r.has_permission(Permission.ADMIN)
+False
+>>> r.reset_permissions()
+>>> r.has_permission(Permission.FOLLOW)
+False
+
+
+5) Create roles by using method :
+
+# app/models.py
+class Role(db.Model):
+    #.......
+    @staticmethod
+    def insert_roles():
+        roles={
+            'User' : [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE ],
+            'Moderator' : [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE, Permission.MODERATE],  
+            'Admin' : [Permission.FOLLOW, Permission.COMMENT, Permission.WRITE, Permission.MODERATE, Permission.ADMIN ],
+        }
+
+        default_role='User'
+        for r in roles:
+            role=Role.query.filter_by(name=r).first()
+            if role is None:
+                role=Role(name=r)
+            role.reset_permissions()
+            for perm in roles[r]:
+                role.add_permission(perm)
+            role.default=(role.name==default_role)
+            db.session.add(role)
+        db.session.commit()
+
+  The insert_roles() method is a static method. So, we can call it by using class name.eg, Role.insert_roles()
+
+6) Role assignment : The role assigned at registration time will be the 'User' role. But the exception is made for the administrator, who needs to be asigned the 'admin' role from the start.
+
+7) The admin is identified by an email address stored in the FLASKY_ADMIN configuration variable.
+# app/models.py
+
+class User(UserMixin, db.Model):
+    #........
+
+    def __init__(self,**kwargs):   
+        super(User,self).__init__(**kwargs)
+        if self.role is None:
+            if self.email==current_app.config['CIRR_ADMIN']:
+                self.role=Role.query.filter_by(name='Admin').first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
+    
+           The User constructor invokes the constructor of the base classes, and after that if the object does not have a role defined, it sets the admin or user role depending on the email address.
+
+8) Now We have to check whether users have a given permission in the role they have been assigned or not 
+  # app/models.py
+from flask_login import UserMixin, AnonymousUserMixin
+ 
+class User(UserMixin, db.Model):
+    #......
+    def can(self,perm):
+        return self.role is not None and self.role.has_permission(perm)
+
+    def is_administrator(self):
+        return self.can(Permission.ADMIN)
+
+class AnonymousUser(AnonymousUserMixin):
+    def can(self,permissions):
+        return False
+    
+    def is_administrator(self):
+        return False
+
+login_manager.anonymous_user=AnonymousUser
+ 
+    The can() method added to the User model returns True if the requested permission is present in the role.
+
+9) Now we make two decorators, one for generic permission checks and one for the administration permission check.
+ # app/decorators.py
+from functools import wraps
+from flask import abort
+from flask_login import current_user
+from .models import Permission
+
+def permission_required(permission):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args,**kwargs):
+            if not current_user.can(permission):
+                abort(403)
+            return f(*args,**kwargs)
+        return decorated_function
+    return decorator
+
+def admin_required(f):
+    return permission_required(Permission.ADMIN)(f)
+
+   These decorators are built with the help of functools package and return 403 response when the current user does not have the requested permission.
+
+# app/templates/403.html : <h1>You are not allowed to access this .</h1>
+
+10) Permissions also need to be checked from templates. To avoid having to add a template argument in every render_template() call, a context processor can be used. Context processors make variables available to all templates during rendering.
+
+# app/main/__init__.py :
+@main.app_context_processor
+def inject_permissions():
+    return dict(Permission=Permission)
+
+11) Now test the roles and permissions :
+# tests/test_user_model.py :
+ from app.models import User,Permission,AnonymousUser
+ class UserModelTestCase(unittest.TestCase):
+    # ........
+    def test_user_role(self):
+        u=User(email='john@example.com',password='cat')
+        self.assertTrue(u.can(Permission.FOLLOW))
+	self.assertTrue(u.can(Permission.COMMENT))
+	self.assertTrue(u.can(Permission.WRITE))
+	self.assertFalse(u.can(Permission.MODERATE))
+        self.assertFalse(u.can(Permission.ADMIN))
+
+    def test_anonymous_user(self):
+        u=AnonymousUser()
+        self.assertFalse(u.can(Permission.FOLLOW))
+	self.assertFalse(u.can(Permission.COMMENT))
+	self.assertFalse(u.can(Permission.WRITE))
+	self.assertFalse(u.can(Permission.MODERATE))
+        self.assertFalse(u.can(Permission.ADMIN))
+
+12) flask shell
+>>> Role.insert_roles()
+>>> Role.query.all()
+
+13) Now remove the setUp() and tearDown() method from test_basic.py
+
+14) Now update the userlist so that all the user accounts that were created before roles and permissions existed have a role assigned.
+flask shell
+>>> admin_role=Role.query.filter_by(name='Admin').first()
+>>> default_role=Role.query.filter_by(default=True).first()
+>>> for u in User.query.all():
+        if u.email==app.config['CIRR_ADMIN']:
+            u.role=admin_role
+        else:
+            u.role=default_role
+
+>>> db.session.commit()
+
+
+User Profile Information :
+1) # app/models.py
+   class User(UserMixin, db.Model):
+       #......
+       name=db.Column(db.String(64))
+       location=db.Column(db.String(64))
+       about_me=db.Column(db.Text())
+       member_since=db.Column(db.DateTime(), default=datetime.utcnow)
+       last_seen=db.Column(db.DateTime(), default=datetime.utcnow)
+
+   The member_since and last_seen are take default value of the current time. The last_seen field needs to be refreshed each time the user accesses the site. A method in the User class can be added to perform this update.
+
+2) # app/models.py 
+  class User(UserMixin, db.Model):
+      #.......
+      def ping(self):
+          self.last_seen=datetime.utcnow()
+          db.session.add(self)
+          db.session.commit()
+
+         The ping() method must be called each time a request from a user is received. Because the before_app_request handler in the auth blueprint runs before every request. So we put the ping() method inside before_request().
+
+3)  # app/auth/views.py :
+  @auth.before_app_request
+  def before_request():
+      if current_user.is_authenticated:
+          current_user.ping()
+          if not current_user.confirmed and request.endpoint and request.blueprint!='auth' and request.endpoint!='static':
+              return redirect(url_for('auth.unconfirmed'))
+
+ Creating a user profile page:
+ 1)  # app/main/views.py :
+      @main.route('/user/<username>')
+      def user(username):
+          user=User.query.filter_by(username=username).first_or_404()
+          return render_template('user.html',user=user)
+
+ 2) An invalid username sent into this route wil cause a 404 error to be returned.
+
+ 3) # app/templates/user.html
+       {% extends 'base.html' %}
+       {% block title %}Flasky - {{user.username}}{% endblock %}
+       {% block page_content %}
+          <div class="page-header">
+             <h1>{{ user.username }}</h1>
+             {% if user.name or user.location %}
+             <p>{% if user.name %}
+                  {{ user.name }}
+                {% endif %}
+                {% if user.location %}
+                   From <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+                {% endif %}     
+             </p>    
+             {% endif %}     
+             {% if current_user.is_administrator() %}  
+                  <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+             {% endif %}
+             {% if user.about_me %}
+             <p>{{ user.about_me }}</p>
+	     {% endif %}
+             <p>Member since {{ moment(user.member_since).format('L') }}.
+                Last seen {{ moment(user.last_seen).fromNow() }}.
+             </p>
+          </div>
+       {% endblock %}
+
+ 4) # app/templates/base.html
+   {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+   {% endif %}
+
+ 5) User-Level Profile Editor :
+ # app/main/forms.py
+ 
+ class EditProfileForm(FlaskForm):
+    name=StringField('Real name', validators=[Length(0,64)])
+    location=StringField('Location',validators=[length(0,64)])
+    about_me=TextAreaField('About me')
+    submit=SubmitField('Submit')
+
+
+ 6) # app/main/views.py
+  @main.route('/edit-profile',methods=['GET','POST'])
+  @login_required
+  def edit_profile():
+     form=EditProfileForm()
+     if form.validate_on_submit():
+        current_user.name=form.name.data
+        current_user.location=form.location.data
+        current_user.about_me=form.about_me.data
+        db.session.add(current_user._get_current_object())
+        db.session.commit()
+        flash('Your profile has been updated.')
+        return redirect(url_for('.user',username=current_user.username))
+     form.name.data=current_user.name
+     form.location.data=current_user.location
+     form.about_me.data=current_user.about_me
+     return render_template('edit_profile.html',form=form)
+
+ 7) # app/templates/user.html
+  {% if user== current_user %}
+     <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+  {% endif %}
+
+ Administrator-Level profile editor :
+ 1) # app/main/forms.py :
+ class EditProfileAdminForm(FlaskForm):
+     email=StringField('Email',validators=[ DataRequired(), Length(1,64),Email() ])
+     username=StringField('Username',validators=[ DataRequired(), Length(1,64), Regexp('^[A-Za-z0-9_.]*$',0,'Usernames must have only letters, numbers, dots or underscores ') ])
+     confirmed=BooleanField('Confirmed')
+     role=SelectField('Role',coerce=int)
+     name=StringField('Real name', validators=[ Length(0,64) ])
+     location=StringField('Location',validators=[ Length(0,64) ])
+     about_me=TextAreaField('About me')
+     submit=SubmitField('Submit')
+     
+     def __init__(self,user,*args,**kwargs):
+        super(EditProfileAdminForm,self).__init__(*args,**kwargs)
+        self.role.choices=[(role.id, role.name) for role in Role.query.order_by(Role.name).all()]
+        self.user=user
+     
+     def validate_email(self,field):
+        if field.data!=self.user.email and User.query.filter_by(email=field.data).first():
+            raise ValidationError('Email already registered.')
+   
+     def validate_username(self,field):
+        if field.data!=self.user.username and User.query.filter_by(username=field.data).first():
+           raise ValidationError('Username already in use.')
+ 
+         The username and email validation condition used for both these fields must first check whether a change to the field was made, and only when there is a change should it ensure that the new value does not duplicate another user's.
+
+
+2) Defining routes 
+# app/main/views.py
+from ..decorators import admin_required
+
+@main.route('/edit-profile/<int:id>', methods=['GET','POST'])
+@login_required
+@admin_required
+def edit_profile_admin(id):
+   user=User.query.get_or_404(id)    # if id is invalid the request will return a code 404 error.
+   form=EditProfileAdminForm(user=user)
+   if form.validate_on_submit():
+       user.email=form.email.data
+       user.username=form.username.data
+       user.confirmed=form.confirmed.data
+       user.role=Role.query.get(form.role.data)
+       user.name=form.name.data
+       user.location=form.location.data
+       user.about_me=form.about_me.data
+       db.session.add(user)
+       db.session.commit()
+       flash('The profile has been updated.')
+       return redirect(url_for('.user',username=user.username))
+   form.email.data=user.email
+   form.username.data=user.username
+   form.confirmed.data=user.confirmed
+   form.role.data=user.role_id
+   form.name.data=user.name
+   form.location.data=user.location
+   form.about_me.data=user.about_me
+   return render_template('edit_profile.html', form=form, user=user)
+
+        The admin_required decorator will automatically return a 403 error for any users who are not administrators that try to use this route.
+
+ 3) To link to this page, another button is added in the user profile page :
+ # app/templates/user.html
+   {% if current_user.is_administrator() %}
+      <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">Edit Profile [Admin]</a>
+   {% endif %}
+
+
+User Avatars :
+1) Users create an account at https://gravatar.com and then upload their images.
+
+2) (venv)$ python
+   >>> import hashlib
+   >>> hashlib.md5('john@example.com',encode('utf-8')).hexdigest()
+    'd4c74594d841139328695756648b6bd6'
+
+3) You can type https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6 in your browser's address bar to get the avatar image for the email address john@example.com .
+
+4) A few query string arguments can be used to configure the characteristics of the avatar image.
+
+      Argument name        Description
+           s               Image size, in pixels
+           r               Image rating. Options are "g","pg","r", and "x"
+           d               The default image generator for users who have no avatars registered with the Gravatar service. Options are "404" to return a 404 error, a URL that points to a default image, or one of the following image generators : "mm","identicon","monsterid","wavatar","retro",or "blank"
+          fd               Force to use default avatars.
+
+5) # app/models.py
+ 
+import hashlib
+from flask import request
+
+class User(UserMixin, db.Model):
+   #......
+   def gravatar(self, size=100, default='identicon', rating='g' ):
+      url='https://secure.gravatar.com/avatar'
+      hash=hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+      return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url=url,hash=hash,size=size,default=default,rating=rating)
+
+(venv)$ flask shell
+>>>u=User(email='john@example.com')
+
+>>>u.gravatar()
+'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=100&d=identicon&r=g'
+
+>>>u.gravatar(size=256)
+'https://secure.gravatar.com/avatar/d4c74594d841139328695756648b6bd6?s=256&d=identicon&r=g'
+
+6) The gravatar() method can also be invoked from jinja2 templates. Eg a 256 pixel avatar can be added to the profile page.
+
+# app/templates/user.html
+......
+<img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
+   <div class="profile-header">
+     ........
+   </div>
+.......
+
+7) If a large number of avatars need to be generated for a page, Then
+
+ # app/models.py
+ class User(UserMixin, db.Model):
+     #.......
+     avatar_hash= db.Column(db.String(32))
+     
+     def __init__(self,**kwargs):
+         #.......
+         if self.email is not None and self.avatar_hash is None:
+             self.avatar_hash=self.gravatar_hash()
+     
+     def change_email(self,token):
+         #.......
+         self.email=new_email
+         self.avatar_hash=self.gravatar_hash()
+         db.session.add(self)
+         return True
+ 
+     def gravatar_hash(self):         # To avoid duplicating the logic to compute the gravatar hash
+         return hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+
+     def gravatar(self, size=100, default='identicon',rating='g'):
+         if request.is_secure:
+             url='https://secure.gravatar.com/avatar'
+         else:
+             url='http://www.gravatar.com/avatar'
+         hash=self.avatar_hash or self.gravatar_hash()
+         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url=url, hash=hash, size=size, default=default, rating=rating )
+
+             During model initialization, the hash is stored in the avatar_hash model column. If the user updates the email address, then the hash is recalculated. The gravatar() method uses the stored hash if available, and if not, it generates a new hash as before. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

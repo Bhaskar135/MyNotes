@@ -1,0 +1,153 @@
+from flask import Flask,render_template,request
+from flask_wtf import FlaskForm
+from wtforms import FileField
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from werkzeug.utils import secure_filename
+import os 
+
+app=Flask(__name__)	# Flask application instance
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:@localhost/prac1'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.config['ALLOWED_FILE_EXTENSIONS']=['jpg','png','pdf']
+app.config['SECRET_KEY']='hard to guess string'
+app.config['UPLOAD_FOLDER']=os.path.realpath('.')+'/static/uploads/'
+app.config['MAX_CONTENT_LENGTH']=16*1024*1024
+
+db=SQLAlchemy(app)
+migrate=Migrate(app,db)
+
+class Product(db.Model):
+    __tablename__='products'
+    id=db.Column(db.Integer,primary_key=True)
+    file_path=db.Column(db.String(255),unique=True,index=True)
+    
+class MyForm(FlaskForm):
+    pdf=FileField('pdf')
+
+def allowed_file(filename):
+    if not '.' in filename:
+        print('Not . in filename')
+        return False
+    ext=filename.rsplit('.',1)[1]
+    if ext.lower() in app.config['ALLOWED_FILE_EXTENSIONS'] :
+        return True
+    else :
+        return False
+
+@app.route('/',methods=['GET','POST'])
+def index():
+    form=MyForm()
+    if form.validate_on_submit():
+        pdf=request.files['pdf']
+        if pdf.filename=="":
+            print('No filename')
+        filename=secure_filename(pdf.filename)
+        if allowed_file(pdf.filename):
+            if Product.query.all() ==[]:
+                part1=filename.split('.')
+                part1[0]='CIBILReport_1'
+                filename=part1[0]+'.'+part1[1]
+                print(filename)
+                pdf.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                product=Product(file_path=filename)
+                db.session.add(product)
+                db.session.commit()
+                print("file saved")
+            else :
+                last_index=last_value()
+                a=Product.query.get(last_index)
+                last_filename=a.file_path
+                print(last_filename)
+                part1=last_filename.split('.')
+                part1a=part1[0].split('_')
+                part1a[0]='CIBILReport_'
+                part1a[1]=int(part1a[1])+1
+                new_filename=part1a[0] + f'{part1a[1]}'  + '.' + part1[1]
+                print(new_filename)
+                pdf.save(os.path.join(app.config['UPLOAD_FOLDER'],new_filename))
+                product=Product(file_path=new_filename)
+                db.session.add(product)
+                db.session.commit()
+                print("file saved")
+                #part1=last_filename.split('_')
+                #print(part1[0])
+                #part2=last_filename.split('.')
+                #part1[0]='CIBILReport_'
+                #part2[0]=int(part2[0])+1
+                #print(part2[0])
+                #print(part1[0])
+                #print(part1[1])
+                #print(part2[1])
+                #new_filename=part1[0]+part1[1]+'.'+part2[1]
+                #print(new_filename)
+                #part1=filename.split('_')
+                #part2=filename.split('.')
+                #part1[0]='CIBILReport_'
+                #part1[1]=''
+
+            #a=Product.query.filter_by(file_path=pdf.filename).first()
+            #part1=a.split('_')
+            #part2=a.split('.')
+            #part1[0]='CibilReport_'
+            #part1[1]=int(part1[1])+1
+            #filename=secure_filename(pdf.filename)
+            #ext1=filename.split('.')
+            #ext1[0]='CIBILReport'+c
+
+            #if Product.query.filter_by(file_path=pdf.filename).first() is not None:
+                #ext1=filename.split('.')    # To split file name ectension
+                #value=(Product.query.filter_by(file_path=pdf.filename).count()) 
+                #value=value+1
+                #ext1[0]=ext1[0]+'('+f'{value}'+')'
+                #filename=ext1[0]+'.'+ext1[1]
+                #print('Success')
+                
+            
+            #pdf.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+            #product=Product(file_path=pdf.filename)
+            #db.session.add(product)
+            #db.session.commit()
+            #print("file saved")
+        else :
+            print('No file')
+    return render_template('index.html',form=form)
+
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db, Product=Product)
+
+def last_value():     # To get the id of last record
+    obj=Product.query.all()
+    return int(obj[-1].id)
+
+
+index.html :
+
+<html>
+    <head>
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{ form.pdf }}
+            <button type="submit">Upload</button>
+        </form>
+        <a href="{{ url_for('static',filename='uploads/CIBILReport_3.pdf') }}" download>Download</a> 
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
