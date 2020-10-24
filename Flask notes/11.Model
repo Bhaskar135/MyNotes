@@ -1,0 +1,48 @@
+20) # app/models.py
+from .import db
+class Role(db.Model):
+    __tablename__= 'roles'      # name of the table in database
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(64),unique=True)
+    users=db.relationship('User',backref='role',lazy='dynamic')
+    def __repr__(self):
+        return '<Role %r>' % self.name
+    
+class User(db.Model):
+    __tablename__='users'
+    id=db.Column(db.Integer,primary_key=True)
+    username=db.Column(db.String(64), unique=True, index=True)
+    role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))   # role_id is a foreign key. Here 'role' come from backref='role'
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
+ 1) Creating the tables :
+      (venv)flask shell
+            from main import db
+            db.create_all()
+ 
+ 2) To remove tables :
+      db.drop_all()
+
+ or 
+  Database Migrations with Flask-Migrate
+  1) To update database tables use Flask-Migrate
+  2) pip install flask-migrate
+  3) # main.py
+     from flask_migrate import Migrate 
+     ......
+     migrate=Migrate(app,db)
+  4) flask db init
+         This command creates a migrations directory, where all the migration scripts will be stored.
+
+  5) flask db migrate -m "initial migration" 
+  6) flask db upgrade 
+     For this first migration, this is equivalent to db.create_all() 
+
+
+
+
+
+
+

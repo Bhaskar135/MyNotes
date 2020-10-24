@@ -1,0 +1,61 @@
+
+ User Authentication :
+ 1) Some packages used in authentication are :
+    a) Flask-Login : Management of user sessions for logged-in users
+    b) Werkzeug : Password hashing and verification
+    c) itsdangerous : Cryptographically secure token generation and verification
+    d) Flask-Mail
+    e) Flask-Bootstrap 
+    f) Flask-WTF
+ 
+ 2) Hashing Passwords with Werkzeug : Two functions can be used here.
+    a) generate_password_hash(password,method='pbkdf2:sha256',salt_length=8)
+          This function takes a plain-text password and returns the password hash as a string.
+    
+    b) check_password_hash(hash,password)
+          This function takes a password hash previously stored in the database and the password entered by the user.The return value is boolean.
+
+ 3) # app/models.py
+ from werkzeug.security import generate_password_hash,check_password_hash
+ class User(db.Model):
+    #.......
+    password_hash=db.Column(db.String(128))
+    
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self,password):
+        self.password_hash=generate_password_hash(password)  # make plain text to hash
+
+    def verify_password(self,password):
+        return check_password_hash(self.password_hash,password)  # to confirm password
+
+    def __repr__(self):
+        return '<User %r>' % self.name
+ 
+ 4) flask shell
+ >>> u=User()
+ >>> u.password='cat'
+ >>> u.password_hash
+ >>> u.verify_password('cat')
+ >>> u.verify_password('dog')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

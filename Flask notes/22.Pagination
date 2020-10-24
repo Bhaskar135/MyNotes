@@ -1,0 +1,127 @@
+1) app/main/views.py: 
+
+@main.route('/', methods=['GET', 'POST'])
+def index():
+    # ...
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+    posts = pagination.items
+    return render_template('index.html', form=form, posts=posts, pagination=pagination)
+
+    *) The page number to render is obtained from the request.args.
+    *) When a page isn’t given, a default page of 1 (the first page) is used.
+    *) The type=int argument ensures that if the argument cannot be converted to an integer, the default value is returned.
+    *) To load a single page of records, the all() method of the query object is replaced with Flask-SQLAlchemy’s paginate().
+    *) The paginate() method takes the page number as its first and only required argument. 
+    *) An optional per_page argument can be given to indicate the number of items in a page. If this argument is not specified, the default is 20 items per page.
+    *) Another optional argument called error_out can be set to True (the default) to issue a code 404 error when a page outside of the valid range is requested. If error_out is False , pages outside of the valid range are returned with an empty list of items.
+    *) To make the page sizes configurable, the value of the per_page argument is read from an application-specific configuration variable called FLASKY_POSTS_PER_PAGE that is added in config.py.
+   
+  eg, class Config:       # base class
+          #.....
+          CONSUMER_REQ_PER_PAGE=os.environ.get('CONSUMER_REQ_PER_PAGE')
+
+2) The return value of paginate() is an object of class Pagination , a class defined by Flask-SQLAlchemy. This object contains several properties that are useful to generate page links in a template. 
+          
+         Attribute              Description
+           items       : The records in the current page
+           query       : The source query that was paginated
+           page        : The current page number
+           prev_num    : The previous page number
+           next_num    : The next page number
+           has_next    : True if there is a next page
+           has_prev    : True if there is a previous page
+           pages       : The total number of pages for the query
+           per_page    : The number of items per page
+           total       : The total number of items returned by the query
+
+     eg, here that object is pagination. So we can use like pagination.items, pagination.page.
+
+3) The pagination object also has some methods :
+
+  a) iter_pages(left_edge=2, left_current=2, right_current=5, right_edge=2) : An iterator that returns the sequence of page numbers to display in a pagination widget.
+
+       Pagination widget : |Previous|1|2|...|48|49|50|51|52|53|54|...|99|100|Next|
+       
+       *) left_edge is number of links after Previous and before ... in pagination widget.(here 1,2)
+       *) left_current is number of links after ... and before current page.(here current page is 50)
+       *) right_current is the number of links from current page and before ... (here 50,51,52,53,54)
+       *) right_edge is the number of links before Next and after ... (here 99,100)
+       *) Here the value of ... is None in calculation.
+
+  b) prev() : A pagination object for the previous page.
+
+  c) next() : A pagination object for the next page.
+
+ # app/templates/_macros.html:
+
+ {% macro pagination_widget(pagination, endpoint) %}
+ <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li{% if not pagination.has_prev %} class="disabled page-item"{% endif %}>     <!-- For Previous link -->
+            <a class="page-link" href="{% if pagination.has_prev %}{{ url_for(endpoint,page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}">Previous</a>
+        </li>
+        {% for p in pagination.iter_pages() %}
+            {% if p %}         <!-- p is None for link ... -->
+                {% if p == pagination.page %}          <!-- this statement is for current page -->
+                    <li class="active page-item">
+                        <a href="{{ url_for(endpoint, page = p, **kwargs) }}" class="page-link">{{ p }}</a>
+                    </li>
+                {% else %}                <!-- this statment is for other links excluding ... ,Previous, Next ->
+                    <li class="page-item"><a href="{{ url_for(endpoint, page = p, **kwargs) }}" class="page-link">{{ p }}</a></li>
+                {% endif %}
+            {% else %}               <!-- this statement is for ... pages -->
+                <li class="disabled active page-item"><a href="#" class="page-link">&hellip;</a></li>
+            {% endif %}
+        {% endfor %}
+        <li{% if not pagination.has_next %} class="disabled active page-item" {% endif %}>    <!-- this statement is for next link -->
+            <a class="page-link" href="{% if pagination.has_next %}{{ url_for(endpoint,page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">Next</a>
+        </li>
+    </ul>
+ </nav>
+ {% endmacro %}
+
+  *) Jinja2 macros always receive keyword arguments without having to include **kwargs in the argument list. The pagination macro passes all the keyword arguments it receives to the url_for() call that generates the pagination links.
+
+  *) The pagination_widget macro can be added below the {% include '_posts.html' %} template in index.html and user.html.
+
+  # app/templates/index.html:
+
+  {% extends "base.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+  {% import "_macros.html" as macros %}
+      ...
+  {% include '_posts.html' %}
+  <div class="pagination">
+      {{ macros.pagination_widget(pagination, '.index') }}
+   </div>
+  {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
