@@ -1,0 +1,86 @@
+
+1) <body>
+        <hl>TravelWorthy</hl>
+        <div id="message">Welcome to our site!</div>
+        <script>
+            var msg = 'Sign up to receive our newsletter for 10% off!';
+            function updateMessage() {
+                var el = document.getElementById('message');
+                el.textContent = msg;
+            }
+            updateMessage();
+        </script>
+    </body>
+
+2) function getArea(width,height){      // These values are parameters
+      return width*height;
+   }
+   var area=getArea(3,5);
+
+3) Functions can return more than one value using an array.
+
+   function getSize (width, height, depth) {
+       var area = width * height;
+       var volume = width * height * depth;
+       var sizes= [area , volume];
+       return sizes;
+   }
+   var areaOne = getSize (3, 2, 3)[0];     // It holds area
+   var volumeOne = getSize (3, 2, 3)[1];   // It holds volume
+
+4) Anonymous function : Function with no name.
+ 
+   var area=function(width,height){ 
+       return width*height; 
+   };
+   var size=area(2,4);
+   document.write(size);
+
+5) Immediately invoked function expressions(IIFE) :
+
+   <script>
+        var area = (function(){
+            var width = 3;
+            var height = 3 ;
+            return width * height;
+        }()) ;   // the last parenthesis can also write like })();
+        document.write(area);
+   </script>
+
+6) When to use anonymous function and IIFE : They are used for code that only needs to run once within a task, rather than repeatedly being called by other parts of the script.
+
+  eg, i) Function as an argument.
+     ii) To assign the value of a property to an object.
+    iii) In event handlers and listeners to perform a task when an event occurs.
+     iv) To prevent conflicts between two scripts that might use the same variable names.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

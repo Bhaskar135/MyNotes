@@ -1,0 +1,17 @@
+
+1) do{
+     
+      i++;
+   }while(i<10);
+
+2) <p id="message">Message</p>
+   <script>
+        var i=1;
+        var msg='';
+        do{
+             msg+=i+'*5='+(i*5)+"<br>";
+             i++;
+        }while(i<5);
+        var message=document.getElementById('message');
+        message.innerHTML=msg;
+   </script>

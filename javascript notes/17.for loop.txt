@@ -1,0 +1,20 @@
+
+1) for(var i=0;i<=10;i++){
+      
+         //do something here
+   
+   }
+
+2) eg, <p id="message">Message</p>
+        <script>
+            var arr=[25, 50, 75];
+            var roundNumber=0;
+            var msg='';
+            for(var i=0;i<arr.length;i++){
+                roundNumber+=1;
+                msg+="Round "+roundNumber+": ";
+                msg+=arr[i]+"<br>";
+            }
+            var getValue=document.getElementById('message');
+            getValue.innerHTML=msg;       //If we put textContent here <br> tag is ignored and we get output in same line.  
+        </script>

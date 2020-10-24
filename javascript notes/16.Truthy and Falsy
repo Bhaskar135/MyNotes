@@ -1,0 +1,109 @@
+
+1) Falsy values are treated as if they are false. The table to the left shows a highScore variable with a series of values, all of which are falsy.
+
+2) Falsy values can also be treated as the number 0 .
+   
+       Value                        Description
+a) var highScore=false;           Boolean false
+
+b) var highScore=0;               Number zero
+
+c) var highScore='';              NaN
+
+d) var highScore=10/'score';      Empty value
+
+e) var highScore;                 A variable with no value assigned to it.
+
+
+3) Truthy values are treated as if they are true. Almost everything that is not in the falsy table can be treated as if it were true. 
+
+4) Truthy values can also be treated as the number 1.
+
+      Value                        Description
+a) var highScore=true;           Boolean true
+
+b) var highScore=1;              Numbers other than zero
+
+c) var highScore='carrot';       Strings with content
+
+d) var highScore=10/5;           Number calculations
+
+e) var highScore='true';         True written as a string
+
+f) var highScore='0';            Zero written as a string
+
+g) var highScore='false';        false written as a string
+
+5) The presence of an object or an array or an element in HTML is usually considered truthy.
+
+  eg, if (document.getElementById('header')) {
+        
+           // Found: do something
+   
+      } else {
+        
+           //Not fou nd: do somethi ng else
+   
+      }
+           If the element is found, the result is truthy.
+
+6) if(document.getElementById('header') ==true) Here document.getElementById ('header') would return an object which is a truthy value but it is not equal to a Boolean value of true.
+
+7) If you use == the then false, 0, and ' ' (empty string) are equal. However, for === they are not equal.
+           false == 0   truthy
+           false === 0  falsy
+
+8) Although null and undefined are both falsy, they are not equal to anything other than themselves.
+          (undefined == null)     truthy
+           (null == false)        falsy
+        (undefined == false)      falsy
+             (null == 0)          falsy
+          (undefined == O)        falsy
+         (undefined === null)     falsy
+
+9) NaN is considered falsy, it is not equivalent to anything. Also NaN==NaN is falsy.
+         (Nan == null)     falsy
+	 (NaN == NaN)      falsy
+
+10) var artist ='variable1' ;
+    var artistA = (artist ||'Okay') ;
+        Here artistA will get the value variable1
+
+11) var artist='';
+    var artistA= (artist ||'Okay'); 
+	Here artistA will get the Okay.
+
+12) You could even create an empty object if artist does not have a value:
+    var artist= '';
+    var artistA = (artist || {}) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

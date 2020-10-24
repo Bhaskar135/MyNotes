@@ -1,0 +1,27 @@
+
+Math Object:
+
+    Property                Description
+ 1) Math.PI            Returns pi (approximately 3.14159265359)
+ 
+    Method                  Description
+ 1) Math.round()       Rounds number to the nearest integer
+ 2) Math.sqrt(n)       Returns square root of positive number, eg, Math.sqrt(9) returns 3
+ 3) Math.ceil()        Rounds number up to the nearest integer
+ 4) Math.floor()       Rounds number down to the nearest integer
+ 5) Math.random()      Generates a random number between 0 (inclusive) and 1 (not inclusive)
+
+   *) This object also has many trigonometric functions such as sin(), cos(), and tan(). FUNCTIONS, METHODS & OBJECTS The trigonometric functions return angles in radians which can then be converted into degrees if you divide the number by (pi/ 180).
+
+     Math.random(): Generate random number between 1 to 10 -> 
+         *) random() method generates a random number between 0 and 1 (with many decimal places). 
+         *) The floor() method is used to specifically round a number down.
+           
+         eg, <p id="info">Hello javascript</p>
+             <script>
+                 var randomNum = Math.floor((Math.random() * 10) + 1);
+                 var el = document.getElementById('info');
+                 el.innerHTML = '<h2>random number</h2><p>' + randomNum + '</p>';
+             </script>
+        
+

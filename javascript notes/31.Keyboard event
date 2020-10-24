@@ -1,0 +1,25 @@
+1) The event object has a property called keyCode, which can be used to tell which key was pressed. It returns an ASCII code that represents the
+lowercase character for that key.
+
+2) The String object has a built-in method called fromCharCode() which will do the conversion from ASCII to letter :       String.fromCharCode(event.keyCode) ;
+
+     eg,
+        <textarea name="" id="message" cols="140" rows="14"></textarea>
+        <div id="charactersLeft"></div>
+        <div id="lastkey"></div>
+        <div id="lastkeyletter"></div>
+        <script>
+            var el ;
+            function charCount(e) {
+                var textEntered, charDisplay, counter, lastKey;
+                textEntered = document.getElementById('message').value;
+                charDisplay = document.getElementById('charactersLeft');
+                counter = (180 - (textEntered.length));
+                charDisplay.textContent = counter;      
+                lastkey = document.getElementById ('lastkey');
+                lastkey.textContent = 'Last key in ASCII code : ' + e.keyCode;     
+                lastkeyletter.textContent = 'Last key letter : ' + String.fromCharCode(e.keyCode) ;    
+            }
+            el = document.getElementById('message');
+            el.addEventListener('keypress', charCount, false);
+        </script>

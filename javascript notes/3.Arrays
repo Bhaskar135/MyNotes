@@ -1,0 +1,11 @@
+1) var arr=['C','C++','Java','Python'];
+
+2) var arr=new Array('C','C++','Java','Python');    // Array() is a constructor
+
+3) Total elements of an array is arr.length
+
+4) Updating an element : arr[1]='php';
+
+5) When you first declare(without assign value) a variable using the var keyword, it is given a special value of undefined.
+
+

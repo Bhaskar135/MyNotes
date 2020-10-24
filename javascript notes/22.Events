@@ -1,0 +1,124 @@
+
+1) Any of the following events can be used to trigger a function in your JavaScript code.
+
+   UI Events  : Occur when a user interacts with the browser's user interface (UI) rather than the web page
+    event                     description
+  i) load              Web page has finished loading.
+
+ ii) unload            Web page is unloading (usually because a new page was requested).
+
+iii) error             Browser encounters a JavaScript error or an asset doesn't exist.
+
+ iv) resize            Browser window has been resized.
+
+  v) scroll            User has scrolled up or down the page.
+
+
+  Keyboard Event : Occur when a user interacts with the keyboard (see also input event)
+      event                   description     
+  i) keydown           User first presses a key (repeats while key is depressed)
+
+ ii) keyup             User releases a key. The keydown and keypress events fire before a character shows on screen, whereas keyup fires after it appears.
+
+iii) keypress          Character is being inserted (repeats while key is depressed).This event would not fire when the user presses the arrow keys, whereas the keydown event would.
+
+ The three events that begin key ... fire in this order:
+        1. keydown - user presses key down
+        2. keypress - user has pressed or is holding a key that adds a character into the page
+        3. keyup - user releases key
+
+
+  Mouse Events : Occur when a user interacts with a mouse, trackpad, or touchscreen.
+    event                    description
+  i) click             User presses and releases a button over the same element
+ 
+ ii) dblclick          User presses and releases a button twice over the same element
+
+iii) mousedown         User presses a mouse button while over an element
+
+ iv) mouseup           User releases a mouse button while over an element
+
+  v) mousemove         User moves the mouse around an element(not on a touchscreen)
+
+ vi) mouseover         User moves the mouse from outside an element and is then moved inside it.(not on a touchscreen)
+
+vii) mouseout          User moves the mouse off an element (not on a touchscreen)
+
+
+  Focus Events : Occur when an element (eg, a link or form field) gains or loses focus
+    event                    description
+  i) focus/focusin           Element gains focus
+ 
+ ii) blur/focusout           Element loses focus
+
+
+  Form Events : Occur when a user interacts with a form element
+    event                    description
+  i) input                Value in any <input> or <textarea> element has changed (IE9+) or any element with the contenteditable attribute .
+
+ ii) change               Value in select box, checkbox, or radio button changes ( IE9+)
+
+iii) submit               User submits a form (using a button or a key).The submit event is attached with <form> element.
+
+ iv) reset                User clicks on a form's reset button (rarely used these days)
+
+  v) cut                  User cuts content from a form field
+
+ vi) copy                 User copies content from a form field
+
+vii) paste                User pastes content into a form field
+
+viii) select              User selects some text in a form field
+
+
+
+ Mutation events : Occur when the DOM structure has been changed by a script
+        event                           description
+  i) DOMSubtreeModified             Change has been made to document. It fires after the DOMNodeInserted and DOMNodeRemoved events occur.
+
+ ii) DOMNodeInserted                Node has been inserted as a direct child of another node
+
+iii) DOMNodeRemoved                 Node has been removed from another node. e.g, using removeChild() or replaceChild().
+
+ iv) DOMNodeInsertedIntoDocument    Node has been inserted as a descendant of another node
+
+  v) DOMNodeRemovedFromDocument     Node has been removed as a descendant of another node
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

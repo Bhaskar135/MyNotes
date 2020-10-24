@@ -1,0 +1,133 @@
+
+Date object : 
+    1) var date = new Date();     // Date() constructor
+    2) By default, when you create a Date object it will hold today's date and the current time.
+    3) If the internal clock on user's computer has the wrong date or time, the Date object could reflect this by holding the wrong date.
+
+  You can set date and time using any of the following formats :
+    var dob=new Date(1996, 11, 26, 15, 45, 55);  //year,month,date,hour,min,sec
+    var dob=new Date('Dec 26, 1996 15:45:55');   
+    var dob=new Date(1996, 11, 26);
+
+       Method                                        Description
+1) getDate()/setDate()                   Returns/ sets the day of the month (1-31)   eg, date.setDate(6);
+
+2) getDay()                              Returns the day of the week (0-6)     eg, date.getDay();
+
+3) getFullYear()/setFullYear()           Returns/ sets the year (4 digits)     eg, date.getFullYear();
+
+4) getHours()/setHours()                 Returns/ sets the hour (0-23)     eg, date.setHours(21);
+
+5) getMinutes()/setMinutes()             Returns/ sets the minutes (0-59)     eg, date.setMinutes(45);
+
+6) getMonth()/setMonth()                 Returns/ sets the month (0-11)     eg, date.setMonth(7);
+
+7) getSeconds()/setSeconds()             Returns/ sets the seconds (0-59)
+
+8) getTime()/setTime()
+
+9) getTimezoneOffset()                   Returns time zone offset in mins for locale
+
+*10) toDateString()                      Returns "date" as a human-readable string
+
+*11) toTimeString()                      Returns "time" as a human-readable string
+
+*12) toString()                          Returns a string representing the specified date
+
+13) getMilliseconds()/setMilliseconds()  Returns/sets the milliseconds (0-999)
+
+
+   The Date object does not store the names of days or months. It uses a number from 0 to 6 for the days of the week and 0 to 11 for the months.
+
+ *) If you try to find the difference between two dates, you will end up with a result in milliseconds. To get the difference in days/weeks/years, you divide this number by the number of milliseconds in a day/week/year.
+
+     eg, <p id="message">Hello Date</p>
+        <script>
+            var today= new Date();
+            var year= today.getFullYear();
+            var past= new Date('Apr 16, 1996 15:45:55');
+            var difference= today.getTime() - past.getTime();
+            difference= (difference/ 31556900000);
+            var elMsg = document.getElementById('message');
+            elMsg.textContent = Math.floor(difference) + ' years of online travel advice';
+        </script>
+
+ A full example : 
+    i) This example is split into two parts. The first shows you the details about the hotel, room rate, and offer rate. The second part indicates when the offer expires.
+
+   ii) The first part of the script creates a hotel object; it has three properties (the hotel name, room rate, and percentage discount being offered), plus a method to calculate the offer price which is shown to the user.
+
+  iii) To ensure that the discounted rate is shown with two decimal places (like most pri ces are shown) the .toFixed() method of the Number object is used.
+
+   iv) The second part of the script shows that the offer will expire in seven days. It does this using a function called offerExpi res().
+
+    v) Inside the function, a new Date object is created; and seven days is added to today's date.
+
+   <p id='offerEnds'>Hello javascript</p> 
+   <p id="hotelName">Hotel name : Taj</p>
+   <p id="roomRate">Room rate : $45</p>
+   <p id="specialRate">Special rate : $25</p>
+    <script>
+        (function() {
+            var hotel = {
+                name: 'Park',
+                roomRate: 240, // Amount in dollars
+                discount : 15, // Percentage di scount
+                offerPrice : function() {
+                var offerRate = this.roomRate * ((100 - this.discount)/100);
+                    return offerRate;
+                }
+            }
+            var hotelName, roomRate, specialRate ;
+            hotelName = document.getElementById('hotelName');
+            roomRate = document.getElementById('roomRate');
+            specialRate = document.getElementById('specialRate');
+            hotelName.textContent = "Hotel name "+hotel.name;
+            roomRate.textContent = 'Room rate $ ' + hotel.roomRate.toFixed(2) ;
+            specialRate.textContent = 'Special rate $ ' +hotel.offerPrice();
+
+            var expiryMsg;
+            var today ;
+            var elEnds ;
+            function offerExpires(today) {
+                var weekFromToday, day, date, month, year, dayNames , monthNames;
+                weekFromToday =new Date(today.getTime () + 7 * 24 * 60 * 60 * 1000) ;
+                dayNames = [ ' Sunday' , ' Monday' , 'Tuesday ' , 'Wednesday ', 'Thursday' ,' Friday ', 'Saturday ' ] ;
+                monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'] ;
+                day = dayNames[weekFromToday.getDay()];
+                date= weekFromToday.getDate();
+                month= monthNames[weekFromToday.getMonth()] ;
+                year= weekFromToday.getFullYear() ;
+                expiryMsg = 'Offer expires next ' ;
+                expiryMsg += day + ' <br/>( ' +date+ ' ' +month+ ' ' +year + ')';
+                return expiryMsg;
+            }
+            today= new Date() ;
+            elEnds = document.getElementById('offerEnds');
+            elEnds.innerHTML = offerExpires(today) ;
+        }()) ;
+     </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

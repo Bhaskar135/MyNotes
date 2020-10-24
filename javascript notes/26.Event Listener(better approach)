@@ -1,0 +1,118 @@
+
+1) Syntax is 
+   element.addEventListener('event', functionName [, Boolean]) ;  //[, Boolean] Indicates something called capture, and is usually set to false
+
+eg,
+   var el=document.getElementById("username");
+   el.addEventListener('blur',checkUsername,false) ;
+
+2) The function should written first before event listener.
+
+3) The DOM element node(s) is stored in a variable.
+
+    eg,
+       <form method="post" action="http://www.example.org/register">
+            <label for="username">Create a username: </label>
+            <input type="text" id="username"/>
+            <div id="feedback"></div>
+            <label for="password">Create a password:</label>
+            <input type="password" id="password"/>
+            <input type="submit" value="Sign up!"/>
+        </form>
+        <script>
+            function checkUsername() {
+                var elMsg = document.getElementById('feedback') ;
+                if(this.value.length<5) {
+                    elMsg.textContent='Username must be 5 characters or more'; // Set msg
+                }else {
+                    elMsg.textContent = '';
+                }
+            }
+            var el=document.getElementById("username");
+            el.addEventListener('blur', checkUsername , false) ;
+        </script>
+
+4) If you need to remove an event listener, there is a function called removeEventListener() which removes the event listener from the specified element (it has the same parameters).
+
+5) Using parameter with event listener:
+      If you need to pass arguments to a function that is called by an event listener, you wrap the function call in an anonymous function.
+    
+  syntax, el.addEventListener('blur',function(){
+	      checkUsername(5);
+          },false) ;
+
+6) example :
+       <form method="post" action="http://www.example.org/register">
+            <label for="username">Create a username: </label>
+            <input type="text" id="username"/>
+            <div id="feedback"></div>
+            <label for="password">Create a password:</label>
+            <input type="password" id="password"/>
+            <input type="submit" value="Sign up!"/>
+        </form>
+        <script>
+            var elUsername = document.getElementById('username') ;
+            var elMsg = document.getElementById('feedback') ;
+            function checkUsername(minlength) {
+                if(elUsername.value.length < minlength){
+                    elMsg.textContent = 'Username must be ' + minlength + ' characters or more';
+                }else {
+                    elMsg.innerHTML = '';
+                }
+            }
+            elUsername.addEventListener('blur',function(){ checkUsername(5);},false) ;
+        </script>
+
+7) example :
+        <form method="post">
+            <label for="name">Username</label>
+            <input type="text" id="username">
+            <div id="feedback"></div>
+            <button type="submit">Submit</button>
+        </form>
+        <script>
+            function tipUsername(){
+                elMsg.className='tip';
+                elMsg.innerHTML="Username must be atleast 5 characters.";
+            }
+            function checkUsername(){
+                var username=el.value;
+                if(username.length<5){
+                    elMsg.className='warning';
+                    elMsg.innerHTML="Not long enough yet...";
+                }else{
+                    elMsg.innerHTML="";
+                }
+            }
+            var el=document.getElementById('username');
+            var elMsg=document.getElementById('feedback');
+            el.addEventListener('focus',tipUsername,false);
+            el.addEventListener('blur',checkUsername,false);
+        </script>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

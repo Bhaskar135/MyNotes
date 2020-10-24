@@ -1,0 +1,21 @@
+
+1) Local variable : When a variable is created inside a function using the var keyword, it can only be used in that function.
+    
+    *) Two different functions can use variables with the same name without any kind of naming conflict.
+
+2) Global variable : If you create a variable outside of a function, then it can be used anywhere within the script.
+  
+    *) If you forget to declare a variable using the var keyword, the variable will work, but it will be treated as a global variable.
+    *) Global variables use more memory.
+    *) If an HTML page uses two JavaScript files, and both have a global variable with the same name, it can cause errors.
+    
+  eg, function getArea(width, height){
+         var area = width * height;     // area local variable
+         return area ;
+      }
+      var wallSize = getArea(3, 2);     // wallSize global variable
+      document.write(wallSize);
+
+3) A variable actually references a value that is stored in memory.
+
+4) The same value in memory can be referenced by more than one variable:

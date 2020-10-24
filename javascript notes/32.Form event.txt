@@ -1,0 +1,54 @@
+
+1) In this example by using change event, when you select the option "javascript" it will show "Language for web browser" otherwise it will show another msg.
+
+2) If Without checking the checkbox the form is submited then it will show message "You must agree to the terms."
+
+<html>
+    <head>
+        <title>Event handling</title>
+    </head>
+    <body>
+        <form method="POST" id="formSignup">
+            <select name="" id="package">
+                <option value="C++">C++</option>
+                <option value="Java">Java</option>
+                <option value="Python">Python</option>
+                <option value="Javascript">Javascript</option>
+            </select>
+            <span id="packageHint"></span><br>
+            <input type="checkbox" id="terms">Agree
+            <span id="termsHint"></span><br>
+            <button type="submit">Submit</button>
+
+        </form>
+
+        <script>
+            var elForm, elSelectPackage, elPackageHint, elTerms;
+            elForm=document.getElementById('formSignup'); 
+            elSelectPackage=document.getElementById('package');
+            elPackageHint=document.getElementById('packageHint');
+            elTerms=document.getElementById('terms');
+            elTermsHint=document.getElementById('termsHint');
+            function packageHint() {
+                var package = this.options[this.selectedIndex].value; 
+                if (package == 'Javascript') {
+                    elPackageHint.innerHTML = 'Language for web browser';
+                } else {
+                    elPackageHint.innerHTML = 'General purpose language';
+                }
+            }
+            function checkTerms(event) {
+                if (!elTerms.checked) {
+                    elTermsHint.innerHTML = 'You must agree to the terms.'; 
+                    event.preventDefault();
+                }
+            }
+            elForm.addEventListener('submit',checkTerms,false);
+            elSelectPackage.addEventListener('change', packageHint,false);
+        </script>
+    </body>
+</html>
+
+
+
+

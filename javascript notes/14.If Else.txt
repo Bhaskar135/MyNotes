@@ -1,0 +1,82 @@
+
+1) if(score>50){
+      document.write("You passed!");
+   }else{
+      document.write("Try again...");
+   }
+
+   eg,
+     <p id="answer">Javascript</p>
+    <script>
+        var pass = 50;
+        var score = 75;
+        var msg;
+        if (score >= pass) {
+            msg = 'Congratulations, you passed!';
+        } else {
+            msg = 'Have another go!';
+        }
+        var el = document.getElementById('answer');
+        el.textContent = msg;
+    </script>
+
+2) Comparision operators: 
+    a) == (is equal to) : value should be same but datatype may not be same. a==a returns true also a=="a" returns true.
+    b) === (strict equal to) : the value and datatype should be same. a==="a" returns false.
+    c) != (is not equal to) : value should not be same. a!=b returns true also a!="b" returns true.
+    d) !== (strict not equal to) : value and datatype should not be same. a!=="a" returns true cause datatype is not same but "a"!=="a" returns false because same datatype and value.
+    e) >,<,>=,<=
+
+    eg, <p id="answer">Javascript</p>
+        <script>
+            var scorel = 90;
+            var score2 = 95;
+            var highScorel 75;
+            var highScore2 = 95;
+            var hasPassed = (score1+ score2) > (highScore1 + highScore2);
+            var el = document.getElementById('answer');
+            el.textContent = 'Leve 1 passed: ' + hasPassed;
+        </script>
+
+3) Logical operator :
+    a) &&  : ((5<2) && (2>=3))
+
+    b) ||  : 
+
+    c) ! (not) : This operator takes a single boolean value and inverts it. eg, !(2<1) returns true.
+
+ eg,
+    <p id="answer1">Javascript</p>
+    <p id="answer2">Javascript</p>
+    <script>
+        var score1= 8;
+        var score2= 8;
+        var pass1= 6;
+        var pass2= 6;
+        var passBoth = (score1 >= pass1) && (score2 >= pass2);
+        var msg1 = 'Both rounds passed: '+passBoth;
+        var el1= document.getElementById('answer1');
+        el1.textContent = msg1;
+        
+        var minPass = ((score1 >= pass1)||(score2 >= pass2));
+        var msg2 = 'Resit required: ' + !(minPass);
+        var el= document.getElementById('answer2');
+        el.textContent = msg2;
+    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
