@@ -1,0 +1,29 @@
+
+1) import numpy
+     or 
+   import numpy as np
+
+2) Numpy array :
+  
+   np.array([1, 4, 2, 5, 3])
+
+3) NumPy is constrained to arrays that all contain the same type. If types do not match, NumPy will upcast if possible (here, integers are upcast to floating point):
+
+   np.array([3.14, 4, 2, 3])
+
+   o/p : array([ 3.14, 4., 2., 3. ])
+
+4) If we want to explicitly set the data type of the resulting array, we can use the dtype keyword:
+     
+   np.array([1, 2, 3, 4], dtype='float32')
+   o/p : array([ 1., 2., 3., 4.], dtype=float32)
+
+5) One way of creating multi-dimensional array is :
+   
+   np.array([range(i,i+3) for i in [2,3,4]])
+
+   o/p : array([[2, 3, 4],
+                [3, 4, 5],
+                [4, 5, 6]])
+
+

@@ -1,0 +1,70 @@
+
+1) pip install ipython
+
+2) pip install jupyterlab
+
+3) type "jupyter notebook" on command line
+
+4)  Every Python object contains the reference to a string, known as a docstring, which in most cases will contain a  summary of the object and how to use it. To access this information we can use ?
+    eg, len?
+
+5) We can also access source code by using ??
+   
+    eg, def square():
+            pass
+        square??
+
+6) Tab completion of object contents
+   
+    eg, L.<TAB>           #pressing TAB key
+
+7) Tab completion when importing
+
+    eg, from itertools import co<TAB>
+
+8) If you’d like to match characters at the middle or end of the word use *  
+
+    eg, *Warning?
+
+9) suppose we are looking for a string method that contains the word find somewhere in its name. We can search for it this way:
+
+    str.*find*?
+
+
+%time : Time the execution of a single statement
+
+%timeit : Time repeated execution of a single statement for more accuracy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

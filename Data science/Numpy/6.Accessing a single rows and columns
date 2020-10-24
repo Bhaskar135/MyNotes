@@ -1,0 +1,68 @@
+
+You can do this by combining indexing and slicing, using an empty slice marked by a single colon ( : )
+
+import numpy as np
+x=np.random.randint(0, 10, (3, 3))
+x
+o/p : array([[1, 6, 3],
+             [0, 9, 0],
+             [4, 5, 0]])
+
+
+print(x2[:, 0])  # all rows but 1st column.
+
+o/p : [1 0 4]
+
+print(x2[0,:])  # first row with all column. It is equivalent to print(x2[0])
+
+o/p : [1 6 3]
+
+
+*) Numpy array slices return views rather than copies of the array data. i.e when we slice 2*2 matrix from a 3*3 or higher dimsional matrix and change some value in 2*2 matrix then original matrix(3*3) also changed.
+
+array([[1, 6, 3],
+       [0, 9, 0],
+       [4, 5, 0]])
+
+x_sub=x[:2,:2]
+
+array([[1, 6],
+       [0, 9]])
+
+x_sub[0,0]=2
+
+array([[2, 6, 3],
+       [0, 9, 0],
+       [4, 5, 0]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
