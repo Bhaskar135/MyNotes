@@ -1,0 +1,241 @@
+
+Styling text inputs :
+ HTML :
+   <input type="email" id="email">
+   <input type="twitter" id="twitter">
+   <input type="web" id="web">
+
+ CSS :
+   input {
+        font-size: 120%;
+        color: #424242;
+        background-color: #f2f2f2;
+        border: 1px solid #bdbdbd;
+        border-radius: 5px;
+        padding: 5px 5px 5px 30px;
+        background-repeat: no-repeat;
+        background-position: 8px 9px;
+        display: block;
+        margin-bottom: 10px;
+   }
+   input:focus {
+        background-color: #ffffff;
+        border: 1px solid #b1e1e4;
+   }
+   input#email {
+        background-image: url("images/email.png");
+   }
+   input#twitter {
+        background-image: url("images/twitter.png");
+   }
+   input#web {
+        background-image: url("images/web.png");
+   }
+
+Styling buttons :
+ HTML:
+   <input type="submit" id="submit">
+
+ CSS :
+   input#submit {
+       color: #444444;
+       text-shadow: 0px 1px 1px #ffffff;
+       border-bottom: 2px solid #b2b2b2;
+       background-color: #b9e4e3;
+       background: gradient(linear, left top,left bottom, from(#beeae9), to(#a8cfce));
+       padding : 8px 8px 8px 8px;
+   }
+   input#submit:hover {
+       color: #333333;
+       border: 1px solid #a4a4a4;
+       border-top: 2px solid #b2b2b2;
+       background-color: #a0dbc4;
+       background: gradient(linear, left top,left bottom, from(#a8cfce), to(#beeae9));
+   }
+
+Styling fieldset :
+
+ HTML :
+   <form>
+       <fieldset>
+           <legend>NEWSLETTER</legend>
+           <div>
+                <label for="name">Name</label>
+                <input type="text" id="name">
+           </div>
+           <div>
+                <label for="email">Email</label>
+                <input type="email" id="email">
+           </div>
+       </fieldset>
+   </form>
+
+ CSS :
+ 
+ fieldset {
+      width: 350px;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+ }
+ legend {
+      background-color: #efefef;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      padding: 10px 20px;
+      text-align: left;
+      text-transform: uppercase;
+ }
+ input{
+      border-top-style:hidden;
+      border-right-style:hidden ;
+      border-bottom:2px solid rgb(173, 173, 173) ;
+      border-left-style:hidden ;
+ }
+ input:focus{
+      outline:none;
+ }
+
+Form control :
+  HTML:
+ <form action="example.php" method="post">
+ <div>
+      <label for="name" class="title">Name:</label>
+      <input type="text" id="name" name="name" />
+ </div>
+ <div>
+      <label for="email" class="title">Email:</label>
+      <input type="email" id="email" name="email" />
+ </div>
+ <div>
+      <span class="title">Gender:</span>
+      <input type="radio" name="gender" id="male" value="M" />
+      <label for="male">Male</label>
+      <input type="radio" name="gender" id="female" value="F" />
+      <label for="female">Female</label><br />
+ </div>
+ <div>
+     <input type="submit" value="Register" id="submit" />
+ </div>
+ </form>
+
+ CSS:
+ div {
+      margin: 10px;
+      padding-bottom: 10px;
+      width: 300px;
+ }
+ .title {
+      float: left;
+      width: 100px;
+      text-align: right;
+      padding-right: 10px;
+ }
+ .radio-buttons label {
+      float: none;
+ }
+ .submitButton {
+      text-align: right;
+ }
+
+
+cursor style : To control the type of mouse cursor that should be displayed to users. Values are :
+  auto, crosshair, default, pointer, move, text, wait, help, url("cursor.gif")
+
+
+eg,
+       HTML :
+       <form>
+            <fieldset>
+                <legend>Register your interest</legend>
+                <p><label class="title" for="name">Your name:</label>
+                    <input type="text" name="name" id="name"><br />
+                    <label class="title" for="email">Your email:</label>
+                    <input type="text" name="email" id="email"></p>
+                <p><label for="location" class="title">Your closest center:</label>
+                    <select name="location" id="location">
+                        <option value="ny">New York</option>
+                        <option value="il">Chicago</option>
+                        <option value="ca">San Francisco</option>
+                    </select></p>
+                <span class="title">Are you a member?</span>
+                <label><input type="radio" name="member" value="yes" /> Yes</label>
+                <label><input type="radio" name="member" value="no" /> No</label></p>
+            </fieldset>
+            <div class="submit"><input type="submit" value="Register" /></div>
+        </form>
+
+        CSS:
+             fieldset {
+		width: 310px;
+		margin-top: 20px;
+		border: 1px solid #d6d6d6;
+		background-color: #ffffff;
+		line-height: 1.6em;
+             }
+       	     legend {
+            	font-style:italic;
+	        color:#666666;
+             }
+	     input[type="text"] {
+		width: 120px;
+		border: 1px solid #d6d6d6;
+		padding: 2px;
+		outline: none;
+             }
+	     input[type="text"]:focus, input[type="text"]:hover {
+		background-color: #d0e2f0;
+		border: 1px solid #999;
+             }
+ 	     input[type="submit"] {
+		border: 1px solid #006633;
+		background-color: #009966;
+		color: #FFFFFF;
+		border-radius: 5px;
+		padding: 5px;
+		margin-top: 10px;
+             }
+	     input[type="submit"]:hover {
+		border: 1px solid #006633;
+                background-color: #00CC33;
+		color: #FFFFFF;
+	    	cursor: pointer;
+             }
+	     .title {
+		float: left;
+		width: 160px;
+		clear: left;
+             }
+	     .submit {
+		width: 310px;
+		text-align: right;
+             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

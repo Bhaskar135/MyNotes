@@ -1,0 +1,36 @@
+
+1) Style the bullet point 
+   a) list-style-type: It can be applied to ul or ol.
+     values for ul : none, disc, circle, square
+     values for ol : decimal(1 2 3), decimal-leading-zero(01 02 03), lower-alpha(a b c), upper-alpha(A B C), lower-roman(i ii iii), upper-roman(I II III)
+
+     eg, HTML
+        <h1>List</h1>
+        <ul>
+            <li>C</li>
+            <li>C++</li>
+            <li>Python</li>
+            <li>JavaScript</li>
+        </ul>
+
+        CSS
+        ul{
+            list-style-type: square;
+        }
+
+   b) list-style-image: You can specify an image to act as a bullet point. It can be applied to ul.
+        eg, list-style-image: url("images/star.png");
+
+   c) list-style-position: This property indicates whether the marker should appear on the inside or the outside of the box containing the main points.
+Values are :
+      i) outside : This is the default behaviour if this property is not used.
+     ii) inside : The marker sits inside the box of text.
+
+   d) list-style : This is a property that acts as a shorthand for list styles. It allows you to express the markers' style, image and position properties in any order.
+        eg, list-style: inside circle;
+
+
+
+
+
+

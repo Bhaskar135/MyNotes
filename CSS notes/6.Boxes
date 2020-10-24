@@ -1,0 +1,217 @@
+
+1) By default a box is sized just big enough to hold its contents. To set your own dimensions for a box you can use the height and width properties.
+
+2) To specify the size of a box are to use pixels, percentages, or ems.
+
+3) When you use percentages, the size of the box is relative to the size of the browser window.
+
+4) When you use ems, the size of the box is based on the size of text within it. Designers have recently started to use percentages and ems more.
+ 
+ eg, HTML :
+   <div class="box">
+        <p>
+            Hey developer.You should use HTML, CSS, Javascript in the frontend to design a web page. And for backend you should use Python's django or Flask framework. Because they are also used in datascience project.
+        </p>
+   </div>
+
+     CSS : 
+     div.box {
+         height: 300px;
+         width: 300px;
+         background-color: #bbbbaa;
+     }
+     p {
+         height: 75%;
+         width: 75%;
+         background-color: #0088dd;
+     }
+
+5) min-width : min-width property specifies the smallest size a box can be displayed at when the browser window is narrow.
+
+6) max-width : max-width property indicates the maximum width a box can stretch to when the browser window is wide.
+
+7) min-height 
+
+8) max-height 
+  
+   eg, h2 {
+	  color: #0088dd;
+          border-bottom: 1px solid #0088dd;
+       }
+       p {
+          min-height: 10px;
+          max-height: 30px;
+       }
+
+   If the box is not big enough to hold the content, and the content expands outside the box. Then to solve this we can use the overflow property.
+
+9) overflow : It can have values ->
+    i) visible : default.
+   ii) hidden : This property simply hides any extra content that does not fit in the box.
+  iii) scroll : This property adds a scrollbar to the box so that users can scroll to see the missing content.
+   iv) auto : Similar to scroll,but it adds scrollbars only when necessary.
+
+10) Every box has three available properties that can be adjusted to control its appearance: a)border  b)margin  c)padding
+
+11) border-width : Used to control the width of a border. The value of this property can either be given in pixels or values can be thin, medium, thick. You can control the individual size of borders using four separate properties:
+                    a) border-top-width
+                    b) border-right-width
+                    c) border-bottom-width
+                    d) border-left-width
+
+     also use like, border-width: top right bottom left;  // clockwise
+                eg, border-width: 2px 1px 1px 2px;
+  
+12) border-style : Some values are ->
+     
+     a)solid  b)dotted  c)dashed  d)double  
+     e)groove : Appears to be curved into the page
+     f)ridge : Appears to stick out from the page
+     g)inset : Appears embedded into the page
+     h)outset : Looks like it is coming out of the screen
+     i)hidden/none : no border is shown
+
+  You can individually change the styles of different borders using:
+     border-top-style, border-left-style, border-right-style, border-bottom-style
+
+13) border-color : We can also individually control the colors of the borders
+      border-top-color, border-right-color, border-bottom-color, border-left-color
+            Or
+      border-color: darkcyan deeppink darkcyan deeppink;
+
+14) border : to specify the width, style and color.
+       border : 1px solid #0088dd;
+
+15) padding : The value of this property is most often specified in pixels.
+       padding-top, padding-right, padding-bottom, padding-left.
+    also padding : 3px 3px 3px 3px;
+
+16) margin : margin-top, margin-right, margin-bottom, margin-left
+      If the width of a box is specified then the margin is added to the width of the box.
+         margin : 1px 1px 1px 1px;
+             or 
+         margin : 10px 20px;  /* the left and right margins should be 10 pixels and the top and bottom margins should be 20 pixels:  (also for padding)*/
+
+17) Centering content : a) Set the left-margin and right-margin to auto .
+                        b) Set a width otherwise it will take up the full width of the page.
+                        c) For text to align in center use text-align :center;
+
+   eg :  HTML
+      <p>Analog synthesizers are often said to have a "warmer" sound than their digital counterparts.</p>
+      <p class="example">Analog synthesizers are often said to have a "warmer" sound than their digital counterparts.</p>
+
+         CSS
+           body {
+              text-align: center;
+           }
+           p {
+              width: 300px;
+              padding: 50px;
+              border: 20px solid #0088dd;
+           }
+           p.example {
+              margin: 10px auto 10px auto;
+              text-align: left;
+           }
+
+ 18) display : The display property allows you to turn an inline element into a block-level element or vice versa, and can also be used to hide an element from the page. Values are :
+    a) inline : This causes a block-level element to act like an inline element.
+    b) block : This causes a inline-level element to act like an block-level element.
+    c) inline-block : This causes a block-level element to flow like an inline element, while retaining other features of a block-level element.
+    d) none : This hides an element from the page.
+
+  *) If you use this property, it is important to note that inline boxes are not supposed to create block-level elements.
+  *) In inline element we can not use width and height but in inline-block we can use width, height. 
+  *) This technique is often used to create navigation menu.
+   
+   eg, HTML
+     <div>Hello HTML</div>
+     <div>Hello CSS</div>
+  
+   CSS 
+     div{
+        display: inline-block;
+     }
+
+ 19) visibility : The visibility property allows you to hide boxes from users but It leaves a space where the element would have been. The values are :
+       a) hidden : This hides the element.
+       b) visible : This shows the element.
+     *) If the visibility of an element is set to hidden, a blank space will appear in its place. If you do not want a blank space to appear, then you should use the display property with a value of none instead.
+
+ 20) box-shadow : It can take values ->
+      box-shadow : 5px 5px 5px 5px #777777;
+      *) 1st value is horizontal offset. If positive then shadow appeared on the right side of the box. If negative then shadow appeared on the left side of the box.
+      *) 2nd value is vertical offset. If positive then shadow appeared on the bottom of the box. If negative then shadow appeared on the top of the box.
+      *) 3rd value is blur distance. If omitted then shadow will be a solid line like a border.
+      *) 4th value is spread of shadow. A positive value will cause the shadow to expand in all directions, and a negative value will make it contract.
+      *) 5th value is color.
+      *) For inner shadow use the value inset before these values.
+      *) Here blur, spread values are optional.
+
+ 21) border-radius : eg, border-radius: 10px; 
+      It can specify individual values for each corner of a box using ->
+         a) border-top-right-radius
+         b) border-bottom-right-radius
+         c) border-bottom-left-radius
+         d) border-top-left-radius
+             Or border-radius: 5px 10px 5px 10px;
+
+ 22) border-radius for elliptical shapes :
+     *) You can target just one corner using the individual properties for that corner: 
+          border-top-left-radius: 80px 50px;   // 1st value is for top horizontal line, 2nd is for left vertical line of the box
+
+     *) For targetting all four corners at once; first you specify the four horizontal values, then the four vertical values.
+          border-radius: 1em 4em 1em 4em / 2em 1em 2em 1em;      // start from top left corner
+
+     *) You can create a circle by making the border-radius, height, width value same.
+
+     eg,HTML : 
+          <p class="one"></p>
+          <p class="two"></p>
+          <p class="three"></p>
+
+        CSS : 
+        p.one {
+            border-top-left-radius: 80px 30px;
+            border:5px solid red;
+            width:150px;
+            height:150px;
+        }
+        p.two {
+            border-radius: 5em 2em 6em 1em / 1em 4em 1em 4em ;
+            border:5px solid red;
+            width:150px;
+            height:150px;
+        }
+        p.three {
+            padding: 0px;
+            border-radius: 100px;
+            border:5px solid red;
+            width:100px;
+            height:100px;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

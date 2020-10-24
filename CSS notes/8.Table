@@ -1,0 +1,220 @@
+
+1) Some basic properties of table :
+
+<h1>First Edition Auctions</h1>
+    <table>
+    <tr>
+		<th>Author</th>
+		<th>Title</th>
+		<th class="money">Reserve Price</th>
+		<th class="money">Current Bid</th>
+    </tr>
+    <tr>
+		<td>E.E. Cummings</td>
+		<td>Tulips & Chimneys</td>
+		<td class="money">$2,000.00</td>
+		<td class="money">$2,642.50</td>
+    </tr>
+    <tr class="even">
+		<td>Charles d'Orleans</td>
+		<td>Poemes</td>
+		<td class="money"></td>
+		<td class="money">$5,866.00</td>
+    </tr>
+    <tr>
+        <td>T.S. Eliot</td>
+        <td>Poems 1909 - 1925</td>
+        <td class="money">$1,250.00</td>
+        <td class="money">$8,499.35</td>
+    </tr>
+    <tr class="even">
+        <td>Sylvia Plath</td>
+        <td>The Colossus</td>
+        <td class="money"></td>
+        <td class="money">$1031.72</td>
+    </tr>
+    </table>
+
+CSS :
+body {
+            font-family: Arial, Verdana, sans-serif;
+            color: #111111;
+        }
+        table {
+            width: 600px;
+        }
+        th, td {
+            padding: 7px 10px 10px 10px;
+        }
+        th {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 90%;
+            border-bottom: 2px solid #111111;
+            border-top: 1px solid #999;
+            text-align: left;
+        }
+        tr.even {
+            background-color: #efefef;
+        }
+        tr:hover {
+            background-color: #c3e6e5;
+        }
+        .money {
+            text-align: right;
+        }
+
+
+2) empty-cells: If you have empty cells in your table, then you can use the empty-cells property to specify whether or not their borders should be shown.
+   It can take one of three values: i) show    ii) hide    iii) inherit(inherit the value of property from parent element)
+
+     HTML :
+     <table class="one">
+        <tr class=".tr">
+            <td>1</td>
+            <td class="td">2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td></td>
+        </tr>
+    </table>
+
+    CSS :
+    td {
+        border: 1px solid #0088dd;
+        padding: 15px;
+    }
+    table.one {
+        empty-cells: hide;
+    }
+
+
+3) border-spacing: The border-spacing property allows you to control the distance between adjacent cells. You can specify two values if desired to specify separate numbers for horizontal and vertical spacing.
+
+	eg, border-spacing: 5px 15px;
+
+4) border-collapse: By using this property borders are collapsed into a single border.
+
+  eg, HTML 
+   <table class="one">
+        <tr>
+            <td>1</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>4</td>
+        </tr>
+    </table>
+    <table class="two">
+        <tr>
+            <td>1</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>4</td>
+        </tr>
+  </table>
+
+  CSS
+  td {
+      background-color: #0088dd;
+      padding: 15px;
+      border: 2px solid #000000;
+  }
+  table.one {
+      border-spacing: 10px ;
+  }
+  table.two {
+      border-collapse: collapse;
+  }
+
+
+eg, HTML :
+ <table>
+       <tr class="head">
+	  <th></th>
+	  <th>New York</th>
+	  <th>Chicago</th>
+	  <th>San Francisco</th>
+       </tr>
+       <tr>
+	  <th>A Poetic Perspective</th>
+	  <td>Sat, 4 Feb 2012<br />11am - 2pm</td>
+	  <td>Sat, 3 Mar 2012<br />11am - 2pm</td>
+          <td>Sat, 17 Mar 2012<br />11am - 2pm</td>
+       </tr>
+       <tr class="even">
+          <th>Walt Whitman at War</th>
+          <td>Sat, 7 Apr 2012<br />11am - 1pm</td>
+	  <td>Sat, 5 May 2012<br />11am - 1pm</td>
+	  <td>Sat, 19 May 2012<br />11am - 1pm</td>
+       </tr>
+ </table>
+
+ CSS :
+ tr.even td, tr.even th {
+     background-color: #e8eff5;
+ }
+ tr.head th:first-child {
+     border-top-left-radius: 5px;
+ }
+ tr.head th:last-child {
+     border-top-right-radius: 5px;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

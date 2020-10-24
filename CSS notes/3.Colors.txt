@@ -1,0 +1,71 @@
+Color :
+ i) Foreground Color :
+   a) rgb values : These express colors in terms of how much red, green and blue. 
+      eg, color : rgb(100,100,90);
+
+   b) hex codes : These are six-digit codes that represent the amount of red, green and blue in a colo.
+      eg, color : #ee3e80;
+
+   c) color names : eg, color: DarkCyan;
+
+ ii) Background Color : 
+       html :
+         <h1>Computer Science</h1>
+         <h2>Web Development</h2>
+         <p>Developing web applications with flask. It is a micro framework.</p>
+
+       CSS : 
+         body {
+            background-color:rgb(200,200,200);
+         }
+         h1 {
+            background-color:DarkCyan;
+         }
+         h2 {
+            background-color:#ee3e80;
+         }
+         p {
+            background-color:white;
+         }
+
+ iii) Opacity, RGBA(a for alpha): Opacity indicate transparent property. eg :
+        html :
+          <div class="one">
+              Opacity 0.5
+          </div>
+          <div class="two">
+              Opacity 0.2
+          </div>
+
+        CSS :
+           div.one{
+              background-color: rgb(212, 45, 45);
+              opacity: 0.5;  /* means 50 % opacity */
+           }
+           div.two{
+              background-color: rgba(0, 0, 0, 0.2);     /* means 20 % opacity */
+              height:50px;
+           }
+
+ iv) hsl and hsla :
+     a)hue : Expressed as an angle(0-360 degrees).
+     b)saturation : Expressed as a percentage.
+     c)lightness : Expressed as a percentage with 0% being white, 50% being normal, 100% being black.
+     d)alpha : Expressed as a number between 0 and 1.0 .
+     
+     eg,html:
+        <p>
+            Hello I am CSS
+        </p>
+
+        css:
+        body {
+            background-color:#C8C8C8;
+            background-color:hsl(0,0%,78%);
+        }
+        p {
+            background-color:#ffffff;
+            background-color:hsla(0,100%,100%,0.5);
+        }
+
+

@@ -1,0 +1,58 @@
+1) There are two ways to add multiple style sheets to a page:
+   a) Your HTML page can link to one style sheet and that stylesheet can use the @import rule to import other style sheets.
+     eg, @import url("tables.css");
+   b) In the HTML you can use a separate <link> element for each style sheet.
+
+2) If a styesheet uses the @import rule, it should appear before the other rules.
+
+HTML :
+<html>
+<head>
+	<title>Multiple Style Sheets-Import</title>
+	<link rel="stylesheet" type="text/css" href="css/styles.css"/>
+</head>
+<body>
+	..........
+</body>
+</html>
+
+styles.css :
+@import url("tables.css");
+@import url("typography.css");
+body {
+    color: #666666;
+    background-color: #f8f8f8;
+    text-align: center;
+}
+#page {
+    width: 600px;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #d6d6d6;
+    padding: 20px;
+}
+h3 {
+    color: #547ca0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

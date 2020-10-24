@@ -1,0 +1,12 @@
+
+1) p[class] : Targets any <p> element with an attribute called class.
+
+2) p[class="dog"] : Targets any <p> element with an attribute called class whose value is dog.
+
+3) p[class~="dog"] : Targets any <p> element with an attribute called class whose value is a list of space-separated words, one of which is dog.
+
+   eg, <p class="dog cat">Hello web designer.</p>
+       
+       p[class~="dog"]{
+	   color:red;
+       }

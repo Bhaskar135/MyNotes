@@ -1,0 +1,314 @@
+1) Basic 
+ External css: 
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Introducing CSS</title>
+ <link href="practice1.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+ <h1>From Garden to Plate</h1>
+ <p>A <i>potager</i> is a French term for an
+ ornamental vegetable or kitchen garden ... </p>
+ <h2>What to Plant</h2>
+ <p>Plants are chosen as much for their functionality
+ as for their color and form ... </p>
+</body>
+</html>
+
+practice1.css :
+body {
+    font-family: Arial, Verdana, sans-serif;
+}
+h1, h2 {
+    color: #ee3e80;
+}
+p {
+    color: #665544;
+}
+
+Internal css: 
+<html>
+<head>
+ <title>Using Internal CSS</title>
+ <style type="text/css">
+ body {
+ font-family: arial;
+ background-color: rgb(185,179,175);}
+ h1 {
+ color: rgb(255,255,255);}
+ </style>
+</head>
+<body>
+ <h1>Potatoes</h1>
+ <p>There are dozens of different potato
+ varieties. They are usually described as
+ early, second early and maincrop.</p>
+</body>
+</html>
+
+Selectors :
+i) universal selector : *{}
+ii) type selector : h1,h2{}
+iii) class selector : .classname{}
+iv) id selector : #idname{}
+v) child selector : li>a{}
+vi) decendent seector : p a{}
+vii) adjacent sibling selector : p+a{}
+viii) general sibling selector : p~a{}
+
+CSS Rule :
+i) Last Rule : If the two selectors are identical, the latter of the two will take precedence
+ii) Specificity : If one selector is more specific than the others, the more specific rule will take precedence .
+    eg, p{} vs p a{} : 2nd is more specific.
+iii) Important: You can add !important after any property value to indicate that it should be considered more important than other rules.
+    eg, p a {
+           color: blue !important;
+        }
+
+Inheritance : The properties of parent element is inherited by child element.
+ eg, <div class="page">
+       <h1>Potatoes</h1>
+       <p>There are dozens of different potato varieties.</p>
+       <p>They are usually described as early, second early and maincrop potatoes.</p>
+     </div>
+CSS :
+body {
+   font-family: Arial, Verdana, sans-serif;
+   color: #665544;
+   padding: 10px;
+}
+.page {       // font-family, color inherit from parrent element
+   border: 1px solid #665544;
+   background-color: #efefef;
+   padding: inherit;    // inherit use to take value of padding from parrent's padding property
+}
+
+
+To test in multiple browser some sites are : 
+BrowserCam.com
+BrowserLab.Adobe.com
+BrowserShots.org
+CrossBrowserTesting.com
+
+Color :
+ i) Foreground Color :
+   a) rgb values : These express colors in terms of how much red, green and blue. 
+      eg, color : rgb(100,100,90);
+
+   b) hex codes : These are six-digit codes that represent the amount of red, green and blue in a colo.
+      eg, color : #ee3e80;
+
+   c) color names : eg, color: DarkCyan;
+
+ ii) Background Color : 
+       html :
+         <h1>Computer Science</h1>
+         <h2>Web Development</h2>
+         <p>Developing web applications with flask. It is a micro framework.</p>
+
+       CSS : 
+         body {
+            background-color:rgb(200,200,200);
+         }
+         h1 {
+            background-color:DarkCyan;
+         }
+         h2 {
+            background-color:#ee3e80;
+         }
+         p {
+            background-color:white;
+         }
+
+ iii) Opacity, RGBA(a for alpha): Opacity indicate transparent property. eg :
+        html :
+          <div class="one">
+              Opacity 0.5
+          </div>
+          <div class="two">
+              Opacity 0.2
+          </div>
+
+        CSS :
+           div.one{
+              background-color: rgb(212, 45, 45);
+              opacity: 0.5;  /* means 50 % opacity */
+           }
+           div.two{
+              background-color: rgba(0, 0, 0, 0.2);     /* means 20 % opacity */
+              height:50px;
+           }
+
+ iv) hsl and hsla :
+     a)hue : Expressed as an angle(0-360 degrees).
+     b)saturation : Expressed as a percentage.
+     c)lightness : Expressed as a percentage with 0% being white, 50% being normal, 100% being black.
+     d)alpha : Expressed as a number between 0 and 1.0 .
+     
+     eg,html:
+        <p>
+            Hello I am CSS
+        </p>
+
+        css:
+        body {
+            background-color:#C8C8C8;
+            background-color:hsl(0,0%,78%);
+        }
+        p {
+            background-color:#ffffff;
+            background-color:hsla(0,100%,100%,0.5);
+        }
+
+ Text :
+ 1) Typeface :  
+        a)Serif (serif fonts were traditionally used for long passages of text) : i)Georgia  ii)Times    iii)Times New Roman
+        b)Sans-serif (if the text is small)                                     : i)Arial    ii)Verdana  iii)Helvetica
+        c)Monospace (every letter in a monospace typeface is the same width)    : i)Courier  ii)Courier New
+        
+ 2) Weight : a)Light  b)Medium  c)Bold  d)Black
+
+ 3) Style : a)Normal  b)Italic  c)Oblique
+
+ 4) Stretch : a)Condensed  b)Regular  c)Extended
+
+ 5) Cursive : a)Comic Sans MS  b)Monotype Corsiva
+
+ 6) Fantasy (Fantasy fonts are usually used for titles) : a)Impact  b)Haettenschweiler
+
+ 7) Techniques That Offer a Wider Choice of Typefaces : font-family, font-face, Service-based Font-Face
+
+ 8) You can specify a list of fonts separated by commas so that, if the user does not have your first choice of typeface installed, the browser can try to use an alternative font from the list.
+
+ 9) It is also common to end with a generic font name for that type of font.
+
+ 10) If a font name is made up of more than one word, it should be put in double quotes.
+
+ Example :
+ <html>
+ <head>
+    <title>Font Family</title>
+    <style type="text/css">
+	body {
+	   font-family: Georgia, Times, serif;
+        }
+	h1, h2 {
+	   font-family: Arial, Verdana, sans-serif;
+        }
+	.credits {
+           font-family: "Courier New", Courier,monospace;
+        }
+    </style>
+ </head>
+ <body>
+    <h1>Briards</h1>
+    <p class="credits">by Ivy Duckett</p>
+    <p class="intro">The <a class="breed" href="http://en.wikipedia.org/wiki/Briard">briard</a>, or berger de brie, is a large breed of dog traditionally used as a herder and guardian of sheep...</p>
+ </body>
+ </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

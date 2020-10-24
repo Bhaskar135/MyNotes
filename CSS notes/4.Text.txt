@@ -1,0 +1,360 @@
+Text :
+ 1) Typeface :  
+        a)Serif (serif fonts were traditionally used for long passages of text) : i)Georgia  ii)Times    iii)Times New Roman
+        b)Sans-serif (if the text is small)                                     : i)Arial    ii)Verdana  iii)Helvetica
+        c)Monospace (every letter in a monospace typeface is the same width)    : i)Courier  ii)Courier New
+        
+ 2) Weight : a)Light  b)Medium  c)Bold  d)Black
+
+ 3) Style : a)Normal  b)Italic  c)Oblique
+
+ 4) Stretch : a)Condensed  b)Regular  c)Extended
+
+ 5) Cursive : a)Comic Sans MS  b)Monotype Corsiva
+
+ 6) Fantasy (Fantasy fonts are usually used for titles) : a)Impact  b)Haettenschweiler
+
+ 7) Techniques That Offer a Wider Choice of Typefaces : font-family, font-face, Service-based Font-Face
+
+ 8) You can specify a list of fonts separated by commas so that, if the user does not have your first choice of typeface installed, the browser can try to use an alternative font from the list.
+
+ 9) It is also common to end with a generic font name for that type of font.
+
+ 10) If a font name is made up of more than one word, it should be put in double quotes.
+
+ Example :
+ <html>
+ <head>
+    <title>Font Family</title>
+    <style type="text/css">
+	body {
+	   font-family: Georgia, Times, serif;
+        }
+	h1, h2 {
+	   font-family: Arial, Verdana, sans-serif;
+        }
+	.credits {
+           font-family: "Courier New", Courier,monospace;
+        }
+    </style>
+ </head>
+ <body>
+    <h1>Briards</h1>
+    <p class="credits">by Ivy Duckett</p>
+    <p class="intro">The <a class="breed" href="http://en.wikipedia.org/wiki/Briard">briard</a>, or berger de brie, is a large breed of dog traditionally used as a herder and guardian of sheep...</p>
+ </body>
+ </html>
+
+11) font-size :
+   a)pixel(px) : You can also use pt for point sizes instead of px for pixels
+    
+   b)percentage : The default size of text in browsers is 16px. So a size of 75% would be the equivalent of 12px, and 200% would be 32px.
+
+   c)em 
+
+12) font-weight : a)bold  b)normal
+   html : 
+     <h2>Hello CSS</h2>
+     <a href="">click here</a>
+     <p>HTML is a Styling language.</p>
+
+   css :
+     body{
+        font-weight: bold;
+     }
+     p{
+        font-weight: normal; 
+     }
+
+13) font-style : a)normal  b)italic  c)oblique
+  eg : font-style : italic;
+
+14) text-transform : 
+    a)uppercase : This causes the text to appear uppercase.
+   
+    b)lowercase : This causes the text to appear lowercase.
+
+    c)capitalize : The first letter of each word to appear capitalized.
+
+15) text-decoration :
+    a)none : This removes any decoration already applied to the text.
+
+    b)underline : This adds a line underneath the text.
+
+    c)overline : This adds a line over the top of the text.
+
+    d)line-through : This adds a line through words.
+
+16) line-height : line-height : 0.5em;
+
+17) letter-spacing : letter-spacing: 0.2em;
+
+18) word-spacing : The default gap between word is 0.25em
+      eg, word-spacing: 1em; 
+
+19) text-align : left, right, center, justify
+
+20) vertical-align : It is more commonly used with inline elements such as <img> ,<em> , or <strong> elements.
+ eg : top, text-top, baseline, bottom, text-bottom, sub, super, middle
+
+21) text-indent : The text-indent property allows you to indent the first line of text within an element.
+ eg : text-indent: -9px; or text-indent: 10px;
+
+22) text-shadow : It can take three lengths and a color for the drop shadow.
+     i) The first length indicates how far to the left or right the shadow should fall.
+    ii) The second value indicates the distance to the top or bottom that the shadow should fall.
+   iii) The third value is optional and specifies the amount of blur that should be applied to the drop shadow.
+    iv) The fourth value is the color of the drop shadow.
+
+ eg, HTML :
+     <p id="first">The first is C programming.</p>
+     <p id="second">The second is C++ programming.</p>
+     <p id="third">The third is Java programming.</p>
+     <p id="fourth">The fourth is /Python programming.</p>
+     <p id="five">The 5th is awsome django.</p>
+
+     CSS :
+     #first{
+          text-shadow: 1px 1px 0px #000000;
+          color: #666666;
+          font-size:30px;
+          background-color: #eeeeee;
+     }
+     #second{
+          text-shadow:1px 1px 3px #666666;
+          color: #666666;
+          font-size:30px;
+          background-color: #dddddd;
+     }
+     #third{
+          text-shadow:2px 2px 7px #111111;
+          color:#ffffff;
+          font-size:30px;
+          background-color: #cccccc;
+     }
+     #fourth{
+          text-shadow:-1px -2px #666666;
+          color:#cccccc;
+          font-size:30px;
+          background-color: #bbbbbb;
+     }
+     #five{
+          text-shadow:-1px -1px #666666;
+          color:#ffffff;
+          font-size:30px;
+          background-color: #aaaaaa;
+     }
+     
+23) :first-line (pseudo element): It select first line of a text.
+     HTML :
+       <p>HTML and CSS property is a frontend designing tool.</p>
+
+     CSS :
+     p:first-line{
+        color:red;
+     }
+
+24) :first-letter (pseudo element): It select first letter of a text.
+     HTML :
+       <p>HTML and CSS property is a frontend designing tool.</p>
+
+     CSS :
+     p:first-letter{
+        font-size:20px;
+     }
+
+25) :link : This allows you to set styles for links that have not yet been visited.
+       eg, a:link{ color:red; }
+
+26) :visited : This allows you to set styles for links that have been clicked on.
+       eg, a:visited{ color:green; }
+
+27) :hover : eg, a:hover{
+		    background-color: #665544;}                 
+                 }
+
+28) :active : When some one click a button or a link at that moment we apply style.
+
+29) :focus : When some one click a button or a link at that moment we apply style and it remain untill we don't click anywhere of the page.
+
+    When pseudo-classes are used, they should appear in this order -> :link , :visited , :hover , :focus , :active .
+
+
+
+ eg, HTML :
+     <body>
+        <h1>Briards</h1>
+        <h2>A Heart wrapped in fur</h2>
+        <p class="intro">The <a class="breed" href="http://en.wikipedia.org/wikiBriard">
+            briard</a>, or berger de brie, is a large breed of dog traditionally used as a
+            herder and guardian of sheep.</p>
+        <h3>Breed History</h3>
+        <p>The briard, which is believed to have originated in France, has been bred for
+            centuries to herd and to protect sheep. The breed was used by the French Army as
+            sentries, messengers and to search for wounded soldiers because of its fine sense
+            of hearing. Briards were used in the First World War almost to the point of
+            extinction. Currently the population of briards is slowly recovering.
+            Charlemagne, Napoleon, Thomas Jefferson and Lafayette all owned briards.</p>
+        <p class="credits">by Ivy Duckett</p>
+    </body>
+
+    CSS :
+    body {
+	padding: 20px;
+    }
+    h1, h2, h3, a {
+	font-weight: normal;
+	color: #0088dd;
+	margin: 0px;
+    }
+    h1 {
+	font-family: Georgia, Times, serif;
+	font-size: 250%;
+	text-shadow: 2px 2px 3px #666666;
+	padding-bottom: 10px;
+    }
+    h2 {
+	font-family: "Gill Sans", Arial, sans-serif;
+	font-size: 90%;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+    }
+    h3 {
+	font-size: 150%;
+    }
+    p {
+	font-family: Arial, Verdana, sans-serif;
+	line-height: 1.4em;
+	color: #665544;
+    }
+    p.intro:first-line {
+	font-weight: bold;
+    }
+    .credits {
+	font-style: italic;
+	text-align: right;
+    }
+    a {
+	text-decoration: none;
+    }
+    a:hover {
+	text-decoration: underline;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
